@@ -1,0 +1,48 @@
+allprojects {
+    repositories {
+        google()
+        jcenter()
+
+    }
+}
+
+ext{
+    //circlerview
+    circlerview = '2.1.0'
+    //RxJava
+    rx_java_version = '2.1.9'
+    rx_android_version = '2.0.1'
+    rx_adapter_version = '1.0.0'
+    //android support
+    androidLibSupportVersion = '28.0.3'
+    //ui
+    constraintVersion = '1.1.0'
+
+    networkDependencies = [
+            asyn_http     : 'com.loopj.android:android-async-http:1.4.5',
+            retorfit2     : 'com.squareup.retrofit2:retrofit:2.4.0',
+            gson          : 'com.squareup.retrofit2:converter-gson:2.4.0',
+            retro_log     : 'com.squareup.okhttp3:logging-interceptor:3.12.1',
+            retro_rxjava  : 'com.squareup.retrofit2:adapter-rxjava:2.4.0',
+            retro_xmlparse: 'com.squareup.retrofit2:converter-simplexml:2.4.0',
+            retro_rxjava2 : 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    ]
+    otherDesignDependencies = [
+            //injection
+            butter_knife    : 'com.jakewharton:butterknife:7.0.1',
+            google: 'com.google.android.gms:play-services-auth:17.0.0',
+           /* facebook: 'com.facebook.android:facebook-login:[5,6+)',*/
+            facebook: 'com.facebook.android:facebook-login:4.30.0',
+            easy_image: 'com.github.jkwiecien:EasyImage:2.0.0',
+    ]
+    designDependencies = [
+            cardview      : 'com.android.support:cardview-v7:${androidLibSupportVersion}',
+            recyclerview  : 'com.android.support:recyclerview-v7:${androidLibSupportVersion}',
+            appcompact    : 'com.android.support:appcompat-v7:${androidLibSupportVersion}',
+            appcompact4   : 'com.android.support:support-v4:${androidLibSupportVersion}',
+            support_compat: 'com.android.support:support-compat:${androidLibSupportVersion}',
+            design        : 'com.android.support:design:${androidLibSupportVersion}',
+            contraint_view: 'com.android.support.constraint:constraint-layout:${constraintVersion}'
+    ]
+}

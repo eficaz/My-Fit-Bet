@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="pading_gray">#f9f9f9</color>
+    <color name="pading_gray1">#f4f4f4</color>
+    <color name="pading_gray2">#dddddd</color>
+    <color name="gray_1">#C0C0C0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="light_blue">#02AAE9</color>
+   <!-- <color name="light_blue">#04A9E9</color>-->
+
+    <color name="red">#f44336</color>
+    <color name="red_loser">#BF5369</color>
+    <color name="black">#000000</color>
+    <color name="tabTextColor">#757575</color>
+    <color name="md_grey_100">#F5F5F5</color>
+    <color name="light_green">#05C184</color>
+    <color name="transparent">#80FFFFFF</color>
+    <color name="start_button_color">#EB9502</color>
+    <color name="golden_color">#fcc62d</color>
+    <color name="hint_text_color">#b2b2b2</color>
+    <color name="main_text_color">#565656</color>
+    <color name="gray_2">#f2f2f2</color>
+
+</resources>

@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/settings_bg"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".8"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:orientation="vertical">
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:gravity="center|left"
+        android:layout_weight="1">
+
+        <TableRow
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/back_black" />
+        </TableRow>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/white"
+            android:text="@string/archies_details" />
+
+
+        <TableRow
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="right|center"
+            android:gravity="right|center"
+            android:layout_marginRight="30dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imgChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/coin_icon" />
+            <TextView
+                android:id="@+id/credits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:textSize="14dp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/lato_regular"
+                android:text="0" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_gravity="right|center"
+            android:gravity="right|center"
+            android:layout_marginRight="30dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/img_user_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/group_icons_hover" />
+            <TextView
+                android:id="@+id/user_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:textSize="14dp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/lato_regular"
+                android:text="0" />
+        </TableRow>
+
+    </TableRow>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/fitbet__bet_icon"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.8"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/group_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left|center|bottom"
+                        android:gravity="center|left|bottom"
+                        android:textColor="@color/white"
+                        android:text="" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.5">
+
+                        <TextView
+                            android:id="@+id/discreption"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="left|center|top"
+                            android:gravity="center|left|top"
+                            android:textSize="12dp"
+                            android:textColor="@color/white"
+                            android:text="" />
+                    </TableRow>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:background="@drawable/dashboard_shape_button_roud_corner1"
+            android:layout_gravity="center"
+            android:gravity="center"
+
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/row3"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/participants"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|left"
+                        android:gravity="center|left"
+                        android:text="0"
+                        android:fontFamily="@font/lato_bold"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:singleLine="true"
+                        android:textSize="10dp"
+                        android:layout_gravity="center|left"
+                        android:gravity="center|left"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/main_text_color"
+                        android:layout_height="wrap_content"
+                        android:text="@string/total_km" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/message_row"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/messages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_gravity="center|left"
+                        android:gravity="center|left"
+                        android:fontFamily="@font/lato_bold"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="15dp"
+                        android:text="0" />
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:layout_gravity="center|left"
+                        android:gravity="center|left"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/main_text_color"
+                        android:text="@string/messages" />
+                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/calander_row"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
+                    android:textSize="15dp"
+                    android:backgroundTint="@color/main_text_color"
+                    android:background="@drawable/calendar"
+                    />
+
+
+                <TextView
+                    android:id="@+id/calander"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/main_text_color"
+                    android:text="" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/clock_row"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
+                    android:textSize="15dp"
+                    android:backgroundTint="@color/main_text_color"
+                    android:background="@drawable/clock"
+                    />
+
+                <TextView
+                    android:id="@+id/clock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/main_text_color"
+                    android:text="" />
+            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/map_row"
+                    android:layout_width="0dp"
+                    android:layout_weight=".6"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center|left"
+                        android:gravity="center|left"
+                        android:textSize="15dp"
+                        android:backgroundTint="@color/main_text_color"
+                        android:background="@drawable/pin"
+                        />
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/main_text_color"
+                        android:layout_gravity="center|left"
+                        android:gravity="center|left"
+                        android:text="@string/map" />
+                </LinearLayout>
+            </LinearLayout>
+        </TableRow>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:background="@drawable/shape_button_roud_corner1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/tropy"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <View
+                android:layout_width="2dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:background="@color/md_grey_100"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/wiinerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:gravity="center|left"
+                    android:fontFamily="@font/lato_bold"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:textColor="@color/main_text_color"
+                    android:text="" />
+                <TextView
+                    android:id="@+id/country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:textSize="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:drawableLeft="@drawable/coin_icon"
+                    android:drawablePadding="7dp"
+                    android:gravity="center|left"
+                    android:text="" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                    android:id="@+id/wiiner_discreption"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/text_button"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <View
+                android:layout_width="2dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:background="@color/md_grey_100"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                    android:id="@+id/video_type"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    android:src="@drawable/play_button"
+                    android:layout_gravity="center"/>
+                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                    android:id="@+id/img_type"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/image_button"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </TableRow>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_weight="5"
+        android:orientation="vertical" >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/invite_group_list"
+            android:background="@color/transparent"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>

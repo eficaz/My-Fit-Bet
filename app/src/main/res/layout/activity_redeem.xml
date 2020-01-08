@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/settings_inner_bg"
+    android:layout_height="match_parent"
+    tools:context=".ui.CreateGroupActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:layout_weight="1.2">
+
+            <TableRow
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:background="@drawable/back_white" />
+            </TableRow>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/white"
+                android:text="@string/redeem_your_credits" />
+        </TableRow>
+        <FrameLayout
+            android:id="@+id/content_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            >
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:maxLines="1"
+                        android:maxLength="50"
+                        android:hint="@string/name"
+                        android:inputType="textPersonName"
+                         />
+                </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/md_grey_100"
+                    android:layout_height="1dp"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:maxLines="1"
+                        android:maxLength="50"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/email"
+                       />
+                </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/md_grey_100"
+                    android:layout_height="1dp"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    >
+
+                    <EditText
+                        android:id="@+id/account_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:maxLength="50"
+                        android:inputType="textPersonName"
+                        android:hint="@string/account_number"
+                        />
+                </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/md_grey_100"
+                    android:layout_height="1dp"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    >
+
+                    <EditText
+                        android:id="@+id/rooting_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:fontFamily="@font/lato_regular"
+                        android:maxLength="50"
+                        android:hint="@string/rooting_number"
+                        android:inputType="textPersonName"
+                         />
+                </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/md_grey_100"
+                    android:layout_height="1dp"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center|left"
+                    android:gravity="left|center"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:id="@+id/country"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center|left"
+                        android:gravity="left|center"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="14dp"
+                        android:layout_weight="2"
+                        android:text="Australia"
+                        />
+
+                    <TextView
+                        android:id="@+id/country_code"
+                        android:layout_width="0dp"
+                        android:layout_weight=".8"
+                        android:text="AU"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="16dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:textColor="@color/light_blue"
+                        android:textColorHint="@color/light_blue"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        />
+                </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/md_grey_100"
+                    android:layout_height="1dp"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    >
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="center"></TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/textView17"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/lato_bold"
+                                    android:textSize="12dp"
+                                    android:text="@string/your_credit" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1.5"
+                                android:gravity="center">
+
+                                <EditText
+                                    android:id="@+id/amount"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:maxLength="5"
+                                    android:maxLines="1"
+                                    android:fontFamily="@font/lato_bold"
+                                    android:inputType="number"
+                                    android:textColor="@color/light_blue"
+                                    android:textSize="14dp"
+                                    android:textStyle="bold" />
+
+                                <ImageView
+                                    android:id="@+id/imageView7"
+                                    android:layout_width="0dp"
+                                    android:layout_weight=".3"
+                                    android:layout_height="20dp"
+                                    android:layout_marginLeft="5dp"
+                                    app:srcCompat="@drawable/coins" />
+
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="center"></TableRow>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <View
+                        android:layout_width="1dp"
+                        android:background="@color/md_grey_100"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="match_parent"/>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1">
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1">
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center|bottom|left"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center|bottom|left"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/strip_charges_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|bottom|left"
+                                android:gravity="center|bottom|left"
+                                android:textSize="10dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/strip_charges" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center|left|top"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="left|center|top"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/strip_charge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="0" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_gravity="center|bottom|left"
+                            android:gravity="center|bottom|left"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/admin_charges_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|bottom|left"
+                                android:gravity="center|bottom|left"
+                                android:fontFamily="@font/lato_regular"
+                                android:textSize="10dp"
+                                android:text="@string/admin_charges" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center|top|left"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="top|center|left"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/admin_charge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|top|left"
+                                android:textSize="10dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:layout_gravity="center|top|left"
+                                android:text="0" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center|top|left"
+                            android:gravity="top|center|left"
+                            android:layout_weight="1">
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1">
+                        </TableRow>
+                    </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_weight="1.1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1">
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+
+                            android:gravity="center"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/textView26"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textSize="12dp"
+                                android:fontFamily="@font/lato_bold"
+                                android:text="@string/your_amount" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/reduce_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textColor="@color/light_blue"
+                                android:textSize="14dp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/lato_bold"
+                                android:layout_height="wrap_content"
+                                android:text="0" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1">
+                        </TableRow>
+                    </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="50dp"
+                    >
+                    <CheckBox
+                        android:id="@+id/checkBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/textView28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/terms_condition" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                   >
+                    <Button
+                        android:id="@+id/submit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:background="@drawable/shape_button_roud_corner"
+                        android:backgroundTint="@color/light_blue"
+                        android:text="@string/redeem_your_credit"
+                        android:layout_marginTop="@dimen/size_30"
+                        android:textColor="@color/white" />
+
+                </TableRow>
+
+
+                <Space
+                    android:id="@+id/space"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </FrameLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,103 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">5dp</dimen>
+    <dimen name="activity_vertical_margin">5dp</dimen>
+
+
+    <dimen name="fastscroll_bubble_radius">44dp</dimen>
+
+    <dimen name="fastscroll_handle_width">4dp</dimen>
+    <dimen name="fastscroll_handle_radius">2dp</dimen>
+
+    <dimen name="fastscroll_track_width">1dp</dimen>
+
+    <dimen name="fastscroll_scrollbar_padding">8dp</dimen>
+
+    <dimen name="search_icon_padding">12dp</dimen>
+    <dimen name="search_view_text_padding">65dp</dimen>
+
+    <dimen name="icon_width_height">30dp</dimen>
+
+
+    <dimen name="size_1">1dp</dimen>
+    <dimen name="size_2">2dp</dimen>
+    <dimen name="size_5">5dp</dimen>
+    <dimen name="size_8">8dp</dimen>
+    <dimen name="size_15">15dp</dimen>
+    <dimen name="size_20">20dp</dimen>
+    <dimen name="size_30">30dp</dimen>
+    <dimen name="size_40">40dp</dimen>
+    <dimen name="size_50">50dp</dimen>
+    <dimen name="size_60">60dp</dimen>
+    <dimen name="size_70">70dp</dimen>
+    <dimen name="size_80">80dp</dimen>
+    <dimen name="size_100">100dp</dimen>
+    <dimen name="size_120">120dp</dimen>
+    <dimen name="size_150">150dp</dimen>
+
+    <dimen name="margin_1">1dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
+    <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_25">25dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_35">35dp</dimen>
+    <dimen name="margin_45">45dp</dimen>
+
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">9sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">9sp</dimen>
+
+    <dimen name="txt_13">13sp</dimen>
+    <dimen name="txt_15">15sp</dimen>
+    <dimen name="txt_16">16sp</dimen>
+    <dimen name="txt_18">18sp</dimen>
+
+
+    <dimen name="padding_0">0dp</dimen>
+    <dimen name="padding_1">1dp</dimen>
+    <dimen name="padding_2">2dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding_6">6dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+
+
+    <dimen name="margin_200">200dp</dimen>
+
+    <!--offer map dimens-->
+
+    <!-- Default configuration for some common confetti animations -->
+
+    <!-- Chat Application -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="round_radius">5dp</dimen>
+    <dimen name="round_size">20dp</dimen>
+    <dimen name="mins_text_size">13sp</dimen>
+    <dimen name="mins_value_text_size">13sp</dimen>
+    <dimen name="ok_icon_size">70dp</dimen>
+    <dimen name="pin_content_layout_padding">40dp</dimen>
+    <dimen name="pin_label_margin">10dp</dimen>
+    <dimen name="pin_min_width">32dp</dimen>
+    <dimen name="registraion_page_user_photo_height">38dp</dimen>
+    <dimen name="registraion_page_user_photo_width">38dp</dimen>
+    <dimen name="item_offset">2dp</dimen>
+
+    <dimen name="labels_text_size">14sp</dimen>
+    <dimen name="fab_size_normal">56dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="text_right_padding">28dp</dimen>
+    <dimen name="menu_item_padding">2dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="text_wrapper_right_margin">-8dp</dimen>
+    <dimen name="text_right_translation">8dp</dimen>
+    <dimen name="tool_bar_height">56dp</dimen>
+    <dimen name="text_margin">12dp</dimen>
+    <dimen name="margin_50">50dp</dimen>
+
+</resources>

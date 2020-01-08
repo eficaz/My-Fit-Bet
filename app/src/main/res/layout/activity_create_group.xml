@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom|center"
+        android:gravity="center|bottom"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_weight="3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/et_groupName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textColorHint="@color/white"
+                    android:hint="@string/group_name"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/white"
+                    android:inputType="textPersonName"
+                    android:textSize="12dp"
+                    android:backgroundTint="@color/white"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                   />
+                <EditText
+                    android:id="@+id/et_short_descreption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="12dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:hint="@string/short_descreption"
+                    android:inputType="textPersonName"
+                    android:backgroundTint="@color/white"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_weight="1" >
+                    <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                        android:id="@+id/img_user"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@color/transparent"
+                        android:src="@drawable/img_upload" />
+                    <!-- <Button
+                        android:id="@+id/bt_camera"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/chat_camera" />-->
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1" >
+
+                    <Button
+                        android:id="@+id/bt_creategroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/shape_button_roud_corner"
+                        android:backgroundTint="@color/white"
+                        android:textSize="10dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/create_group"
+                        android:textColor="@color/light_blue" />
+                    <Button
+                        android:id="@+id/bt_updategroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/shape_button_roud_corner"
+                        android:backgroundTint="@color/white"
+                        android:textSize="10dp"
+                        android:visibility="gone"
+                        android:text="@string/update_group"
+                        android:textColor="@color/light_blue" />
+                </TableRow>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="80dp"
+        android:layout_weight="9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_gravity="center|left"
+                android:gravity="center|left"
+                android:layout_marginRight="@dimen/margin_10"
+                >
+
+                <TableRow
+                    android:id="@+id/ed_delete_row"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:background="@drawable/layout_whight_border"
+                    android:layout_height="match_parent" >
+                    <TextView
+                        android:id="@+id/users_count"
+                        android:layout_width="0dp"
+                        android:layout_weight="10"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:layout_marginLeft="10dp"
+                        android:drawablePadding="7dp"
+                        android:drawableLeft="@drawable/group_icons_hover"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|left"
+                        />
+                    <ImageView
+                        android:id="@+id/edit"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginBottom="@dimen/margin_15"
+                        android:src="@drawable/edit_button"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/delete"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginBottom="@dimen/margin_15"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/delete_btn"
+                        android:visibility="gone" />
+
+                </TableRow>
+
+                <EditText
+                    android:id="@+id/searchview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="text|textNoSuggestions"
+                    android:background="@drawable/shape_button_roud_corner1"
+                    android:drawableLeft="@drawable/search"
+                    android:maxLength="30"
+                    android:textIsSelectable="false"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="@color/main_text_color"
+                    android:textSize="12dp"
+                    />
+               <!-- <SearchView
+                    android:id="@+id/searchview"
+                    android:layout_width="match_parent"
+                    android:queryHint="@string/search"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />-->
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_10"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/no_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textColor="@color/main_text_color"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:text="@string/no_group" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/group_list"
+                    android:background="@color/transparent"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </TableRow>
+</LinearLayout>

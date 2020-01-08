@@ -1,0 +1,287 @@
+<resources>
+    <string name="ver_no">1.0</string>
+    <string name="app_name">FitBet</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="update">Update</string>
+    <string name="update_bet">Update Bet</string>
+    <string name="profile_pic_updated">Profile Picture Updated Successfully</string>
+    <string name="updated_successfully">Updated Successfully</string>
+    <string name="uopload_your_video_or_img">UPLOAD YOUR VIDEO OR IMAGE</string>
+    <string name="reg_now">REGISTER</string>
+    <string name="file_upload_failed">File Upload Failed</string>
+    <string name="reg_now1">REGISTER NOW</string>
+    <string name="congratulations">CONGRATULATIONS</string>
+    <string name="better_luck_next_time">BETTER LUCK NEXT TIME</string>
+    <string name="your_position">YOUR POSITION</string>
+    <string name="you_have_won">YOU HAVE WON</string>
+    <string name="submit">Submit</string>
+    <string name="re_set_password">RESET PASSWORD</string>
+    <string name="max_alowed_five_cashier">Maximum Limit Reached </string>
+    <string name="incorrect_credentials">Incorrect User Name &amp; Password. Please Try Again</string>
+    <string name="enter_valid_email">Enter Valid Email</string>
+    <string name="enter_userName">Enter Your Name</string>
+    <string name="select_password_type">Please Enter Password</string>
+    <string name="select_confirm_password_type">Please Enter Confirm Password</string>
+    <string name="login_with">Login With</string>
+    <string name="bet">Bet</string>
+    <string name="registation">Registration</string>
+    <string name="no_chart_data_available">No Data</string>
+    <string name="create_bet">Create Bet</string>
+    <string name="create_group">Create Group</string>
+    <string name="update_group">Update Group</string>
+    <string name="archives">Archive</string>
+    <string name="upcomming_bets">UPCOMING BETS</string>
+    <string name="upcomming_bets1">Upcoming Bets</string>
+    <string name="my_bets">MY BETS</string>
+    <string name="my_bets1">My Bets</string>
+    <string name="search">Search</string>
+    <string name="group_name">Group Name</string>
+    <string name="short_descreption">Enter Short Description</string>
+    <string name="chat_menu_action_gallery">Gallery</string>
+    <string name="chat_menu_action_camera">Camera</string>
+    <string name="chat_menu_action_video">Video</string>
+    <string name="cancel">Cancel</string>
+    <string name="reson_for_cancelation">Reason for cancellation</string>
+    <string name="enter_group_name">Please Enter Group Name</string>
+    <string name="short_description">Please Give Short Description</string>
+    <string name="i_accept_the_terms_of_service">I Accept the Terms of Service</string>
+    <string name="I_agreed_to_the_Terms_Conditions">I\'ve agreed to the Terms &amp; Conditions</string>
+    <string name="facebook_app_id">389723578412624</string>
+    <string name="fb_login_protocol_scheme">fb389723578412624</string>
+    <string name="invite_group">Invite A Group</string>
+    <string name="invite_group_">Invite Group</string>
+    <string name="invite_group_details">Group Details</string>
+    <string name="search_group">SEARCH GROUP</string>
+    <string name="search_users">Search User</string>
+    <string name="invite">INVITE</string>
+    <string name="buy_now">BUY NOW</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="location_updated">Location Updated: %1$s</string>
+    <string name="privacy_and_policy">Privacy Policy</string>
+    <string name="terms_and_service">Terms &amp; Service</string>
+    <string name="not_started_yet_ney_bets">Not Started Yet Any Bets</string>
+    <string name="no_internet"> No Internet Connection</string>
+    <string name="no_internet_message">Make sure your device is connected to the Internet </string>
+    <string name="imvalid_entry">An Unexpected Error Has Occurred Application</string>
+    <string name="invited_successfully">Invited Successfully</string>
+    <string name="please_choose_credit">Please select any one of the pack</string>
+<string name="permission_required">Service Permissions are required for this app</string>
+    <string name="any_one_not_participate">None of Joined Any Participant in This Bet.</string>
+
+    <string name="bet_name">Bet Name</string>
+    <string name="bet_credit">Bet in Credit</string>
+    <string name="bet_select_date">Start Date &amp; Time</string>
+    <string name="to_bet_select_date">End Date &amp; Time</string>
+    <string name="bet_description">Description</string>
+    <string name="bet_distance_by_km">Distance By Kms</string>
+    <string name="bet_distance_location">Distance By Location</string>
+    <string name="bet_km">Kms</string>
+    <string name="bet_create_bet">CREATE BET</string>
+    <string name="invite_users">Invite Users</string>
+    <!--<string name="google_maps_key">AIzaSyCo1aS5JTLL59Mz5seG8AaxrjgAYjvCW9o</string>-->
+    <string name="google_maps_key">AIzaSyC4AdGVuQ00-kPjEctDsZTIDWRUKJNQ1kk</string>
+    <string name="start_point">Start Point</string>
+    <string name="end_point">End Point</string>
+    <string name="skip">Skip</string>
+    <string name="done">Done</string>
+    <string name="start_location">Start Location    </string>
+    <string name="end_location">End Location     </string>
+    <string name="distance">Distance</string>
+    <string name="location_service">Enable Location Services ?</string>
+    <string name="ok">OK</string>
+    <string name="no_gps_message">Application Would Like to Use Your Current Location.Please Turn On The Location Services for Your Device</string>
+
+    <string name="clean">Clean</string>
+
+    <string name="set">Set</string>
+
+    <string name="start">START</string>
+
+    <string name="won">WON</string>
+    <string name="winner">WINNER</string>
+    <string name="lost">LOST</string>
+    <string name="credit">CREDITS</string>
+
+    <string name="day1">7 DAYS</string>
+    <string name="day30">30 DAYS</string>
+    <string name="month6">6 MONTHS</string>
+    <string name="year1">1 YEAR</string>
+
+    <string name="tab_me">Me</string>
+    <string name="tab_bet">Bet</string>
+    <string name="tab_live"> </string>
+    <string name="tab_messeg">Chat</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="enter_user_name">Please Enter User Name</string>
+    <string name="enter_credit">Please Enter Credit</string>
+    <string name="select_date">Please Select Bet Start Date</string>
+    <string name="enter_km">Please Enter Km</string>
+    <string name="select_start_end_location">Please Choose Start End Location</string>
+    <string name="select_date_time">Select Date</string>
+    <string name="change_password">Change Password</string>
+    <string name="redeem">Redeem</string>
+    <string name="credit_purchase">Credit Purchase</string>
+    <string name="share">Share</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="logout">Logout</string>
+
+    <string name="edit_bet">Update Bet</string>
+
+    <string name="send">Send</string>
+
+    <string name="type_comment">Type Message...</string>
+
+
+    <string name="invite_">INVITE</string>
+    <string name="user">User</string>
+    <string name="group">Group</string>
+    <string name="details">Details</string>
+
+    <string name="participants">Participants</string>
+    <string name="messages">Messages</string>
+    <string name="bet_details">Bet Details</string>
+    <string name="map">Map</string>
+
+    <string name="please_type_message">Please Enter Message</string>
+    <string name="please_choose_after_date">Start Date Should be Greater Than Current Date</string>
+
+    <string name="join_now">JOIN</string>
+
+    <string name="archies_bets">Archive Bets</string>
+
+    <string name="join_bets">Join Bets</string>
+
+    <string name="archies_details">Archive Details</string>
+
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+
+    <string name="name">Name</string>
+
+    <string name="average">Average: </string>
+
+    <string name="total">Total: </string>
+
+    <string name="total_km">Total KM</string>
+
+    <string name="total_credit">Total Credit</string>
+
+    <string name="total_amount">Total Amount</string>
+
+    <string name="no_group">No Groups</string>
+
+    <string name="no_data">Data Not Available !</string>
+
+    <string name="account_number">Account Number</string>
+
+    <string name="rooting_number">Routing Number</string>
+
+    <string name="your_credit">YOUR CREDIT</string>
+
+    <string name="strip_charges">Stripe Charge</string>
+
+    <string name="admin_charges">Admin Charge</string>
+
+    <string name="your_amount">YOUR AMOUNT</string>
+
+    <string name="terms_condition"> I\'ve agreed to the Terms &amp; Conditions</string>
+
+    <string name="redeem_your_credit">REDEEM YOUR CREDIT</string>
+
+    <string name="redeem_your_credits">Redeem Your Coins</string>
+
+    <string name="you_don_have_credit">You don\'t have credit</string>
+
+    <string name="you_can_not_edit">You Can\'t Edit This Bet</string>
+
+    <string name="con_new_password">Confirm New Password</string>
+
+    <string name="con_password">Confirm Password</string>
+
+    <string name="password_not_match">Password Not Match</string>
+
+    <string name="password_con_password_not_match">Password &amp; Confirm Password Not Match</string>
+
+    <string name="please_enter_name">Please Enter Name</string>
+
+    <string name="please_enter_bet_name">Please Enter Bet Name</string>
+
+    <string name="please_enter_email">Please Enter Email</string>
+
+    <string name="please_enter_accountNumber">Please Enter Account Number</string>
+
+    <string name="please_enter_rootingNumber">Please Enter Routing Number</string>
+
+    <string name="please_enter_amount">Please Enter Amount</string>
+
+    <string name="run_challenge">Run Challenge</string>
+
+    <string name="remaining">REMAINING KMs</string>
+
+    <string name="time_lapsed">TIME LAPSED</string>
+
+    <string name="start_time">Start Time</string>
+
+    <string name="no_bets">No Bets</string>
+
+    <string name="no_users">No Users</string>
+
+    <string name="no_message">No Message</string>
+
+    <string name="top_five_participants">Top 5 Participants</string>
+
+    <string name="please_agreed_terms_condition">Please Agreed To The Terms &amp; Condition</string>
+
+    <string name="permission_rationale">Please Grant Location Permission To Start The Service</string>
+
+    <string name="permission_denied_explanation">You Have Not Granted Location Permission. So the Service Cannot Be Started</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="title_alert_no_intenet">No Internet</string>
+
+    <string name="msg_alert_no_internet">Please Make Sure That You Have Active Internet Connection</string>
+    <string name="no_google_playservice_available">No Google Playservice Found. Please Install It</string>
+    <string name="msg_location_service_not_started">Location Tracking Not Started</string>
+    <string name="msg_location_service_started">Location Tracking Started</string>
+    <string name="btn_label_refresh">Refresh</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
+    <string name="GPSAlertDialogTitle">GPSAlert</string>
+    <string name="GPSAlertDialogMessage">GPS is not enabled. Do you want to go to setting menu</string>
+    <string name="GPS_Setting">Settings</string>
+    <string name="location_not_found">Location Services</string>
+
+    <string-array name="bottom_tabs">
+        <item>@string/tab_me</item>
+        <item>@string/tab_bet</item>
+        <item>@string/tab_live</item>
+        <item>@string/tab_messeg</item>
+        <item>@string/tab_settings</item>
+    </string-array>
+
+
+    <string name="subscription_period_prompt">Select your subscription period</string>
+    <string name="subscription_resignup_prompt">To reactivate your subscription, select your subscription period</string>
+    <string name="subscription_update_prompt">To change your subscription, select your new subscription period</string>
+    <string name="subscription_period_monthly">Monthly</string>
+    <string name="subscription_period_yearly">Yearly</string>
+    <string name="subscription_prompt_continue">Continue</string>
+    <string name="subscription_prompt_cancel">Cancel</string>
+    <string name="content_description_app_loading_image">App loading image</string>
+    <string name="content_description_title_image">80\'s Video Game Style Car Logo</string>
+    <string name="content_desc_gas_gauge_indicator">Gas gauge indicator</string>
+    <string name="content_desc_free_vs_premium_indicator">Free or Premium Image Indicator</string>
+    <string name="alert">Alert</string>
+    <string name="new_version">New version available</string>
+    <string name="update_app">Please, update app to new version to continue reposting.</string>
+    <string name="no_thanks">No, thanks</string>
+
+
+</resources>

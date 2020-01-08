@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/layout_whight_border"
+    android:id="@+id/row_main"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="5dp"
+    android:padding="@dimen/margin_10"
+    android:layout_marginTop="5dp"
+    android:layout_height="80dp">
+
+    <LinearLayout
+        android:id="@+id/row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:src="@drawable/fitbet__bet_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:orientation="vertical">
+
+
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/tv_Name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:text="azsfsfs"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|left"
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_Description"
+                        android:layout_width="0dp"
+                        android:layout_weight="1.5"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|left"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textSize="10dp" />
+
+                    <TextView
+                        android:id="@+id/km"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:visibility="visible"
+                        android:textSize="10dp"
+                        android:textColor="@color/light_blue"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/users_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="@color/hint_text_color"
+                        android:maxLength="5"
+                        android:textSize="10dp"
+                        android:drawablePadding="7dp"
+                        android:drawableLeft="@drawable/coin_icon"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|left"
+                        />
+                    <TextView
+                        android:id="@+id/left_days"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="@color/hint_text_color"
+                        android:layout_marginLeft="10dp"
+                        android:maxLength="7"
+                        android:visibility="gone"
+                        android:textSize="10dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|left"
+                        />
+                </TableRow>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

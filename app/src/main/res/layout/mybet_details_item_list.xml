@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/layout_whight_border"
+    android:layout_width="match_parent"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginBottom="5dp"
+    android:padding="@dimen/margin_10"
+    android:id="@+id/row"
+    android:layout_marginTop="5dp"
+    android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                        android:id="@+id/img_user"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:src="@drawable/group_icons" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_Name"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/main_text_color"
+                        android:text=""
+                        android:gravity="center|left"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_Country"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:textColor="@color/main_text_color"
+                        android:gravity="center|left"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:id="@+id/invite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:visibility="gone"
+                            android:background="@drawable/shape_button_roud_corner"
+                            android:backgroundTint="@color/light_blue"
+                            android:textColor="@color/white"
+                            android:text="@string/invite" />
+
+                        <TextView
+                            android:id="@+id/tv_km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/light_blue"
+                            android:ellipsize="marquee"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
+                            android:textSize="14dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            />
+                    </TableRow>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
