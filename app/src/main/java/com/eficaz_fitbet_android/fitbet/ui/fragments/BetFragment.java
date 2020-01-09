@@ -169,7 +169,6 @@ public class BetFragment extends Fragment implements LocationReceiveListener {
     private LocationManager mLocationManager;
 
     private int REQUEST_CHECK_SETTINGS=111;
-private FusedLocationProviderClient mFusedLocationProviderClient;
 private LocationReceiveListener locationReceiveListener;
     @Override
     public void onDestroy() {
@@ -234,15 +233,7 @@ stopLocationService();
         } else {  //No user has not granted the permissions yet. Request now.
             requestPermissions();
         }
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    Log.d("Lat n lon ",""+location.getLatitude()+" "+location.getLongitude());
-                }
-            }
-        });
+;
 
         intintView();
     }
@@ -647,6 +638,8 @@ stopLocationService();
         }
     }
     private void callDashboardDetailsApi() {
+        if(!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -680,6 +673,8 @@ stopLocationService();
         }
     }
     private void callJoinBetsAPi() {
+        if(!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBetList(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -744,6 +739,8 @@ stopLocationService();
         CustomProgress.getInstance().hideProgress();
     }
     private void callmyBetsApi() {
+        if(!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).MyBets(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -819,6 +816,8 @@ stopLocationService();
     }
 
     private void callUpcommingBetsAPi() {
+        if(!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpcommingBet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"");
         call.enqueue(new Callback<ResponseBody>() {
             @Override

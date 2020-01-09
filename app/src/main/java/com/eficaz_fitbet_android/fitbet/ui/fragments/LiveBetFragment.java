@@ -287,7 +287,7 @@ private boolean isTimerRunning,run=true;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
+if(googleMap!=null)
         googleMap.setMyLocationEnabled(true);
 
         if(positionMarker!=null) {
@@ -427,33 +427,33 @@ if(CustomProgress.getInstance().isShowing())
                 JSONArray jsonArray = new JSONArray(mainJsonObject.getString(PARTICIPANT));
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject arrayObject = jsonArray.getJSONObject(i);
-                    LiveBetDetails model = new LiveBetDetails();
-                    model.setPosition(arrayObject.getString(POSITION));
-                    model.setReg_key(arrayObject.getString(REG_KEY));
-                    model.setFirstname(arrayObject.getString(Contents.FIRST_NAME));
-                    model.setEmail(arrayObject.getString(Contents.EMAIL));
-                    model.setCreditScore(arrayObject.getString(Contents.CREDIT_SCORE));
-                    model.setWon(arrayObject.getString(WON));
+                    LiveBetDetails liveBetDetails = new LiveBetDetails();
+                    liveBetDetails.setPosition(arrayObject.getString(POSITION));
+                    liveBetDetails.setReg_key(arrayObject.getString(REG_KEY));
+                    liveBetDetails.setFirstname(arrayObject.getString(Contents.FIRST_NAME));
+                    liveBetDetails.setEmail(arrayObject.getString(Contents.EMAIL));
+                    liveBetDetails.setCreditScore(arrayObject.getString(Contents.CREDIT_SCORE));
+                    liveBetDetails.setWon(arrayObject.getString(WON));
 
-                    model.setLost(arrayObject.getString(Contents.LOST));
+                    liveBetDetails.setLost(arrayObject.getString(Contents.LOST));
 
-                    model.setCountry(arrayObject.getString(Contents.COUNTRY));
+                    liveBetDetails.setCountry(arrayObject.getString(Contents.COUNTRY));
 
-                    model.setProfile_pic(arrayObject.getString(PROFILE_PIC));
+                    liveBetDetails.setProfile_pic(arrayObject.getString(PROFILE_PIC));
 
-                    model.setImage_status(arrayObject.getString(IMAGE_STATUS));
+                    liveBetDetails.setImage_status(arrayObject.getString(IMAGE_STATUS));
 
-                    model.setRegType(arrayObject.getString(REG_TYPE));
+                    liveBetDetails.setRegType(arrayObject.getString(REG_TYPE));
 
-                    model.setDistance(arrayObject.getString(DISTANCE));
+                    liveBetDetails.setDistance(arrayObject.getString(DISTANCE));
 
-                    model.setStartdate(arrayObject.getString(Contents.START_DATE));
+                    liveBetDetails.setStartdate(arrayObject.getString(Contents.START_DATE));
 
-                    model.setPositionlongitude(arrayObject.getString(Contents.POSITION_LONGITUDE));
+                    liveBetDetails.setPositionlongitude(arrayObject.getString(Contents.POSITION_LONGITUDE));
 
-                    model.setPositionlatitude(arrayObject.getString(Contents.POSITION_LATITUDE));
+                    liveBetDetails.setPositionlatitude(arrayObject.getString(Contents.POSITION_LATITUDE));
 
-                    liveBetDetailsArrayList.add(model);
+                    liveBetDetailsArrayList.add(liveBetDetails);
 
 
                     if(arrayObject.getString("reg_key").equals(AppPreference.getPrefsHelper().getPref(REG_KEY,""))){
@@ -620,21 +620,27 @@ System.out.println("About  to call scheduleTimer ");
             e.printStackTrace();
         }
     }
-
+private int i=2;
     @Override
     public void onLocationReceived(Double lat, Double lon) {
         positionLatitude = lat;
         positionLongitude = lon;
         destination=""+lat+","+lon;
 
-        Log.d("onLocationRecved LIVE", "loc : " + lat + "," + lon);
+        i++;
+
+        if(i%3==0) {
+
+            Log.d("onLocationRcvd LIVE "+i, "location : " + lat + "," + lon);
 
 
-        if(!origin.equals(""))
-            fetchDirections(origin,destination);
-        origin=destination;
+            if (!origin.equals(""))
+                fetchDirections(origin, destination);
+            origin = destination;
 
-        onMapReady(googleMap);
+            onMapReady(googleMap);
+            i=0;
+        }
 
     }
 
@@ -952,8 +958,11 @@ System.out.println("Formatted distance "+userDistance);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if(!userRoute.equals(""))
+                        if(!userRoute.equals("")) {
+                           userRoute=userRoute.replaceAll("\\\\", "");
+                           System.out.println("Userroute == "+userRoute);
                             drawPolyLine(userRoute);
+                        }
 
                     }
                 });
