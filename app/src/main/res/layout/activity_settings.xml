@@ -134,7 +134,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:layout_marginTop="30dp"
-        android:background="@color/transparent"
+
         android:orientation="vertical">
 
         <LinearLayout

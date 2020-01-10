@@ -162,6 +162,7 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("Archives grouplist == "+bodyString);
                     groupDetailsList(bodyString);
                     CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {

@@ -90,6 +90,8 @@ private LocationCallback locationCallback=new LocationCallback(){
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mFusedLocationProviderClient!=null)
+        mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
         System.out.println("Destroy service");
         SLApplication.isServiceRunning=false;
     }

@@ -97,10 +97,12 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center|left"
+
                                     android:layout_marginLeft="@dimen/margin_10"
                                     android:gravity="center|left"
                                     android:hint="@string/start_location"
-                                    android:maxLines="1"
+
+                                    android:maxLines="4"
                                     android:textColor="@color/white"
                                     android:fontFamily="@font/lato_regular"
                                     android:textColorHint="@color/white"
@@ -123,7 +125,7 @@
                                     android:layout_gravity="center|left"
                                     android:layout_marginLeft="@dimen/margin_10"
                                     android:gravity="center|left"
-                                    android:maxLines="1"
+                                    android:maxLines="4"
                                     android:hint="@string/end_location"
                                     android:fontFamily="@font/lato_regular"
                                     android:textColor="@color/white"

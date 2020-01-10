@@ -2,6 +2,7 @@ package com.eficaz_fitbet_android.fitbet.ui;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -82,7 +83,7 @@ public class RedeemActivity extends BaseActivity {
     @Bind(R.id.admin_charge)
     TextView admin_charge;
 
-    String totalCredit="0";
+    private int totalCredit;
     double passingAmount;
 
     @Bind(R.id.space)
@@ -160,7 +161,7 @@ private MyDialog noInternetDialog;
                 }
             }
         });
-        amount.addTextChangedListener(new TextWatcher() {
+    /*    amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -197,14 +198,15 @@ private MyDialog noInternetDialog;
                     }
                 }
             }
-        });
+        });*/
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        amount.addTextChangedListener(new TextWatcher() {
+/*        amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -222,30 +224,30 @@ private MyDialog noInternetDialog;
                             //int dinamic_adminCharge=0,dinamic_stripe_charge=0;
 
                             double amount1= Integer.parseInt(s.toString());
-                            double amount2=(double) amount1*dinamic_adminCharge/100;
+                            double amount2= amount1*dinamic_adminCharge/100;
                             double adminCharge=amount2;
-                            passingAmount=(double)(amount1-amount2);
-                            double amount4=(double) passingAmount*dinamic_stripe_charge/100;
-                            double stripCharge=amount4;
-                            double amonut5=passingAmount-amount4;
-                            reduce_amount.setText(""+new DecimalFormat("##.##").format(amonut5)+" AUD");
+                            passingAmount=amount1-amount2;
+                            double stripCharge= passingAmount*dinamic_stripe_charge/100;
+
+                            double reduceAmount=passingAmount-stripCharge;
+                            reduce_amount.setText(""+new DecimalFormat("##.##").format(reduceAmount)+" AUD");
                             strip_charge.setText(""+new DecimalFormat("##.##").format(stripCharge));
                             admin_charge.setText(""+new DecimalFormat("##.##").format(adminCharge));
                         }
                     }else{
 
                     }
-                      /* if(!amount.getText().toString().equals("")){
+                      *//* if(!amount.getText().toString().equals("")){
                            if(Integer.parseInt(totalCredit)<Integer.parseInt(s.toString())){
                                amount.setText(totalCredit);
                            }else{
                            }
-                       }*/
+                       }*//*
                 }else{
                     reduce_amount.setText("0"+" AUD");
                 }
             }
-        });
+        });*/
     }
 
     private void getAdminCharge() {
@@ -306,29 +308,33 @@ private MyDialog noInternetDialog;
             }
         });
     }
-
+private double userCredit;
 
     private void DashboardDetailReportapiresult(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");
+            System.out.println("Dashboard redeem = "+bodyString);
             if (status.trim().equals("Ok")) {
                 String data1 = jsonObject.getString(DASH_BOARD_USERS);
                 JSONObject jsonObject1 = new JSONObject(data1);
-                amount.setText(jsonObject1.getString(DASH_BOARD_CREDIT_SCORE));
+
+                userCredit=jsonObject1.getDouble(DASH_BOARD_CREDIT_SCORE);
+                totalCredit=(int)userCredit;
+                amount.setText(String.valueOf(totalCredit));
+                amount.addTextChangedListener(textWatcher);
                 email.setText(jsonObject1.getString(EMAIL));
                 name.setText(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
-                totalCredit=amount.getText().toString();
 
 
-                double amount1= Integer.parseInt(jsonObject1.getString(DASH_BOARD_CREDIT_SCORE));
-                double amount2=(double) amount1*dinamic_adminCharge/100;
-                double adminCharge=amount2;
-                passingAmount=(double)(amount1-amount2);
-                double amount4=(double) passingAmount*dinamic_stripe_charge/100;
-                double stripCharge=amount4;
-                double amonut5=passingAmount-amount4;
-                reduce_amount.setText(""+new DecimalFormat("##.##").format(amonut5)+" AUD");
+
+                double amount1= jsonObject1.getDouble(DASH_BOARD_CREDIT_SCORE);
+                double adminCharge= amount1*dinamic_adminCharge/100;
+
+                passingAmount=amount1-adminCharge;
+                double stripCharge= passingAmount*dinamic_stripe_charge/100;
+                double reduceAmount=passingAmount-stripCharge;
+                reduce_amount.setText(""+new DecimalFormat("##.##").format(reduceAmount)+" AUD");
                 strip_charge.setText(""+new DecimalFormat("##.##").format(stripCharge));
                 admin_charge.setText(""+new DecimalFormat("##.##").format(adminCharge));
 
@@ -366,4 +372,60 @@ private MyDialog noInternetDialog;
             }
         });
     }
+
+
+    TextWatcher textWatcher=new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String result = s.toString().replaceAll(" ", "");
+            if (!s.toString().equals(result)) {
+                amount.setText(result);
+                amount.setSelection(result.length());
+                // alert the user
+            }
+            if(!s.toString().equals("")) {
+                if (Double.valueOf(result) > userCredit) {
+                    amount.setText(String.valueOf(totalCredit));
+                    amount.setSelection(amount.getText().length());
+
+
+                    double amount2 = userCredit * dinamic_adminCharge / 100;
+                    double adminCharge = amount2;
+                    passingAmount = userCredit - amount2;
+                    double stripCharge = passingAmount * dinamic_stripe_charge / 100;
+
+                    double reduceAmount = passingAmount - stripCharge;
+                    reduce_amount.setText("" + new DecimalFormat("##.##").format(reduceAmount) + " AUD");
+                    strip_charge.setText("" + new DecimalFormat("##.##").format(stripCharge));
+                    admin_charge.setText("" + new DecimalFormat("##.##").format(adminCharge));
+                } else {
+
+                    double amount1 = Double.parseDouble(s.toString());
+                    double amount2 = amount1 * dinamic_adminCharge / 100;
+                    double adminCharge = amount2;
+                    passingAmount = amount1 - amount2;
+                    double stripCharge = passingAmount * dinamic_stripe_charge / 100;
+
+                    double reduceAmount = passingAmount - stripCharge;
+                    reduce_amount.setText("" + new DecimalFormat("##.##").format(reduceAmount) + " AUD");
+                    strip_charge.setText("" + new DecimalFormat("##.##").format(stripCharge));
+                    admin_charge.setText("" + new DecimalFormat("##.##").format(adminCharge));
+                }
+            }
+
+
+
+        }
+    };
+
 }

@@ -7,18 +7,28 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,6 +83,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -124,6 +135,21 @@ import static com.eficaz_fitbet_android.fitbet.utils.Contents.WINNER_PARTICIPANT
 import static com.eficaz_fitbet_android.fitbet.utils.Contents.WON;
 
 public class LiveBetFragment extends Fragment implements OnMapReadyCallback , DirectionFinderListener, LocationReceiveListener {
+
+    @Bind(R.id.contstraint_layout)
+    ConstraintLayout constraintLayout;
+
+    @Bind(R.id.linearLayout)
+    LinearLayout linearLayout;
+
+    @Bind(R.id.frameLayout)
+    FrameLayout frameLayout;
+
+    @Bind(R.id.cardView)
+    CardView cardView;
+
+    @Bind({R.id.arrow})
+    ImageView arrowImage;
 
     @Bind({R.id.mapView})
     MapView mapView;
@@ -223,8 +249,86 @@ System.out.println("onViewCreated LiveBetFragment");
 
         }
 
+        arrowImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              if(((String)arrowImage.getTag()).equals("down")){
+                  arrowImage.setTag("up");
+                  arrowImage.setImageResource(R.drawable.arrow_up);
+                  setupNewConstraints();
+
+              }else{
+                  arrowImage.setTag("down");
+                  arrowImage.setImageResource(R.drawable.arrow_down);
+                  releaseNewConstraints();
+              }
+            }
+        });
+
     }
-private boolean isTimerRunning,run=true;
+
+    private void setupNewConstraints() {
+
+        frameLayout.setVisibility(View.GONE);
+        cardView.setVisibility(View.GONE);
+        betMembersRecyclerView.setVisibility(View.GONE);
+
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+        constraintSet.connect(R.id.mapView,ConstraintSet.BOTTOM,R.id.linearLayout,ConstraintSet.TOP,0);
+        constraintSet.connect(R.id.mapView,ConstraintSet.END,R.id.contstraint_layout,ConstraintSet.END,0);
+        constraintSet.connect(R.id.mapView,ConstraintSet.START,R.id.contstraint_layout,ConstraintSet.START,0);
+        constraintSet.connect(R.id.mapView,ConstraintSet.TOP,R.id.txt_bet_name,ConstraintSet.BOTTOM,0);
+        constraintSet.constrainDefaultHeight(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainDefaultWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.setVerticalBias(R.id.mapView,0.0f);
+        constraintSet.setHorizontalBias(R.id.mapView,0.0f);
+
+       constraintSet.constrainDefaultHeight(R.id.linearLayout,70);
+
+        constraintSet.applyTo(constraintLayout);
+
+/*        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_bet_name"
+        app:layout_constraintVertical_bias="0.0"*/
+
+    }
+    private void releaseNewConstraints() {
+        frameLayout.setVisibility(View.VISIBLE);
+        cardView.setVisibility(View.VISIBLE);
+        betMembersRecyclerView.setVisibility(View.VISIBLE);
+
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+        constraintSet.connect(R.id.mapView,ConstraintSet.BOTTOM,R.id.contstraint_layout,ConstraintSet.BOTTOM,0);
+        constraintSet.connect(R.id.mapView,ConstraintSet.END,R.id.contstraint_layout,ConstraintSet.END,0);
+        constraintSet.connect(R.id.mapView,ConstraintSet.START,R.id.contstraint_layout,ConstraintSet.START,0);
+        constraintSet.connect(R.id.mapView,ConstraintSet.TOP,R.id.txt_bet_name,ConstraintSet.BOTTOM,0);
+        constraintSet.constrainDefaultHeight(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainDefaultWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.setVerticalBias(R.id.mapView,0.0f);
+        constraintSet.setHorizontalBias(R.id.mapView,0.0f);
+
+        constraintSet.constrainDefaultHeight(R.id.linearLayout,60);
+
+        constraintSet.applyTo(constraintLayout);
+
+     /*      <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_bet_name"
+        app:layout_constraintVertical_bias="0.0" />*/
+    }
+
+    private boolean isTimerRunning,run=true;
     private void cancelTimer(){
 
         if(isTimerRunning){
@@ -263,25 +367,25 @@ private boolean isTimerRunning,run=true;
     @Override
     public void onStop() {
         System.out.println("Live bet inside onStop ");
-        run=false;
+  /*      run=false;
         if (SLApplication.isServiceRunning) {
             System.out.println("Live bet stopping service ");
             stopLocationService(serviceIntent);
             new LocService().stopSelf();
-        }
+        }*/
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        run=false;
-       /* _context.unregisterReceiver(broadcastReceiver);*/
+       // run=false;
+
     }
     @Override
     public void onPause() {
         super.onPause();
-        run=false;
+       // run=false;
     }
 
     @Override
@@ -292,14 +396,55 @@ if(googleMap!=null)
 
         if(positionMarker!=null) {
          // positionMarker.remove();
-     positionMarker.setPosition(new LatLng(positionLatitude,positionLongitude));
+    positionMarker.setPosition(new LatLng(positionLatitude,positionLongitude));
+           // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
             System.out.println("onMapReady drawing position marker");
         }
 
 
      googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  positionLatitude,   positionLongitude), 18f));
+
     }
 
+
+    private void animateMarker(final Marker marker , final LatLng startPosition, final LatLng toPosition,
+                              final boolean hideMarker) {
+
+
+
+
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+
+        final long duration = 1000;
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startPosition.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startPosition.latitude;
+
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                } else {
+                    if (hideMarker) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        });
+    }
     private boolean hasGPSDevice(Context context) {
         final LocationManager mgr = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (mgr == null)
@@ -393,6 +538,8 @@ if(CustomProgress.getInstance().isShowing())
 
                 startLatitude = betDetailsObject.getDouble(USER_start_latitude);
                 startLongitude = betDetailsObject.getDouble(USER_start_longitude);
+                positionLatitude=startLatitude;
+                positionLongitude=startLongitude;
                 positionMarker=googleMap.addMarker(positionMarkerOptions.position(new LatLng(startLatitude,startLatitude)));
                startMarker= googleMap.addMarker(startMarkerOptions.position(new LatLng(startLatitude, startLongitude)));
                onMapReady(googleMap);
@@ -480,18 +627,12 @@ if(CustomProgress.getInstance().isShowing())
                         }
 
                         double totalDistance= (arrayObject.getDouble(DISTANCE));
-                        double finalDistance= totalDistance/1000;
-                        final DecimalFormat f = new DecimalFormat("##.00");
-                        txtTotalKm.setText(""+f.format(finalDistance)+" km");
+                        txtTotalKm.setText(formatNumber2Decimals(totalDistance)+" km");
 
 
                         double remainingDistance=betDetailsObject.getDouble(TOTAL_DISTANCE)-arrayObject.getDouble(DISTANCE);
 
-                        DecimalFormat decimalFormat1 = new DecimalFormat("#.##");
-                        double decimal1= Double.parseDouble(String.valueOf(remainingDistance).replace("-",""));
-                        String input1 = String.valueOf(decimal1).substring(0,5);
-                        double numberAsString1= Double.parseDouble(input1);
-                        txtRemainingKm.setText(""+decimalFormat1.format(numberAsString1/1000)+" km");
+                        txtRemainingKm.setText(formatNumber2Decimals(remainingDistance)+" km");
 
                     }
 
@@ -510,7 +651,7 @@ if(CustomProgress.getInstance().isShowing())
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
-System.out.println("About  to call scheduleTimer ");
+
         scheduleTimer();
     }
 
@@ -621,24 +762,28 @@ System.out.println("About  to call scheduleTimer ");
         }
     }
 private int i=2;
+    private double userDistanceDouble=0.0;
     @Override
     public void onLocationReceived(Double lat, Double lon) {
-        positionLatitude = lat;
-        positionLongitude = lon;
-        destination=""+lat+","+lon;
-
         i++;
 
-        if(i%3==0) {
+        if(i%3==0 && positionLatitude != 0.0) {
 
-            Log.d("onLocationRcvd LIVE "+i, "location : " + lat + "," + lon);
 
+            Log.d("onLocationRcvd LIVE "+i, "location : " + lat + "," + lon+"poslat "+positionLatitude);
+
+            userDistanceDouble=userDistanceDouble+getDistance(positionLatitude,positionLongitude,lat,lon);
+
+            positionLatitude = lat;
+            positionLongitude = lon;
+            destination=""+lat+","+lon;
 
             if (!origin.equals(""))
                 fetchDirections(origin, destination);
             origin = destination;
 
             onMapReady(googleMap);
+          //  new UpdateAsyncTask().execute();
             i=0;
         }
 
@@ -659,7 +804,6 @@ private int i=2;
     }
 
     private void drawPolyLine(@NotNull String userRoute) {
-System.out.println("Calling draw polygon");
         List<LatLng> latLngList = new ArrayList<>();
 
         String[] splitRoutes = userRoute.split("fitbet");
@@ -668,7 +812,7 @@ System.out.println("Calling draw polygon");
 
         for (String route:routeList) {
             latLngList.clear();
-            latLngList = decodePolyLine(route);
+            latLngList = DirectionFinder.decodePolyLine(route);
             System.out.println("Routes "+route);
             final List<LatLng> finalLatLngList = latLngList;
             getActivity().runOnUiThread(new Runnable() {
@@ -736,17 +880,17 @@ System.out.println("Calling draw polygon");
         isTimerRunning=true;
     }
 
-    private String getDistance(Double startLat,Double startLon,Double positionLat,Double positionLon){
+    private double getDistance(Double startLat,Double startLon,Double positionLat,Double positionLon) {
 
-        Location startLocation=new Location("start");
+        Location startLocation = new Location("start");
         startLocation.setLatitude(startLat);
         startLocation.setLongitude(startLon);
-        Location positionLocation=new Location("position");
+        Location positionLocation = new Location("position");
         positionLocation.setLatitude(positionLat);
         positionLocation.setLongitude(positionLon);
-        System.out.println("Distance between "+startLocation.distanceTo(positionLocation));
-        float distance= startLocation.distanceTo(positionLocation);
-        return String.format(Locale.getDefault(), "%.2f", distance);
+        System.out.println("Distance between " + startLocation.distanceTo(positionLocation));
+        return    startLocation.distanceTo(positionLocation);
+
     }
 
     private String formatNumber2Decimals(double number ){
@@ -756,11 +900,26 @@ System.out.println("Calling draw polygon");
         return String.format(Locale.getDefault(), "%.2f", number) ;
     }
 
-    private void getUpdates() {
-userDistance=getDistance(startLatitude,startLongitude,positionLatitude,positionLongitude);
+    private class UpdateAsyncTask extends AsyncTask<Void,Void,Void>{
+  /*      WeakReference<LiveBetFragment> liveBetFragmentWeakReference;
+        UpdateAsyncTask(LiveBetFragment liveBetFragment)
+        {
+            liveBetFragmentWeakReference = new WeakReference<>(liveBetFragment);
+        }*/
+        @Override
+        protected Void doInBackground(Void... voids) {
 
-System.out.println("Formatted distance "+userDistance);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveDetailsUpdation(challengerId,userDistance,positionLongitude,positionLatitude, AppPreference.getPrefsHelper().getPref(REG_KEY,""),betType, userRoute);
+            getUpdates();
+
+            return null;
+        }
+    }
+
+    private void getUpdates() {
+
+
+System.out.println("Formatted distance "+formatNumber2Decimals(userDistanceDouble));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveDetailsUpdation(challengerId,""+userDistanceDouble,positionLongitude,positionLatitude, AppPreference.getPrefsHelper().getPref(REG_KEY,""),betType, userRoute);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -798,6 +957,8 @@ System.out.println("Formatted distance "+userDistance);
                                 if(regNo.equals(AppPreference.getPrefsHelper().getPref(REG_KEY,""))){
                                     if(!regNo.equals("")&&!winName.equals("")&&!won.equals("")&&!betId.equals("")){
                                         if(winner){
+                                            stopLocationService(serviceIntent);
+                                            cancelTimer();
                                             winner=false;
                                             counterHandler.removeCallbacks(counterRunnable);
                                             AppPreference.getPrefsHelper().savePref(Contents.UPDATE_METER, "0");
@@ -807,22 +968,22 @@ System.out.println("Formatted distance "+userDistance);
                                             i.putExtra(MYBETS_betid,betId);
                                             i.putExtra(WON,won);
                                             startActivity(i);
-                                            stopLocationService(serviceIntent);
-                                          cancelTimer();
+
                                         }
                                     }else{
                                         Utils.showCustomToastMsg(getActivity(), R.string.imvalid_entry);
                                     }
                                 }else{
                                     if(loser){
+                                        stopLocationService(serviceIntent);
+                                        cancelTimer();
                                         loser=false;
                                         counterHandler.removeCallbacks(counterRunnable);
                                         AppPreference.getPrefsHelper().savePref(Contents.UPDATE_METER, "0");
                                         Intent i = new Intent(getActivity(), LoserActivity.class);
                                         i.putExtra(MYBETS_betid,betId);
                                         startActivity(i);
-                                        stopLocationService(serviceIntent);
-                                        timer.cancel();
+
                                     }
                                 }
                             }

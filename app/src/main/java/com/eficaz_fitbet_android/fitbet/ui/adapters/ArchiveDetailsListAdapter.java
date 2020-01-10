@@ -3,6 +3,7 @@ package com.eficaz_fitbet_android.fitbet.ui.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,9 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.eficaz_fitbet_android.fitbet.utils.Contents.MYBETS_startlatitude;
+import static com.eficaz_fitbet_android.fitbet.utils.Contents.MYBETS_startlongitude;
 
 public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
     Context constant;
@@ -131,6 +135,16 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
                 i.putExtra(Contents.POSITION_LATITUDE,"");
                 i.putExtra(Contents.POSITION_LONGITUDE,"");
                 i.putExtra(Contents.ROUTE,m.getRoute());
+           Bundle b=new Bundle();
+                b.putString(Contents.POSITION_LATITUDE, m.getPositionlatitude());
+                b.putString(Contents.POSITION_LONGITUDE, m.getPositionlongitude());
+                b.putString(MYBETS_startlatitude,m.getStartlatitude());
+                b.putString(MYBETS_startlongitude,m.getStartlongitude());
+                b.putString("winner route",m.getRoute());
+                b.putString("distance",m.getDistance());
+                i.putExtras(b);
+
+
                 constant.startActivity(i);
             }
         });

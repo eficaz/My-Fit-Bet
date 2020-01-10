@@ -241,6 +241,11 @@ mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILIT
             }
         });
     }
+
+    public void setLive_bet(boolean live_bet) {
+        this.live_bet = live_bet;
+    }
+
     private void publishLiveDetails(String bodyString) {
 
         try {

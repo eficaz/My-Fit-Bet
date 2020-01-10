@@ -56,6 +56,7 @@ import retrofit2.Response;
 
 import static com.eficaz_fitbet_android.fitbet.utils.Contents.CAMERA_REQUEST_CODE;
 import static com.eficaz_fitbet_android.fitbet.utils.Contents.CAMERA_VIDEO_REQUEST_CODE;
+import static com.eficaz_fitbet_android.fitbet.utils.Contents.DASH_BOARD_POSICTION;
 import static com.eficaz_fitbet_android.fitbet.utils.Contents.FIRST_NAME;
 import static com.eficaz_fitbet_android.fitbet.utils.Contents.MYBETS_betid;
 import static com.eficaz_fitbet_android.fitbet.utils.Contents.REG_KEY;
@@ -137,6 +138,8 @@ public class WinnerActivity extends BaseActivity implements CommonUsage {
                 CustomProgress.getInstance().showProgress(WinnerActivity.this, "", false);
                 }else{
                     CustomProgress.getInstance().hideProgress();
+                    AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"0");
+                    startActivity(new Intent(WinnerActivity.this,DashBoardActivity.class));
                     finish();
                 }
             }

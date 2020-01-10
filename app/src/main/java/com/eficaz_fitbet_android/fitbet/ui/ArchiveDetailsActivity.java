@@ -145,7 +145,7 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     @Bind(R.id.map_row)
     LinearLayout map_row;
 
-    String winerLat="",winerLog="";
+    String winnerPositionLat ="", winnerPositionLog ="";
     String imagepath;
     String videopath;
     String uaser_image,winer_name,credit,winner_description;
@@ -173,6 +173,11 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     ArrayList<ArchivesDetails> archivesDetailsList;
 
     ArchiveDetailsListAdapter archiveDetailsListAdapter;
+    private String originalRoute;
+    private String originalStartLat;
+    private String originalStartLog;
+    private String originalDistance, originalEndLat, originalEndLog,startAddress,endAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,12 +281,18 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ArchiveDetailsActivity.this, MapRedirectDetailedActivity.class);
-                i.putExtra(Contents.POSITION_LATITUDE,winerLat);
-                i.putExtra(Contents.POSITION_LONGITUDE,winerLog);
-                i.putExtra(MYBETS_startlongitude,startlongitude);
-                i.putExtra(MYBETS_endlongitude,endlongitude);
-                i.putExtra(MYBETS_startlatitude,startlatitude);
-                i.putExtra(MYBETS_endlatitude,endlatitude);
+                Bundle b=new Bundle();;
+               b.putString(Contents.POSITION_LATITUDE, originalEndLat);
+                b.putString(Contents.POSITION_LONGITUDE, originalEndLog);
+                b.putString(MYBETS_startlongitude,originalStartLog);
+                b.putString(MYBETS_startlatitude,originalStartLat);
+                b.putString("original route",originalRoute);
+                b.putString("original distance",originalDistance);
+                b.putString("start address",startAddress);
+                b.putString("end address",endAddress);
+                System.out.println("Extraaaa "+ originalEndLat +","+ originalEndLog +","+originalStartLog+","+originalStartLat);
+                i.putExtras(b);
+
                 startActivity(i);
             }
         });
@@ -324,6 +335,7 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     Archivebetdetail(bodyString);
+                    System.out.println("Archive details == "+bodyString);
                     CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -339,41 +351,41 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
             if (data.equals("Ok")) {
-                    JSONObject jsonObject1 = new JSONObject(bodyString);
-                    String data1 = jsonObject1.getString(PARTICIPANT);
+
+                    String data1 = jsonObject.getString(PARTICIPANT);
                     JSONArray jsonArray = new JSONArray(data1);
                     archivesDetailsList = new ArrayList<>();
                     archivesDetailsList.clear();
-                     betName=jsonObject1.getString(MYBETS_betname);
-                     betid=jsonObject1.getString(MYBETS_betid);
-                     bet_TOTAL_PARTICIPANTS=jsonObject1.getString(TOTAL_PARTICIPANTS);
-                    group_name.setText(jsonObject1.getString(MYBETS_betname));
+                     betName=jsonObject.getString(MYBETS_betname);
+                     betid=jsonObject.getString(MYBETS_betid);
+                     bet_TOTAL_PARTICIPANTS=jsonObject.getString(TOTAL_PARTICIPANTS);
+                    group_name.setText(jsonObject.getString(MYBETS_betname));
                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                    double decimal= Double.parseDouble(String.valueOf(jsonObject1.getString(MYBETS_distance)).replace("-",""));
+                    double decimal= Double.parseDouble(String.valueOf(jsonObject.getString(MYBETS_distance)).replace("-",""));
                     String input;
-                    if(jsonObject1.getString(MYBETS_distance).length()>5){
+                    if(jsonObject.getString(MYBETS_distance).length()>5){
                          input = String.valueOf(decimal).substring(0,5);
                     }else{
                          input = String.valueOf(decimal);
                     }
                     double numberAsString= Double.parseDouble(input);
                     participants.setText(""+decimalFormat.format(numberAsString/1000));
-                    if(jsonObject1.getString(WINNER_description).equals("")){
+                    if(jsonObject.getString(WINNER_description).equals("")){
                         wiiner_discreption.setVisibility(View.GONE);
                     }
-                    messages.setText(jsonObject1.getString(TOTAL_MESSAGE));
-                    discreption.setText(jsonObject1.getString(DESCRIPTION));
-                    credits.setText(jsonObject1.getString(MYBETS_credit));
-                    user_count.setText(jsonObject1.getString(TOTAL_PARTICIPANTS));
-                    startlatitude=jsonObject1.getString(MYBETS_startlatitude);
-                    startlongitude=jsonObject1.getString(MYBETS_startlongitude);
-                    endlatitude=jsonObject1.getString(MYBETS_endlatitude);
-                    endlongitude=jsonObject1.getString(MYBETS_endlongitude);
-                    country.setText(jsonObject1.getString(WINNER_CREDIT));
+                    messages.setText(jsonObject.getString(TOTAL_MESSAGE));
+                    discreption.setText(jsonObject.getString(DESCRIPTION));
+                    credits.setText(jsonObject.getString(MYBETS_credit));
+                    user_count.setText(jsonObject.getString(TOTAL_PARTICIPANTS));
+                    startlatitude=jsonObject.getString(MYBETS_startlatitude);
+                    startlongitude=jsonObject.getString(MYBETS_startlongitude);
+                    endlatitude=jsonObject.getString(MYBETS_endlatitude);
+                    endlongitude=jsonObject.getString(MYBETS_endlongitude);
+                    country.setText(jsonObject.getString(WINNER_CREDIT));
                 try{
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     df.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    Date date = df.parse(jsonObject1.getString(MYBETS_date));
+                    Date date = df.parse(jsonObject.getString(MYBETS_date));
                     df.setTimeZone(TimeZone.getDefault());
                     String formattedDate = df.format(date);
                     DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy");
@@ -385,18 +397,28 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                    if(jsonObject1.getString(MYBETS_bettype).equals("distance")){
+                    if(jsonObject.getString(MYBETS_bettype).equals("distance")){
                         map_row.setVisibility(View.GONE);
+                        originalRoute=jsonObject.getString("route");
+                        originalDistance=jsonObject.getString("distance");
+
+                        originalStartLat=jsonObject.getString("startlatitude");
+                        originalStartLog=jsonObject.getString("startlongitude");
+                        originalEndLat =jsonObject.getString("endlatitude");
+                        originalEndLog =jsonObject.getString("endlongitude");
+                        startAddress=jsonObject.getString("startlocation");
+                        endAddress=jsonObject.getString("endlocation");
+
                     }else{
                         map_row.setVisibility(View.VISIBLE);
                     }
-                    if(jsonObject1.getString(FILE_TYPE).equals("image")){
-                        imagepath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject1.getString(FILE_PATH);
+                    if(jsonObject.getString(FILE_TYPE).equals("image")){
+                        imagepath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);
                         String fileType="0";
                         video_type.setVisibility(View.GONE);
                         img_type.setVisibility(View.VISIBLE);
-                    }else if(jsonObject1.getString(FILE_TYPE).equals("video")){
-                        videopath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject1.getString(FILE_PATH);
+                    }else if(jsonObject.getString(FILE_TYPE).equals("video")){
+                        videopath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);
                         String fileType="1";
                         video_type.setVisibility(View.VISIBLE);
                         img_type.setVisibility(View.GONE);
@@ -408,11 +430,12 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         if(jsonList.getString(POSITION).equals("1")){
                             wiinerName.setText(jsonList.getString(FIRST_NAME));
-                            winerLat=jsonList.getString(POSITION_LATITUDE);
-                            winerLog=jsonList.getString(POSITION_LONGITUDE);
+                            winnerPositionLat =jsonList.getString(POSITION_LATITUDE);
+                            winnerPositionLog =jsonList.getString(POSITION_LONGITUDE);
+
                             winer_name=jsonList.getString(FIRST_NAME);
-                            credit=jsonObject1.getString(WINNER_CREDIT);
-                            winner_description=jsonObject1.getString(WINNER_description);
+                            credit=jsonObject.getString(WINNER_CREDIT);
+                            winner_description=jsonObject.getString(WINNER_description);
                             if (!jsonList.getString(PROFILE_PIC).equals("NA")) {
                                 if (jsonList.getString(REG_TYPE).equals("normal")&&jsonList.getString(IMAGE_STATUS).equals("0")){
                                     uaser_image=Constant.BASE_APP_IMAGE__PATH+jsonList.getString(PROFILE_PIC);

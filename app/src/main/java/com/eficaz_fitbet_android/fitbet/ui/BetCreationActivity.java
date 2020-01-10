@@ -626,20 +626,20 @@ public class BetCreationActivity extends BaseActivity {
                     Utils.showCustomToastMsg(BetCreationActivity.this, R.string.enter_credit);
                 }else if(fromDate.equals("")||toDate.equals("")){
                     Utils.showCustomToastMsg(BetCreationActivity.this, R.string.select_date);
-                }else if(distanceKm==true){
+                }else if(distanceKm){
                     if(edBet_km.getText().toString().startsWith("0")){
                         edBet_km.setText("");
                     }else{
                         if(!edBet_km.getText().toString().equals("")){
-                            if(distanceKm==true){
+                            if(distanceKm){
                                 callAddBetApi();
                                 CustomProgress.getInstance().showProgress(BetCreationActivity.this, "", false);
                             }
-                        } else if(kmInDec==0 ||distanceLocation==true){
+                        } else if(kmInDec==0 ||distanceLocation){
                             Utils.showCustomToastMsg(BetCreationActivity.this, R.string.enter_km);
                         }
                     }
-                }else if(distanceLocation==true){
+                }else if(distanceLocation){
                     callAddLocationTypeBetApi();
                     CustomProgress.getInstance().showProgress(BetCreationActivity.this, "", false);
                 }

@@ -356,7 +356,6 @@ stopLocationService();
         bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
         bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
         bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
-        CustomProgress.getInstance().showProgress(getActivity(), "", false);
         tab_selection=0;
         bt_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,7 +433,7 @@ stopLocationService();
                 searchView.setText("");
                 callUpcommingBetsAPi();
                 tab_selection=0;
-                CustomProgress.getInstance().showProgress(getActivity(), "", false);
+
             }
         });
         my_bets.setOnClickListener(new View.OnClickListener() {
@@ -458,7 +457,7 @@ stopLocationService();
                 searchView.setText("");
                 callmyBetsApi();
                 tab_selection=1;
-                CustomProgress.getInstance().showProgress(getActivity(), "", false);
+
             }
         });
         searchView.setFocusable(false);
@@ -514,7 +513,7 @@ stopLocationService();
                     bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
                     bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
                     callJoinBetsAPi();
-                    CustomProgress.getInstance().showProgress(getActivity(), "", false);
+
                 }
             }
         });
@@ -625,7 +624,7 @@ stopLocationService();
                     startActivity(i);
                 }
             }
-        } else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals(4)){
+        } else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("4")){
             upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
             my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
             bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
@@ -646,6 +645,7 @@ stopLocationService();
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("callDashboardDetailsApi "+bodyString);
                     DashboardDetailReportapiresult(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -658,6 +658,10 @@ stopLocationService();
         });
     }
     private void DashboardDetailReportapiresult(String bodyString) {
+
+        /*if(CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().hideProgress();*/
+
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");
@@ -747,9 +751,11 @@ stopLocationService();
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("callmyBetsApi === "+bodyString);
                     createMybets(bodyString);
-                    CustomProgress.getInstance().hideProgress();
+
                 } catch (Exception e) {
+                    CustomProgress.getInstance().hideProgress();
                     e.printStackTrace();
                 }
             }
@@ -763,53 +769,55 @@ stopLocationService();
         try{
             JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")){
+            if(data.equals("Ok")) {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
-                }
-                MyBetesDetails = new ArrayList<>();
-                MyBetesDetails.clear();
-                joinDetails = new ArrayList<>();
-                joinDetails.clear();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonList = jsonArray.getJSONObject(i);
-                    MyBets model = new MyBets();
-                    model.setBetid(jsonList.getString(Contents.MYBETS_betid));
-                    model.setBetname(jsonList.getString(Contents.MYBETS_betname));
-                    model.setDescription(jsonList.getString(Contents.MYBETS_description));
-                    model.setDate(jsonList.getString(Contents.MYBETS_date));
-                    model.setTotal(jsonList.getString(Contents.TOTAL));
-                    model.setEnddate(jsonList.getString(Contents.MYBETS_enddate));
-                    model.setDistance(jsonList.getString(Contents.MYBETS_distance));
-                    model.setStartlocation(jsonList.getString(Contents.MYBETS_startlocation));
-                    model.setEndlocation(jsonList.getString(Contents.MYBETS_endlocation));
-                    model.setStartlongitude(jsonList.getString(Contents.MYBETS_startlongitude));
-                    model.setEndlongitude(jsonList.getString(Contents.MYBETS_endlongitude));
-                    model.setStartlatitude(jsonList.getString(Contents.MYBETS_startlatitude));
-                    model.setEndlatitude(jsonList.getString(Contents.MYBETS_endlatitude));
-                    model.setRoute(jsonList.getString(Contents.MYBETS_route));
-                    model.setCredit(jsonList.getString(Contents.MYBETS_credit));
-                    model.setWinner(jsonList.getString(Contents.MYBETS_winner));
-                    model.setStatus(jsonList.getString(Contents.MYBETS_status));
-                    model.setCreatedate(jsonList.getString(Contents.MYBETS_createdate));
-                    model.setCreatedby(jsonList.getString(Contents.MYBETS_createdby));
-                    model.setBettype(jsonList.getString(Contents.MYBETS_bettype));
-                    model.setChallengerid(jsonList.getString(Contents.MYBETS_challengerid));
-                    model.setStarted(jsonList.getString(Contents.MYBETS_started));
-                    model.setEditstatus(jsonList.getString(Contents.MYBETS_editstatus));
-                    MyBetesDetails.add(model);
-                }
-                myBetsListAdapter = new MyBetsDetailsListAdapter(getActivity(), MyBetesDetails,bodyString);
-                list.setHasFixedSize(true);
-                list.setLayoutManager(new LinearLayoutManager(getActivity()));
-                list.setAdapter(myBetsListAdapter);
-            }
 
+                    MyBetesDetails = new ArrayList<>();
+                    MyBetesDetails.clear();
+                    joinDetails = new ArrayList<>();
+                    joinDetails.clear();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonList = jsonArray.getJSONObject(i);
+                        MyBets model = new MyBets();
+                        model.setBetid(jsonList.getString(Contents.MYBETS_betid));
+                        model.setBetname(jsonList.getString(Contents.MYBETS_betname));
+                        model.setDescription(jsonList.getString(Contents.MYBETS_description));
+                        model.setDate(jsonList.getString(Contents.MYBETS_date));
+                        model.setTotal(jsonList.getString(Contents.TOTAL));
+                        model.setEnddate(jsonList.getString(Contents.MYBETS_enddate));
+                        model.setDistance(jsonList.getString(Contents.MYBETS_distance));
+                        model.setStartlocation(jsonList.getString(Contents.MYBETS_startlocation));
+                        model.setEndlocation(jsonList.getString(Contents.MYBETS_endlocation));
+                        model.setStartlongitude(jsonList.getString(Contents.MYBETS_startlongitude));
+                        model.setEndlongitude(jsonList.getString(Contents.MYBETS_endlongitude));
+                        model.setStartlatitude(jsonList.getString(Contents.MYBETS_startlatitude));
+                        model.setEndlatitude(jsonList.getString(Contents.MYBETS_endlatitude));
+                        model.setRoute(jsonList.getString(Contents.MYBETS_route));
+                        model.setCredit(jsonList.getString(Contents.MYBETS_credit));
+                        model.setWinner(jsonList.getString(Contents.MYBETS_winner));
+                        model.setStatus(jsonList.getString(Contents.MYBETS_status));
+                        model.setCreatedate(jsonList.getString(Contents.MYBETS_createdate));
+                        model.setCreatedby(jsonList.getString(Contents.MYBETS_createdby));
+                        model.setBettype(jsonList.getString(Contents.MYBETS_bettype));
+                        model.setChallengerid(jsonList.getString(Contents.MYBETS_challengerid));
+                        model.setStarted(jsonList.getString(Contents.MYBETS_started));
+                        model.setEditstatus(jsonList.getString(Contents.MYBETS_editstatus));
+                        MyBetesDetails.add(model);
+                    }
+                    myBetsListAdapter = new MyBetsDetailsListAdapter(getActivity(), MyBetesDetails, bodyString);
+                    list.setHasFixedSize(true);
+                    list.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    list.setAdapter(myBetsListAdapter);
+                }
+            }
+            if(CustomProgress.getInstance().isShowing())
+                CustomProgress.getInstance().hideProgress();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -825,7 +833,7 @@ stopLocationService();
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     ResultUpcommingBets(bodyString);
-                    CustomProgress.getInstance().hideProgress();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -902,6 +910,8 @@ stopLocationService();
             JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
             if(data.equals("Ok")){
+                if(CustomProgress.getInstance().isShowing())
+                    CustomProgress.getInstance().hideProgress();
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
