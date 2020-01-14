@@ -83,7 +83,7 @@
     <string name="bet_create_bet">CREATE BET</string>
     <string name="invite_users">Invite Users</string>
     <!--<string name="google_maps_key">AIzaSyCo1aS5JTLL59Mz5seG8AaxrjgAYjvCW9o</string>-->
-    <string name="google_maps_key">AIzaSyC4AdGVuQ00-kPjEctDsZTIDWRUKJNQ1kk</string>
+    <string name="google_maps_key">AIzaSyDprgIGxT3UqTDoROqfQ2BqHBRfKdOD0oQ</string>
     <string name="start_point">Start Point</string>
     <string name="end_point">End Point</string>
     <string name="skip">Skip</string>
@@ -282,6 +282,8 @@
     <string name="new_version">New version available</string>
     <string name="update_app">Please, update app to new version to continue reposting.</string>
     <string name="no_thanks">No, thanks</string>
+    <string name="rules_regulations"><![CDATA[Rules & Regulations]]></string>
+    <string name="decline">DECLINE</string>
 
 
 </resources>

@@ -50,8 +50,8 @@
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
--keep class com.crashlytics.** { *; }
--dontwarn com.crashlytics.**
+
+
 
 -dontwarn com.instagram.common.json.**
 -dontwarn com.fasterxml.jackson.databind.ext.DOMSerializer

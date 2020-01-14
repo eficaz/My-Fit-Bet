@@ -143,7 +143,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.0">
 
-        <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+        <com.androidapp.fitbet.utils.CircleImageView
             android:id="@+id/img_user"
             android:layout_width="44dp"
             android:layout_height="33dp"

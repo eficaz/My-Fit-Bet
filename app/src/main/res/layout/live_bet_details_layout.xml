@@ -300,7 +300,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center">
 
-                                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                                <com.androidapp.fitbet.utils.CircleImageView
                                     android:id="@+id/img_user"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"

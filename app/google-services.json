@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:824020980818:android:6b5901ba66c3a8b103bb8b",
+        "android_client_info": {
+          "package_name": "com.androidapp.fitbet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824020980818-mlp28ptut0qiktr67pe1log0cd2famru.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.androidapp.fitbet",
+            "certificate_hash": "dd45ee1cf0fe42b9ffbd86a0153d8d816e484385"
+          }
+        },
+        {
+          "client_id": "824020980818-77a15vvkfbufps6g1bh09h8rhort14pk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo1aS5JTLL59Mz5seG8AaxrjgAYjvCW9o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824020980818-77a15vvkfbufps6g1bh09h8rhort14pk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:824020980818:android:c0dabe9d365cfe3703bb8b",
         "android_client_info": {
           "package_name": "com.eficaz_android.fitbet"

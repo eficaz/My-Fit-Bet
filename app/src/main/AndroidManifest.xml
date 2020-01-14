@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.eficaz_fitbet_android.fitbet">
+    package="com.androidapp.fitbet">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,7 +21,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
-        android:name="com.eficaz_fitbet_android.fitbet.utils.SLApplication"
+        android:name="com.androidapp.fitbet.utils.SLApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -32,13 +32,13 @@
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.eficaz_fitbet_android.fitbet.ui.ProfileActivity"
+        <activity android:name="com.androidapp.fitbet.ui.ProfileActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan"></activity>
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.CreditPurchaseActivity"
+            android:name="com.androidapp.fitbet.ui.CreditPurchaseActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
@@ -90,183 +90,183 @@
         </provider>
         -->
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.videoplayer"
+            android:name="com.androidapp.fitbet.ui.videoplayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
             android:theme="@style/NOAppTheme" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.EditBetCreationActivity"
+            android:name="com.androidapp.fitbet.ui.EditBetCreationActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.PrivacyPolicyActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.TermsAndServiceActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MessageListActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.JoinBetsActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.WinnerActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.LoserActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.RedeemActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.ChangePasswordActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.ArchiveDetailsActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.ArchivesListActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MessageActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.UpcomingBetDetailActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MyBetDetailActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.UpcommingBetActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MyBetUserInviteActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MyBetGroupInviteActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.CountrySelectionActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.fragments.SettingsFragment"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.GoogleSearchAutoCompleteActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MapDistanceByLoctionActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.MapRedirectDetailedActivity"
+            android:name="com.androidapp.fitbet.ui.PrivacyPolicyActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.ArchiveListMapDetailedActivity"
+            android:name="com.androidapp.fitbet.ui.TermsAndServiceActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MessageListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.JoinBetsActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.WinnerActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.LoserActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.RedeemActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.ChangePasswordActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.ArchiveDetailsActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.ArchivesListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MessageActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.UpcomingBetDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MyBetDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.UpcommingBetActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MyBetUserInviteActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MyBetGroupInviteActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.CountrySelectionActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.fragments.SettingsFragment"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.GoogleSearchAutoCompleteActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MapDistanceByLoctionActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.androidapp.fitbet.ui.MapRedirectDetailedActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.InviteGroupListActivity"
+            android:name="com.androidapp.fitbet.ui.ArchiveListMapDetailedActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name="com.androidapp.fitbet.ui.InviteGroupListActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.BetCreationActivity"
+            android:name="com.androidapp.fitbet.ui.BetCreationActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.InviteGroupActivity"
+            android:name="com.androidapp.fitbet.ui.InviteGroupActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.CreateGroupActivity"
+            android:name="com.androidapp.fitbet.ui.CreateGroupActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.ui.DashBoardActivity"
+            android:name="com.androidapp.fitbet.ui.DashBoardActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.SplashActivity"
+            android:name="com.androidapp.fitbet.SplashActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -304,9 +304,7 @@
         <meta-data
             android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
             android:value="true" />
-        <meta-data
-            android:name="firebase_crash_collection_enabled"
-            android:value="true" />
+
         <meta-data
             android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
             android:value="true" />
@@ -329,7 +327,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.SignUpActivity"
+            android:name="com.androidapp.fitbet.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
@@ -341,7 +339,7 @@
             android:windowSoftInputMode="adjustResize" />
         -->
         <activity
-            android:name="com.eficaz_fitbet_android.fitbet.LoginActivity"
+            android:name="com.androidapp.fitbet.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
@@ -353,18 +351,18 @@
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="location" />-->
-        <service android:name="com.eficaz_fitbet_android.fitbet.map.LocationMonitoringService" />
+        <service android:name="com.androidapp.fitbet.map.LocationMonitoringService" />
         <!--<service android:name="com.eficaz_fitbet_android.fitbet.map.LocationFinder" />-->
         <service
-            android:name="com.eficaz_fitbet_android.fitbet.service.Firebase_messagingService"
+            android:name="com.androidapp.fitbet.service.Firebase_messagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".service.LocService" />
-        <receiver android:name=".service.LocReceiver">
+        <service android:name="com.androidapp.fitbet.service.LocService" />
+        <receiver android:name="com.androidapp.fitbet.service.LocReceiver">
             <intent-filter>
                 <action android:name="location_update"></action>
             </intent-filter>

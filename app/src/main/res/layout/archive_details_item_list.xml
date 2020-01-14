@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.eficaz_fitbet_android.fitbet.utils.CircleImageView
+                <com.androidapp.fitbet.utils.CircleImageView
                     android:id="@+id/img_user"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

@@ -2,7 +2,7 @@
 <paths>
     <external-path name="external_files" path="."/>
     <external-path
-        path="Android/data/com.eficaz_fitbet_android.fitbet/"
+        path="Android/data/com.androidapp.fitbet/"
         name="files_root" />
     <root-path name="root" path="." />
     <external-path
