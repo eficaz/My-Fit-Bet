@@ -99,5 +99,6 @@
     <dimen name="tool_bar_height">56dp</dimen>
     <dimen name="text_margin">12dp</dimen>
     <dimen name="margin_50">50dp</dimen>
+    <dimen name="size_75">75dp</dimen>
 
 </resources>

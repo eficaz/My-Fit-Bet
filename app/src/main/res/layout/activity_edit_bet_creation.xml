@@ -50,8 +50,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="25"
-            android:layout_marginTop="20dp"
+            android:layout_weight="27"
+            android:layout_marginTop="15dp"
             android:padding="20dp"
             android:background="@drawable/shape_button_roud_corner1"
             android:layout_marginBottom="30dp"
@@ -377,7 +377,7 @@
                 android:gravity="center|left"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="2dp"
+
                 android:layout_weight="1" >
 
                 <TextView
@@ -389,7 +389,7 @@
                     android:textColorHint="@color/hint_text_color"
                     android:textColor="@color/main_text_color"
                     android:singleLine="true"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                     />
             </TableRow>
@@ -398,10 +398,9 @@
                 android:id="@+id/toRow"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:gravity="center|left"
+                android:gravity="center|start"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="2dp"
                 android:layout_weight="1" >
 
                 <TextView
@@ -413,7 +412,7 @@
                     android:textColorHint="@color/hint_text_color"
                     android:textColor="@color/main_text_color"
                     android:singleLine="true"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                     />
             </TableRow>
@@ -424,7 +423,7 @@
                 android:gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_weight="1.3" >
+                android:layout_weight="1.5" >
 
                 <RelativeLayout android:layout_height="wrap_content"
                     android:layout_width="wrap_content"

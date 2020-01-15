@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
+import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.model.MyBets;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
@@ -51,13 +52,14 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
 
     Double lat,log;
     SimpleDateFormat sdf;
-
+private MyDialog noInternetDialog;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
     public UpcommingBetsDetailsListAdapter(Context context, ArrayList<MyBets> myDataset) {
         this.constant = context;
         this.groupListModels = myDataset;
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
+        noInternetDialog=new MyDialog(context,null,context.getString(R.string.no_internet),context.getString(R.string.no_internet_message),context.getString(R.string.ok),"",true,"internet");
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -97,16 +99,6 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
         viewholder.users_count.setText(""+m.getCredit());
         viewholder.left_days.setText("Total "+(Double.parseDouble(m.getDistance())/1000) +"Km");
 
-        if(groupListModels.get(position).getChallengerid().equals("null") || groupListModels.get(position).getChallengerid().equals("")){
-            viewholder.join_now.setVisibility(View.VISIBLE);
-            viewholder.start.setVisibility(View.GONE);
-        }else if(!groupListModels.get(position).getChallengerid().equals("") &&!groupListModels.get(position).getStarted().equals("no")){
-            viewholder.join_now.setVisibility(View.GONE);
-            viewholder.start.setVisibility(View.VISIBLE);
-        }else{
-            viewholder.join_now.setVisibility(View.GONE);
-            viewholder.start.setVisibility(View.GONE);
-        }
         viewholder.rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,13 +115,16 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
             public void onClick(View v) {
                 android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(constant)
                         .setTitle("")
-                        .setMessage("Are you sure about joining "+groupListModels.get(position).getBetname())
+                        .setMessage("Are you sure about joining "+groupListModels.get(position).getBetname()+"?")
                         .setPositiveButton("Yes",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        CustomProgress.getInstance().showProgress(constant, "", false);
-                                        callJoinApi(position);
+
+                                        if(Utils.isConnectedToInternet(constant)) {
+                                            CustomProgress.getInstance().showProgress(constant, "", false);
+                                            callJoinApi(position);
+                                        }else  noInternetDialog.show();
                                     }
                                 }) .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -145,49 +140,96 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
 
             }
         });
-        viewholder. start.setOnClickListener(new View.OnClickListener() {
+        viewholder. decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String latitudeLongitude = Utils.getLocationFromNetwork();
-                String[] Lat = latitudeLongitude.split(",");
-                lat= Double.valueOf(Lat[0]);
-                log= Double.valueOf(Lat[1]);
-                Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(groupListModels.get(position).getChallengerid(),groupListModels.get(position).getDistance(),log.toString(),lat.toString(),
-                        AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            String bodyString = new String(response.body().bytes(), "UTF-8");
-                            final JSONObject jsonObject;
-                            try {
-                                jsonObject = new JSONObject(bodyString);
-                                String data = jsonObject.getString("Status");
-                                if(data.equals("Ok")){
-                                    CustomProgress.getInstance().hideProgress();
-                                    viewholder.join_now.setVisibility(View.GONE);
-                                    viewholder.start.setVisibility(View.GONE);
-                                    viewholder.button_row.setVisibility(View.GONE);
-                                    //notifyDataSetChanged();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            //groupDetailsList(bodyString,position);
 
-                            //listOrderGroup(bodyString);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        CustomProgress.getInstance().hideProgress();
-                    }
-                });
+
+                android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(constant)
+                        .setTitle("")
+                        .setMessage("Are you sure about decline "+groupListModels.get(position).getBetname()+"?")
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(Utils.isConnectedToInternet(constant))
+                                        declineBet(position);
+                                        else
+                                            noInternetDialog.show();
+                                    }
+                                }) .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                            }
+                        }).create();
+                dialog.show();
+
+
+
+
+
+
+
+
+
+
+
+
             }
         });
     }
+
+    private void declineBet(final int position) {
+
+
+
+        if(!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(constant, "", false);
+
+        System.out.println("bet Id "+groupListModels.get(position).getBetid()+" reg key "+AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).declineInvite(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),groupListModels.get(position).getBetid());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String bodyString = new String(response.body().bytes(), "UTF-8");
+                    final JSONObject jsonObject;
+                    try {
+                        CustomProgress.getInstance().hideProgress();
+                        jsonObject = new JSONObject(bodyString);
+                        System.out.println("Decline bet = "+bodyString);
+                        String data = jsonObject.getString("Status");
+                        String message=jsonObject.getString("Msg");
+                        if(data.equals("Ok")){
+
+                            groupListModels.remove(position);
+                            notifyDataSetChanged();
+
+                        }
+
+                        MyDialog myDialog=new MyDialog(constant,null,"",message,"OK","",false,"");
+                        myDialog.show();
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //groupDetailsList(bodyString,position);
+
+                    //listOrderGroup(bodyString);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                CustomProgress.getInstance().hideProgress();
+            }
+        });
+    }
+
     private void callJoinApi(final int position) {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(groupListModels.get(position).getBetid(),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
@@ -239,7 +281,7 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
                         if(data.equals("Ok")){
                             CustomProgress.getInstance().hideProgress();
                             viewholder.join_now.setVisibility(View.GONE);
-                            viewholder.start.setVisibility(View.GONE);
+                            viewholder.decline.setVisibility(View.GONE);
                             //notifyDataSetChanged();
                         }
                     } catch (JSONException e) {
@@ -279,13 +321,13 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
         TextView tv_Name, tv_Description,users_count,left_days;
         ConstraintLayout rowView;
         TableRow button_row;
-        Button join_now,start;
+        Button join_now,decline;
         public ViewHolder(View convertView) {
             super(convertView);
             rowView=  convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
-            start= convertView.findViewById(R.id.start);
+            decline= convertView.findViewById(R.id.start);
             left_days= convertView.findViewById(R.id.left_days);
             users_count = convertView.findViewById(R.id.users_count);
             tv_Description = convertView.findViewById(R.id.tv_Description);

@@ -74,6 +74,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static com.androidapp.fitbet.utils.Contents.BET_START_STATUS;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_CREDIT_SCORE;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_USERS;
@@ -162,8 +163,8 @@ public class BetFragment extends Fragment implements LocationReceiveListener {
 private LocationReceiveListener locationReceiveListener;
     @Override
     public void onDestroy() {
-if(SLApplication.isServiceRunning)
-stopLocationService();
+        if(!AppPreference.getPrefsHelper().getPref(BET_START_STATUS,"").equals("true")&&SLApplication.isServiceRunning)
+            stopLocationService();
 
         super.onDestroy();
     }
@@ -172,9 +173,9 @@ stopLocationService();
 
     @Override
     public void onStop() {
-        System.out.println("Live bet inside onStop ");
-        if (SLApplication.isServiceRunning) {
-            System.out.println("Live bet stopping service ");
+        System.out.println("Bet inside onStop ");
+        if(!AppPreference.getPrefsHelper().getPref(BET_START_STATUS,"").equals("true")&&SLApplication.isServiceRunning) {
+            System.out.println("Bet stopping service ");
             stopLocationService();
         }
         super.onStop();

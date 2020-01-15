@@ -30,6 +30,7 @@ import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.ui.DashBoardActivity;
 import com.androidapp.fitbet.ui.UpcomingBetDetailActivity;
 import com.androidapp.fitbet.ui.fragments.CreateGroupFragment;
+import com.androidapp.fitbet.ui.fragments.LiveBetFragment;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CircleImageView;
 import com.androidapp.fitbet.utils.Contents;
@@ -193,6 +194,8 @@ public class JoinBetsDetailsListAdapter extends RecyclerView.Adapter{
         viewholder.start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final DashBoardActivity dashBoardActivity=((DashBoardActivity)v.getContext());
+
                 AppPreference.getPrefsHelper().savePref(Contents.UPDATE_METER, "0");
                 android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(constant)
                         .setTitle("")
@@ -245,8 +248,12 @@ public class JoinBetsDetailsListAdapter extends RecyclerView.Adapter{
                                                                 AppPreference.getPrefsHelper().savePref(Contents.BET_START_STATUS, "true");
                                                                 AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "2");
                                                                 AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
-                                                                Intent intent = new Intent(constant, DashBoardActivity.class);
-                                                                constant.startActivity(intent);
+                                                                clearSavedBetItems();
+                                                                dashBoardActivity.getSupportFragmentManager().beginTransaction()
+                                                                        .replace(R.id.content_main, new LiveBetFragment(),Utils.BetScreenName)
+                                                                        .commit();
+                                                                dashBoardActivity.setImageToFab();
+
                                                             }else{
                                                                 CustomProgress.getInstance().hideProgress();
                                                                 String msg = jsonObject.getString("Msg");
@@ -279,6 +286,9 @@ public class JoinBetsDetailsListAdapter extends RecyclerView.Adapter{
                                             final DecimalFormat f = new DecimalFormat("##.00");
                                             double l3= Double.parseDouble(f.format(distance));
                                             //Utils.showCustomToastMsg(constant, "---------meter-----------"+""+l3);
+                                            if(!CustomProgress.getInstance().isShowing())
+                                                CustomProgress.getInstance().showProgress(constant, "", false);
+
                                             Call<ResponseBody> call
                                             //Utils.showCustomToastMsg(constant, "------latitude------2--"+""+AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LAT,"")+"------longitude-------2-"+""+AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LOG,""));
 
@@ -305,7 +315,10 @@ public class JoinBetsDetailsListAdapter extends RecyclerView.Adapter{
                                                                 Utils.showCustomToastMsg(constant, msg);
                                                                 AppPreference.getPrefsHelper().savePref(Contents.BET_START_STATUS, "true");
                                                                 clearSavedBetItems();
-                                                                constant.startActivity(new Intent(constant, DashBoardActivity.class));
+                                                                dashBoardActivity.getSupportFragmentManager().beginTransaction()
+                                                                        .replace(R.id.content_main, new LiveBetFragment(),Utils.BetScreenName)
+                                                                        .commit();
+                                                                dashBoardActivity.setImageToFab();
                                                             }else{
                                                                 String msg = jsonObject.getString("Msg");
                                                                 Utils.showCustomToastMsg(constant, msg);

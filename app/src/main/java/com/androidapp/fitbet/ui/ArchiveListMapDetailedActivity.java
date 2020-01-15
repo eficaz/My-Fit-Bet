@@ -29,8 +29,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -67,7 +70,7 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
     Double startLongitude=0.0, positionLongitude, startLatitude, positionLatitude,distanceInMeters;
     Polyline polyline;
     private String origin,destination;
-    private MyDialog noInternetDialog;;
+    private MyDialog noInternetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,15 +149,24 @@ System.out.println("google driving == "+bodyString);
 
 
         List<LatLng> latLngList = new ArrayList<>();
-
         String[] splitRoutes = userRoute.split("fitbet");
-        List<String> routeList= Arrays.asList(splitRoutes);
-        System.out.println("routeList.size() map redir"+routeList.size());
+        List<String> routeList = Arrays.asList(splitRoutes);
+        ///////////////////////////////////////////////////////////////
+     /*   String[] splitRoutes = userRoute.split("fitbet");
+        List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
+        System.out.println("routeList.size()"+routeList.size());
+        Set<String> routeSets=new LinkedHashSet<>(routeList);
+        routeList.clear();
+        routeList.addAll(routeSets);*/
+//////////////////////////////////////////////////////////////////////
+       /* String[] splitRoutes = userRoute.split("fitbet");
+        List<String> routeList = Arrays.asList(splitRoutes);
+        System.out.println("routeList.size() map redir" + routeList.size());
 
-        for (String route:routeList) {
+        for (String route : routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
-            System.out.println("Routes "+route);
+            System.out.println("Routes " + route);
             final List<LatLng> finalLatLngList = latLngList;
             runOnUiThread(new Runnable() {
                 @Override
@@ -166,17 +178,50 @@ System.out.println("google driving == "+bodyString);
             });
 
 
+        }*/
+
+
+
+
+        PolylineOptions polylineOptions = null;
+        for (String route : routeList) {
+            latLngList.clear();
+            latLngList = DirectionFinder.decodePolyLine(route);
+            System.out.println("Routes " + route);
+            final List<LatLng> finalLatLngList = latLngList;
+            if (polyline == null) {
+                polylineOptions = getDefaultPolyLines(finalLatLngList);
+            } else {
+
+                if (polylineOptions != null) {
+                    polylineOptions.addAll(finalLatLngList);
+                }
+            }
+
+
+            final PolylineOptions finalPolylineOptions = polylineOptions;
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    polyline = mMap.addPolyline(finalPolylineOptions);
+
+                }
+            });
+
 
         }
 
-        zoomRoute(mMap,latLngList);
-    }
+        zoomRoute(mMap, latLngList);
 
+    }
     public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute) {
 
         if (googleMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
 
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
         for (LatLng latLngPoint : lstLatLngRoute)
             boundsBuilder.include(latLngPoint);
 

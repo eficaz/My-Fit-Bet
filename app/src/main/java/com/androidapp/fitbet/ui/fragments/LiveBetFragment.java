@@ -279,18 +279,22 @@ System.out.println("onViewCreated LiveBetFragment");
         betMembersRecyclerView.setVisibility(View.GONE);
         dashBoardActivity.hideBottomNavigationView();
 
+        final float scale = getResources().getDisplayMetrics().density;
+
+        int dpHeightInPx = (int) (70 * scale);
+
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
         constraintSet.connect(R.id.mapView,ConstraintSet.BOTTOM,R.id.linearLayout,ConstraintSet.TOP,0);
         constraintSet.connect(R.id.mapView,ConstraintSet.END,R.id.contstraint_layout,ConstraintSet.END,0);
         constraintSet.connect(R.id.mapView,ConstraintSet.START,R.id.contstraint_layout,ConstraintSet.START,0);
         constraintSet.connect(R.id.mapView,ConstraintSet.TOP,R.id.txt_bet_name,ConstraintSet.BOTTOM,0);
-        constraintSet.constrainDefaultHeight(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
-        constraintSet.constrainDefaultWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainHeight(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
         constraintSet.setVerticalBias(R.id.mapView,0.0f);
         constraintSet.setHorizontalBias(R.id.mapView,0.0f);
 
-       constraintSet.constrainDefaultHeight(R.id.linearLayout,70);
+       constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPx);
 
         constraintSet.applyTo(constraintLayout);
 
@@ -309,18 +313,25 @@ System.out.println("onViewCreated LiveBetFragment");
         betMembersRecyclerView.setVisibility(View.VISIBLE);
         dashBoardActivity.showBottomNavigationView();
 
+
+        final float scale = getResources().getDisplayMetrics().density;
+
+        int dpHeightInPxLl = (int) (60 * scale);
+        int dpHeightInPxMap = (int) (200 * scale);
+
+
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
         constraintSet.connect(R.id.mapView,ConstraintSet.BOTTOM,R.id.contstraint_layout,ConstraintSet.BOTTOM,0);
         constraintSet.connect(R.id.mapView,ConstraintSet.END,R.id.contstraint_layout,ConstraintSet.END,0);
         constraintSet.connect(R.id.mapView,ConstraintSet.START,R.id.contstraint_layout,ConstraintSet.START,0);
         constraintSet.connect(R.id.mapView,ConstraintSet.TOP,R.id.txt_bet_name,ConstraintSet.BOTTOM,0);
-        constraintSet.constrainDefaultHeight(R.id.mapView,200);
-        constraintSet.constrainDefaultWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainHeight(R.id.mapView,dpHeightInPxMap);
+        constraintSet.constrainWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
         constraintSet.setVerticalBias(R.id.mapView,0.0f);
         constraintSet.setHorizontalBias(R.id.mapView,0.0f);
 
-        constraintSet.constrainDefaultHeight(R.id.linearLayout,60);
+        constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPxLl);
 
         constraintSet.applyTo(constraintLayout);
 
@@ -861,7 +872,7 @@ private int i=2;
                 if(!appPreference.getSavedUserRoute().equals("")) {
                     userRoute=appPreference.getSavedUserRoute().replaceAll("\\\\", "");
                     System.out.println("Userroute == "+userRoute);
-                    drawPolyLine(userRoute, Color.RED);
+                    //drawPolyLine(userRoute, Color.RED);
                 }
 
             }
@@ -888,15 +899,15 @@ private int i=2;
     private void drawPolyLine(@NotNull String userRoute, final int color) {
         List<LatLng> latLngList = new ArrayList<>();
 
-        String[] splitRoutes = userRoute.split("fitbet");
-        List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
-        System.out.println("routeList.size()"+routeList.size());
-        Set<String> routeSets=new LinkedHashSet<>(routeList);
-        routeList.clear();
-        routeList.addAll(routeSets);
+            String[] splitRoutes = userRoute.split("fitbet");
+            List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
+            System.out.println("routeList.size()"+routeList.size());
+            Set<String> routeSets=new LinkedHashSet<>(routeList);
+            routeList.clear();
+            routeList.addAll(routeSets);
 
 
-        if(polyline==null){
+        /*if(polyline==null){
 
             if(routeList.size()>0){
 
@@ -915,43 +926,60 @@ private int i=2;
 
 
         }else{
+             List<LatLng> to=new ArrayList<>();
 
-            final List<LatLng> points=polyline.getPoints();
             for (int i = 1; i <routeList.size() ; i++) {
+                  to.clear();
+                to = DirectionFinder.decodePolyLine(routeList.get(i));
 
-                final List<LatLng> to = DirectionFinder.decodePolyLine(routeList.get(i));
-                points.addAll(to);
-                if(getActivity()!=null)
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        polyline.setPoints(points);
-                    }
-                });
+                if(getActivity()!=null) {
+                    final List<LatLng> finalTo = to;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            polyline.setPoints(finalTo);
+                        }
+                    });
+                }
 
             }
-        }
+        }*/
 
 
-/* /////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+        PolylineOptions polylineOptions = null;
         for (String route:routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
             System.out.println("Routes "+route);
             final List<LatLng> finalLatLngList = latLngList;
-            if(getActivity()!=null)
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    PolylineOptions polylineOptions = getDefaultPolyLines(finalLatLngList,color);
+            if(polyline==null) {
+                 polylineOptions = getDefaultPolyLines(finalLatLngList, color);
+            }else{
 
-                    polyline = googleMap.addPolyline(polylineOptions);
+                if (polylineOptions != null) {
+                    polylineOptions.addAll(finalLatLngList);
                 }
-            });
+            }
+
+
+            if(getActivity()!=null) {
+                final PolylineOptions finalPolylineOptions = polylineOptions;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        polyline = googleMap.addPolyline(finalPolylineOptions);
+
+                    }
+                });
+            }
 
 
 
-       ////////////////////////////////////////////////////////////////////  }*/
+       ////////////////////////////////////////////////////////////////////
+            }
 
 
 

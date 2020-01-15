@@ -54,8 +54,9 @@ AppPreference appPreference;
 
     private LocationRequest getLocRequest() {
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(2000);
-        locationRequest.setFastestInterval(3000);
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(1000);
+        locationRequest.setSmallestDisplacement(0.1f);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         return locationRequest;
@@ -124,20 +125,6 @@ if(appPreference!=null)
             e.printStackTrace();
         }
     }
-    private double getDistance(double startLat,double startLon,double positionLat,double positionLon) {
-
-        Location startLocation = new Location("start");
-        startLocation.setLatitude(startLat);
-        startLocation.setLongitude(startLon);
-        Location positionLocation = new Location("position");
-        positionLocation.setLatitude(positionLat);
-        positionLocation.setLongitude(positionLon);
-
-        System.out.println("Distance between " + startLocation.distanceTo(positionLocation));
-
-        return    startLocation.distanceTo(positionLocation);
-
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -187,9 +174,11 @@ if(appPreference!=null)
 
     @Override
     public void onDirectionFinderSuccess(List<Route> route) { ;
+        route.get(0).pointString.replaceAll("\\\\", "");
+        if(appPreference.getSavedUserRoute().equals("")) {
 
-        if(appPreference.getSavedUserRoute().equals(""))
             appPreference.saveUserRoute(route.get(0).pointString);
+        }
         else
           appPreference.saveUserRoute( appPreference.getSavedUserRoute() + "fitbet" + route.get(0).pointString);
     }

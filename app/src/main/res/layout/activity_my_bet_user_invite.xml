@@ -96,7 +96,7 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/invite_group_list"
-                            android:background="@color/transparent"
+
                             android:layout_width="match_parent"
                             android:layout_marginTop="40dp"
                             android:layout_height="match_parent" />

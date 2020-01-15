@@ -151,6 +151,17 @@ mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILIT
 
     }
 
+public void setImageToFab(){
+
+    mFab.setImageResource(R.drawable.tab_center_icon_active1);
+    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+
+}
+
 
     public void hideBottomNavigationView(){
         mBottomNavigationView.setVisibility(GONE);

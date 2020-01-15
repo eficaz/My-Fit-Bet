@@ -345,7 +345,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             String msg = jsonObject.getString("Msg");
             if(status.trim().equals("Ok")){
                 CustomProgress.getInstance().hideProgress();
-                Utils.showCustomToastMsg(LoginActivity.this, msg);
                 startActivity(new Intent(LoginActivity.this, DashBoardActivity.class));
                 finish();
 

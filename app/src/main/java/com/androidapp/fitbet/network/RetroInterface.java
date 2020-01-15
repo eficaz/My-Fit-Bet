@@ -4,6 +4,9 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -222,6 +225,10 @@ public interface RetroInterface {
     @GET("bet/betdetail?")
     Call<ResponseBody> Betdetail(@Query("betid") String betId ,
                                @Query("reg_key")String regkey);
+
+    @GET("bet/declineinvite?")
+    Call<ResponseBody> declineInvite(@Query("reg_key") String regKey ,
+                                 @Query("betid") String betId);
 
     @GET("bet/betloserdetails?")
     Call<ResponseBody> LoserDetail(@Query("betid") String betId ,
