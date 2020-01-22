@@ -49,8 +49,8 @@
     <string name="short_description">Please Give Short Description</string>
     <string name="i_accept_the_terms_of_service">I Accept the Terms of Service</string>
     <string name="I_agreed_to_the_Terms_Conditions">I\'ve agreed to the Terms &amp; Conditions</string>
-    <string name="facebook_app_id">389723578412624</string>
-    <string name="fb_login_protocol_scheme">fb389723578412624</string>
+    <string name="facebook_app_id">759948881082563</string>
+    <string name="fb_login_protocol_scheme">fb759948881082563</string>
     <string name="invite_group">Invite A Group</string>
     <string name="invite_group_">Invite Group</string>
     <string name="invite_group_details">Group Details</string>
@@ -284,6 +284,9 @@
     <string name="no_thanks">No, thanks</string>
     <string name="rules_regulations"><![CDATA[Rules & Regulations]]></string>
     <string name="decline">DECLINE</string>
+    <string name="bet_not_completed">Bet not completed. Time expired</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 
 
 </resources>

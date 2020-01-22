@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center|start"
             android:layout_weight="1">
 
             <TableRow
@@ -29,9 +29,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/light_blue"
-                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
                     android:layout_marginTop="@dimen/margin_10"
                     android:background="@drawable/back_black" />
             </TableRow>
@@ -65,10 +65,10 @@
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_10"
-                        android:layout_gravity="center|left"
-                        android:gravity="center|left"
-                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
+                        android:layout_gravity="center|start"
+                        android:gravity="center|start"
+                        android:layout_marginEnd="@dimen/margin_10"
                         >
 
                         <EditText
@@ -78,7 +78,7 @@
                             android:imeOptions="flagNoExtractUi"
                             android:inputType="text|textNoSuggestions"
                             android:background="@drawable/shape_button_roud_corner1"
-                            android:drawableLeft="@drawable/search"
+                            android:drawableStart="@drawable/search"
                             android:maxLength="30"
                             android:textIsSelectable="false"
                             android:padding="10dp"
@@ -98,8 +98,8 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/invite_group_list"
                             android:background="@color/transparent"
-                            android:layout_marginRight="@dimen/margin_5"
-                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_marginEnd="@dimen/margin_5"
+                            android:layout_marginStart="@dimen/margin_5"
                             android:layout_width="match_parent"
                             android:layout_marginTop="20dp"
                             android:layout_height="match_parent" />

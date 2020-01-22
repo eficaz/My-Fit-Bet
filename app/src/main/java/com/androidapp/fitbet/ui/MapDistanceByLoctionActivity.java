@@ -650,7 +650,7 @@ if(!SLApplication.isServiceRunning) {
                         startMarker.setDraggable(true);
                         entMarker.setDraggable(true);
 
-                        LatLng sydney = new LatLng(startALat, startALog);
+                        LatLng sydney = new LatLng(endALat, endALog);
                         mMap.addPolyline(lineOptions);
                         polyline = mMap.addPolyline(new PolylineOptions());
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(14).build();

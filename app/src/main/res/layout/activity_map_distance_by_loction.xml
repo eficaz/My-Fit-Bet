@@ -25,13 +25,13 @@
                 android:id="@+id/close_row"
                 android:layout_width="40dp"
                 android:gravity="center"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_height="40dp" >
                 <ImageView
                     android:id="@+id/btn_close"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
 
                     android:src="@drawable/close_button" />
 
@@ -66,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/start_end_destination" />
+                  android:src="@drawable/start_end_destination" />
             </TableRow>
 
             <TableRow
@@ -89,17 +89,17 @@
                             android:id="@+id/row_startpoint"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_gravity="center|left"
+                            android:layout_gravity="center|start"
                             android:layout_weight="1"
-                            android:gravity="center|left">
+                            android:gravity="center|start">
 
                             <TextView
                                 android:id="@+id/startpoint"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_gravity="center|left"
-                                android:layout_marginLeft="@dimen/margin_10"
-                                android:gravity="center|left"
+                                android:layout_gravity="center|start"
+                                android:layout_marginStart="@dimen/margin_10"
+                                android:gravity="center|start"
                                 android:visibility="gone"
                                 android:hint="@string/start_location"
                                 android:maxLines="1"
@@ -110,12 +110,12 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center|left"
-                                android:layout_marginLeft="20dp"
+                                android:layout_gravity="center|start"
+                                android:layout_marginStart="20dp"
                                 android:padding="@dimen/margin_10"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 android:layout_marginTop="@dimen/margin_10"
-                                android:layout_marginRight="@dimen/margin_10"
+                                android:layout_marginEnd="@dimen/margin_10"
                                 android:layout_marginBottom="@dimen/margin_10"
                                 android:background="@drawable/shape_button_roud_corner_with_lite_blue"
                                 android:hint="@string/start_location"
@@ -129,17 +129,17 @@
                             android:id="@+id/row_endpoint"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_gravity="center|left"
+                            android:layout_gravity="center|start"
                             android:layout_weight="1"
-                            android:gravity="center|left">
+                            android:gravity="center|start">
 
                             <TextView
                                 android:id="@+id/endpoint"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_gravity="center|left"
-                                android:layout_marginLeft="@dimen/margin_10"
-                                android:gravity="center|left"
+                                android:layout_gravity="center|start"
+                                android:layout_marginStart="@dimen/margin_10"
+                                android:gravity="center|start"
                                 android:visibility="gone"
                                 android:maxLines="1"
                                 android:hint="@string/end_location"
@@ -150,12 +150,12 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center|left"
-                                android:layout_marginLeft="20dp"
+                                android:layout_gravity="center|start"
+                                android:layout_marginStart="20dp"
                                 android:padding="@dimen/margin_10"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 android:layout_marginTop="@dimen/margin_10"
-                                android:layout_marginRight="@dimen/margin_10"
+                                android:layout_marginEnd="@dimen/margin_10"
                                 android:layout_marginBottom="@dimen/margin_10"
                                 android:background="@drawable/shape_button_roud_corner_with_lite_blue"
                                 android:hint="@string/end_location"

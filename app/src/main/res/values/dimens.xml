@@ -51,8 +51,8 @@
     <dimen name="margin_35">35dp</dimen>
     <dimen name="margin_45">45dp</dimen>
 
-    <dimen name="design_bottom_navigation_text_size" tools:override="true">9sp</dimen>
-    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">9sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
 
     <dimen name="txt_13">13sp</dimen>
     <dimen name="txt_15">15sp</dimen>
@@ -100,5 +100,10 @@
     <dimen name="text_margin">12dp</dimen>
     <dimen name="margin_50">50dp</dimen>
     <dimen name="size_75">75dp</dimen>
+    <dimen name="size_85">85dp</dimen>
+    <dimen name="size_25">25dp</dimen>
+    <dimen name="size_90">90dp</dimen>
+    <dimen name="margin_55">55dp</dimen>
+
 
 </resources>

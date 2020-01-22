@@ -74,6 +74,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static com.androidapp.fitbet.utils.Contents.BET_PAGE_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.BET_START_STATUS;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_CREDIT_SCORE;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
@@ -160,6 +161,7 @@ public class BetFragment extends Fragment implements LocationReceiveListener {
     private LocationManager mLocationManager;
 
     private int REQUEST_CHECK_SETTINGS=111;
+    private AppPreference appPreference;
 private LocationReceiveListener locationReceiveListener;
     @Override
     public void onDestroy() {
@@ -210,7 +212,8 @@ private LocationReceiveListener locationReceiveListener;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated BetFragment");
-        AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"1");
+        appPreference=      AppPreference.getPrefsHelper(getActivity());
+       appPreference.savePref(DASH_BOARD_POSICTION,"1");
         locationReceiveListener=this;
     LocReceiver.registerLocationReceiveListener(locationReceiveListener);
         if (checkPermissions()) { //Yes permissions are granted by the user. Go to the next step.
@@ -385,11 +388,11 @@ private LocationReceiveListener locationReceiveListener;
                         bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
 
                         //startActivity(new Intent(getActivity(), BetCreationActivity.class));
-                        AppPreference.getPrefsHelper().savePref(Contents.MYBETS_betname, "");
-                        AppPreference.getPrefsHelper().savePref(Contents.CREDIT_SCORE, "");
-                        AppPreference.getPrefsHelper().savePref(Contents.START_DATE, "");
-                        AppPreference.getPrefsHelper().savePref(Contents.MYBETS_enddate, "");
-                        AppPreference.getPrefsHelper().savePref(Contents.MYBETS_description,  "");
+                       appPreference.savePref(Contents.MYBETS_betname, "");
+                       appPreference.savePref(Contents.CREDIT_SCORE, "");
+                       appPreference.savePref(Contents.START_DATE, "");
+                       appPreference.savePref(Contents.MYBETS_enddate, "");
+                       appPreference.savePref(Contents.MYBETS_description,  "");
                         Intent i = new Intent(getActivity(), BetCreationActivity.class);
                         i.putExtra(Contents.pass_startlatitude,"0");
                         i.putExtra(Contents.pass_startlongitude,"0");
@@ -430,7 +433,7 @@ private LocationReceiveListener locationReceiveListener;
         my_bets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                 searchView.setFocusable(false);
                 searchView.setClickable(false);
                 upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
@@ -495,6 +498,7 @@ private LocationReceiveListener locationReceiveListener;
                     Log.e("fitbet bt_joinbet","Gps not enabled");
              createLocationRequest();
                 }else{
+                   appPreference.savePref(BET_PAGE_POSICTION,"2");
                     searchView.setFocusable(false);
                     searchView.setClickable(false);
                     searchView.setText("");
@@ -599,11 +603,11 @@ private LocationReceiveListener locationReceiveListener;
                     bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
                     bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
                     //startActivity(new Intent(getActivity(), BetCreationActivity.class));
-                    AppPreference.getPrefsHelper().savePref(Contents.MYBETS_betname, "");
-                    AppPreference.getPrefsHelper().savePref(Contents.CREDIT_SCORE, "");
-                    AppPreference.getPrefsHelper().savePref(Contents.START_DATE, "");
-                    AppPreference.getPrefsHelper().savePref(Contents.MYBETS_enddate, "");
-                    AppPreference.getPrefsHelper().savePref(Contents.MYBETS_description,  "");
+                   appPreference.savePref(Contents.MYBETS_betname, "");
+                   appPreference.savePref(Contents.CREDIT_SCORE, "");
+                   appPreference.savePref(Contents.START_DATE, "");
+                   appPreference.savePref(Contents.MYBETS_enddate, "");
+                   appPreference.savePref(Contents.MYBETS_description,  "");
                     Intent i = new Intent(getActivity(), BetCreationActivity.class);
                     i.putExtra(Contents.pass_startlatitude,"0");
                     i.putExtra(Contents.pass_startlongitude,"0");
@@ -709,8 +713,27 @@ private LocationReceiveListener locationReceiveListener;
             callmyBetsApi();
             tab_selection=1;
             //CustomProgress.getInstance().showProgress(getActivity(), "", false);
-            AppPreference.getPrefsHelper().savePref(Contents.CREATE_BET_STATUS, "false");
+           appPreference.savePref(Contents.CREATE_BET_STATUS, "false");
+        }else{
+
+            switch (AppPreference.getPrefsHelper().getPref(BET_PAGE_POSICTION,"")){
+
+                case "0":
+
+                    upcomming_bets.performClick();
+                    break;
+                case "1":
+                    if(SLApplication.isBetCreatedOrEdited)
+                    my_bets.performClick();
+                    break;
+                case "3":
+                    bt_joinbet.performClick();
+                    break;
+
+            }
+
         }
+
 
 
     }
@@ -972,9 +995,9 @@ private LocationReceiveListener locationReceiveListener;
     public void onLocationReceived(Double lat, Double lon) {
         System.out.println("onLocationReceived bet "+lat+","+lon);
 
-        AppPreference.getPrefsHelper().savePref(Contents.FOR_START_BET_LAT,""+lat);
+       appPreference.savePref(Contents.FOR_START_BET_LAT,""+lat);
 
-        AppPreference.getPrefsHelper().savePref(Contents.FOR_START_BET_LOG,""+lon);
+       appPreference.savePref(Contents.FOR_START_BET_LOG,""+lon);
 
     }
 }

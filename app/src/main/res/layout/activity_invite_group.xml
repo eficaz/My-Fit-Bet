@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="10"
-        android:background="@drawable/settings_bg"
+        android:background="@drawable/profile_details_bg"
         android:gravity="center"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center|start"
             android:layout_weight=".5">
 
             <TableRow
@@ -28,9 +28,9 @@
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
                     android:backgroundTint="@color/white"
                     android:layout_marginTop="@dimen/margin_10"
                     android:background="@drawable/back_black" />
@@ -48,14 +48,14 @@
             <Button
                 android:id="@+id/btn_invite"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_weight=".5"
                 android:background="@drawable/shape_button_roud_corner"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="@dimen/margin_16"
                 android:text="@string/invite_users"
                 android:textColor="@color/light_blue"
                 android:textSize="11dp" />
@@ -71,11 +71,76 @@
             android:layout_height="0dp"
             android:layout_weight="2" >
 
-            <LinearLayout
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_90"
+
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/margin_16"
+                    android:paddingBottom="@dimen/margin_5"
+                    android:paddingTop="@dimen/margin_5">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight=".8"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <com.androidapp.fitbet.utils.CircleImageView
+                            android:id="@+id/img_user"
+
+                            android:layout_width="@dimen/margin_55"
+                            android:layout_height="@dimen/margin_55"
+                            android:layout_gravity="center"
+                            android:src="@drawable/group_icons" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="2.5"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:layout_weight=".8"
+                            android:maxLines="1"
+                            android:textSize="14sp"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/lato_bold"
+                            android:gravity="center|start"
+                            />
+
+                        <TextView
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:text=""
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="start"
+                            />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+       <!--     <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:orientation="vertical">
 
                 <TableRow
@@ -84,8 +149,8 @@
                     android:layout_height="0dp" >
                     <com.androidapp.fitbet.utils.CircleImageView
                         android:id="@+id/img_user"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="@dimen/size_50"
+                        android:layout_height="@dimen/size_50"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:src="@drawable/group_icons" />
@@ -94,7 +159,7 @@
                         android:id="@+id/name"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginStart="@dimen/margin_20"
                         android:fontFamily="@font/lato_regular"
                         android:textColor="@color/white"
                         android:textSize="14dp"
@@ -113,23 +178,23 @@
                         android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:maxLines="2"
-                        android:layout_marginLeft="60dp"
+                        android:layout_marginStart="60dp"
                         android:fontFamily="@font/lato_regular"
                         android:layout_height="match_parent"
-                        android:layout_gravity="top|center|left"
+                        android:layout_gravity="top|center|start"
                         android:gravity="center|top|left"
                         android:textSize="12dp"
                         android:textColor="@color/white"
                         />
 
                 </TableRow>
-            </LinearLayout>
+            </LinearLayout>-->
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="100dp"
+
             android:layout_weight="10">
 
             <LinearLayout
@@ -140,10 +205,11 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_gravity="center|left"
-                    android:gravity="center|left"
-                    android:layout_marginRight="@dimen/margin_10"
+android:paddingStart="@dimen/margin_16"
+                    android:paddingEnd="@dimen/margin_16"
+                    android:layout_gravity="center|start"
+                    android:gravity="center|start"
+
                    >
 
 
@@ -162,12 +228,12 @@
                             android:layout_height="match_parent"
                             android:singleLine="true"
                             android:text="0"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:drawablePadding="7dp"
-                            android:drawableLeft="@drawable/group_icons_hover"
+                            android:drawableStart="@drawable/group_icons_hover"
                             android:textSize="12dp"
                             android:fontFamily="@font/lato_regular"
-                            android:gravity="center|left"
+                            android:gravity="center|start"
                             />
 
 
@@ -176,10 +242,10 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginStart="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_15"
                             android:layout_marginBottom="@dimen/margin_15"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
                             android:src="@drawable/delete_btn"
                             android:visibility="gone" />
 
@@ -190,7 +256,7 @@
                         android:id="@+id/delete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:visibility="gone"
                         android:layout_marginBottom="@dimen/margin_15"
                         android:layout_marginTop="@dimen/margin_15"
@@ -203,7 +269,7 @@
                         android:imeOptions="flagNoExtractUi"
                         android:inputType="text|textNoSuggestions"
                         android:background="@drawable/shape_button_roud_corner1"
-                        android:drawableLeft="@drawable/search"
+                        android:drawableStart="@drawable/search"
                         android:maxLength="30"
                         android:padding="10dp"
                         android:textIsSelectable="false"
@@ -216,7 +282,7 @@
                         android:id="@+id/searchview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:drawableLeft="@drawable/invite_group_icon"
+                        android:drawableStart="@drawable/invite_group_icon"
                         android:hint="@string/search_users"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="30"
@@ -247,7 +313,6 @@
                         android:text="@string/no_users" />
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/invite_group_list"
-                        android:background="@color/transparent"
                         android:layout_width="match_parent"
                         android:layout_marginTop="40dp"
                         android:layout_height="match_parent" />

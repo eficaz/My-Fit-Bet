@@ -2,10 +2,13 @@ package com.androidapp.fitbet.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.se.omapi.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ import com.androidapp.fitbet.LoginActivity;
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.camera.CameraGalleryPickerBottom;
 import com.androidapp.fitbet.customview.CustomProgress;
+import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
 import com.androidapp.fitbet.map.LocationMonitoringService;
 import com.androidapp.fitbet.network.Constant;
@@ -43,6 +47,11 @@ import com.androidapp.fitbet.utils.CircleImageView;
 import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
@@ -122,12 +131,14 @@ TableRow rulesRegulations;
     boolean imageupload =false;
     boolean first_time=false;
 private AppPreference appPreference;
+private MyDialog noInternetDialog;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated SettingsFragment");
         appPreference=AppPreference.getPrefsHelper(getActivity());
         appPreference.savePref(DASH_BOARD_POSICTION,"4");
+        noInternetDialog=new MyDialog(getActivity(),null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
         intintView();
     }
     private void intintView() {
@@ -272,18 +283,11 @@ private AppPreference appPreference;
         rowlogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Utils.isConnectedToInternet(getActivity()))
                 LogOutApi();
-                CustomProgress.getInstance().showProgress(getActivity(), "", false);
-                appPreference.savePref(Contents.REG_KEY, "");
-            clearSavedBetItems();
-                LoginManager.getInstance().logOut();
-                Intent i = new Intent(getActivity(), LoginActivity.class);
-                startActivity(i);
-                SLApplication.removeLocationUpdates();
-                if(SLApplication.isServiceRunning)
-                    new LocService().stopSelf();
-                if(getActivity()!=null)
-                getActivity().finish();
+                else
+                    noInternetDialog.show();
+
             }
         });
 
@@ -294,6 +298,7 @@ private AppPreference appPreference;
         appPreference.savedStatusFlag(false);
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
+        appPreference.setLatLongList(null);
     }
     public void showKeyboard(EditText editText) {
         editText.requestFocus();
@@ -302,15 +307,63 @@ private AppPreference appPreference;
         editable=true;
         bt_submit.setVisibility(View.VISIBLE);
     }
+
+    public void logoutFromFacebook() {
+
+        if (AccessToken.getCurrentAccessToken() == null) {
+        System.out.println("fb already logged out");
+
+            return;
+        }
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                LoginManager.getInstance().logOut();
+
+            }
+        }).executeAsync();
+    }
+
     private void LogOutApi() {
+        CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LogOutApi(appPreference.getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    //DashboardDetailReportapiresult(bodyString);
-                    CustomProgress.getInstance().hideProgress();
+                System.out.println("logout == "+bodyString);
+                CustomProgress.getInstance().hideProgress();
+                JSONObject jsonObject=new JSONObject(bodyString);
+
+                if(jsonObject.getString("Status").equals("Ok")){
+
+                    appPreference.savePref(Contents.REG_KEY, "");
+                    clearSavedBetItems();
+
+                   new Handler().postDelayed(new Runnable() {
+                       @Override
+                       public void run() {
+                           logoutFromFacebook();
+                       }
+                   },500);
+
+
+                    Intent i = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(i);
+                    SLApplication.removeLocationUpdates();
+                    if(SLApplication.isServiceRunning)
+                        new LocService().stopSelf();
+                    if(getActivity()!=null)
+                        getActivity().finish();
+                }else{
+                    Utils.showCustomToastMsg(getActivity(),jsonObject.getString("Msg"));
+                }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -322,7 +375,7 @@ private AppPreference appPreference;
         });
     }
     private void updateProfilePic() {
-        RequestBody reg_key=RequestBody.create(MediaType.parse("multipart/from-data"),appPreference.getPref(Contents.REG_KEY,""));
+        RequestBody reg_key=RequestBody.create(MediaType.parse("multipart/form-data"),appPreference.getPref(Contents.REG_KEY,""));
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), filePath);
         MultipartBody.Part part = MultipartBody.Part.createFormData("image", filePath.getName(), requestFile);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadProfilePic(part,reg_key);
@@ -381,7 +434,7 @@ private AppPreference appPreference;
                             //Utils.showCustomToastMsg(getActivity(), R.string.updated_successfully);
                             bt_submit.setVisibility(View.GONE);
                             first_time=true;
-                            if(!imageupload==true){
+                            if(!imageupload){
                                 Utils.showCustomToastMsg(getActivity(), jsonObject.getString("Msg"));
                                 CustomProgress.getInstance().hideProgress();
                             }

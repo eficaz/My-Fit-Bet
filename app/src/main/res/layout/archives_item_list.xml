@@ -5,9 +5,10 @@
     android:id="@+id/row_main"
     android:layout_width="match_parent"
     android:layout_marginBottom="5dp"
+    android:elevation="@dimen/margin_10"
     android:padding="@dimen/margin_10"
     android:layout_marginTop="5dp"
-    android:layout_height="80dp">
+    android:layout_height="@dimen/size_80">
 
     <LinearLayout
         android:id="@+id/row"
@@ -23,18 +24,17 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight=".8"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <com.androidapp.fitbet.utils.CircleImageView
                     android:id="@+id/img_user"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerInParent="true"
+                    android:layout_width="@dimen/margin_45"
+                    android:layout_height="@dimen/margin_45"
                     android:layout_gravity="center"
-                    android:background="@color/white"
                     android:src="@drawable/fitbet__bet_icon" />
             </LinearLayout>
 
@@ -44,7 +44,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginStart="@dimen/margin_10"
                 android:orientation="vertical">
 
 
@@ -61,14 +61,15 @@
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:text="azsfsfs"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+
                     android:layout_weight="1">
 
                     <TextView
@@ -77,21 +78,23 @@
                         android:layout_weight="1.5"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|left"
+                        android:layout_marginTop="3dp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text=""
-                        android:textSize="10dp" />
+                        android:text="agherwhgertgshfdhds"
+                        android:textSize="10sp" />
 
                     <TextView
                         android:id="@+id/km"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:visibility="visible"
-                        android:textSize="10dp"
+                        android:gravity="center"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/lato_bold"
                         android:textColor="@color/light_blue"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:text="ghdsghlk" />
 
                 </TableRow>
                 <TableRow
@@ -106,11 +109,11 @@
                         android:text="0"
                         android:textColor="@color/hint_text_color"
                         android:maxLength="5"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:drawablePadding="7dp"
-                        android:drawableLeft="@drawable/coin_icon"
+                        android:drawableStart="@drawable/coin_icon"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
                     <TextView
                         android:id="@+id/left_days"
@@ -119,12 +122,12 @@
                         android:singleLine="true"
                         android:text="0"
                         android:textColor="@color/hint_text_color"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:maxLength="7"
                         android:visibility="gone"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
                 </TableRow>
             </LinearLayout>

@@ -1,6 +1,7 @@
 package com.androidapp.fitbet.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -121,7 +122,7 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
                 try {
                     CustomProgress.getInstance().hideProgress();
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-System.out.println("google driving == "+bodyString);
+                   System.out.println("google driving == "+bodyString);
                     JSONObject jsonObject=new JSONObject(bodyString);
                     JSONArray routeArray = jsonObject.getJSONArray("routes");
                     JSONArray legsArray=routeArray.getJSONObject(0).getJSONArray("legs");
@@ -131,9 +132,14 @@ System.out.println("google driving == "+bodyString);
 
                     distance.setText(formatNumber2Decimals(distanceInMeters)+"KM");
                     onMapReady(mMap);
+new Handler().post(new Runnable() {
+    @Override
+    public void run() {
+        drawPolyLines(winnerRoute);
+    }
+});
 
 
-                    drawPolyLines(winnerRoute);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -183,13 +189,13 @@ System.out.println("google driving == "+bodyString);
 
 
 
-        PolylineOptions polylineOptions = null;
+
         for (String route : routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
             System.out.println("Routes " + route);
             final List<LatLng> finalLatLngList = latLngList;
-            if (polyline == null) {
+       /*     if (polyline == null) {
                 polylineOptions = getDefaultPolyLines(finalLatLngList);
             } else {
 
@@ -197,15 +203,15 @@ System.out.println("google driving == "+bodyString);
                     polylineOptions.addAll(finalLatLngList);
                 }
             }
+*/
+final PolylineOptions polylineOptions=getDefaultPolyLines(finalLatLngList);
 
-
-            final PolylineOptions finalPolylineOptions = polylineOptions;
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
 
 
-                    polyline = mMap.addPolyline(finalPolylineOptions);
+                    polyline = mMap.addPolyline(polylineOptions);
 
                 }
             });
@@ -213,7 +219,7 @@ System.out.println("google driving == "+bodyString);
 
         }
 
-        zoomRoute(mMap, latLngList);
+       // zoomRoute(mMap, latLngList);
 
     }
     public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute) {
@@ -265,7 +271,7 @@ System.out.println("google driving == "+bodyString);
             googleMap.addMarker(new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)).position(new LatLng(startLatitude, startLongitude)));
             googleMap.addMarker(new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location)).position(new LatLng(positionLatitude, positionLongitude)));
         }
-
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  startLatitude,   startLongitude), 18f));
     }
 
     private String formatNumber2Decimals(double number ){

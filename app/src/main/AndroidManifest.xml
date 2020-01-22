@@ -354,7 +354,7 @@
         <service android:name="com.androidapp.fitbet.map.LocationMonitoringService" />
         <!--<service android:name="com.eficaz_fitbet_android.fitbet.map.LocationFinder" />-->
         <service
-            android:name="com.androidapp.fitbet.service.Firebase_messagingService"
+            android:name="com.androidapp.fitbet.service.MyFirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

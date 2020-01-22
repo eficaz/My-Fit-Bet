@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/settings_bg"
+    android:background="@drawable/profile_details_bg"
     android:layout_height="match_parent"
     tools:context=".ui.MessageListActivity">
     <LinearLayout
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center|start"
             android:layout_weight=".8">
 
             <TableRow
@@ -28,9 +28,9 @@
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
                     android:layout_marginTop="@dimen/margin_10"
                     android:background="@drawable/back_white" />
             </TableRow>
@@ -48,23 +48,23 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:gravity="center|left"
+            android:gravity="center|start"
             android:layout_weight="1">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|left"
-                android:layout_marginLeft="@dimen/margin_10"
-                android:layout_marginRight="@dimen/margin_10"
-                android:gravity="center|left">
+                android:layout_gravity="center|start"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:gravity="center|start">
 
                 <EditText
                     android:id="@+id/searchview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_button_roud_corner1"
-                    android:drawableLeft="@drawable/search"
+                    android:drawableStart="@drawable/search"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="text|textNoSuggestions"
                     android:maxLength="30"
@@ -76,13 +76,7 @@
                     android:textSize="12dp" />
             </TableRow>
         </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:gravity="center|left"
-            android:layout_weight=".8">
-        </TableRow>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -108,8 +102,8 @@
                         <TableRow
                             android:layout_width="match_parent"
                             android:background="@drawable/layout_border"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_height="match_parent" >
 
                             <TableRow
@@ -123,14 +117,14 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginStart="20dp"
                                     android:orientation="vertical">
 
                                     <TextView
                                         android:id="@+id/textView31"
                                         android:layout_width="match_parent"
-                                        android:layout_gravity="center|left"
-                                        android:gravity="center|left"
+                                        android:layout_gravity="center|start"
+                                        android:gravity="center|start"
                                         android:textColor="@color/main_text_color"
                                         android:fontFamily="@font/lato_regular"
                                         android:layout_height="wrap_content"
@@ -163,8 +157,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="20dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginEnd="20dp"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -172,8 +166,8 @@
                                         android:id="@+id/textView33"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center|left"
-                                        android:gravity="center|left"
+                                        android:layout_gravity="center|start"
+                                        android:gravity="center|start"
                                         android:textColor="@color/main_text_color"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="@string/archies_bets" />
@@ -211,8 +205,8 @@
                             android:text="@string/no_bets" />
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/list"
-                            android:layout_marginRight="@dimen/margin_5"
-                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_marginEnd="@dimen/margin_5"
+                            android:layout_marginStart="@dimen/margin_5"
                             android:layout_width="match_parent"
                             android:layout_marginTop="20dp"
                             android:layout_height="match_parent" />

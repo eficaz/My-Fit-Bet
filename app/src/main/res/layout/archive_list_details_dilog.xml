@@ -18,8 +18,8 @@
             android:gravity="center"
             android:alpha="1.5"
             android:layout_marginTop="80dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="80dp"
             android:layout_height="match_parent">
 
@@ -87,7 +87,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/main_text_color"
-                                    android:drawableLeft="@drawable/coin_icon"
+                                    android:drawableStart="@drawable/coin_icon"
                                     android:drawablePadding="7dp"
                                     android:textSize="12dp"
                                     android:text="" />
@@ -100,8 +100,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/md_grey_100"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_height="2dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -115,8 +115,8 @@
                         android:id="@+id/discreption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
                         android:textSize="12dp"
                         android:textColor="@color/main_text_color"
                         android:text="" />

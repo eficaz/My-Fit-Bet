@@ -1,8 +1,11 @@
 package com.androidapp.fitbet.ui;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -12,17 +15,52 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.androidapp.fitbet.customview.CountDownDialog;
 import com.androidapp.fitbet.service.GPSTracker;
 
 import com.androidapp.fitbet.utils.SLApplication;
 
 public class BaseActivity extends AppCompatActivity implements DialogInterface.OnCancelListener {
 
+private IntentFilter filter=new IntentFilter("count_down");
+
+private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+     System.out.println("Base activity onReceive");
+    startCountDown(context);
+
+    }
+};
+
+    private void startCountDown(Context context) {
+
+new CountDownDialog(context);
+
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+System.out.println("Base OnCreate");
+        registerReceiver(mBroadcastReceiver,filter);
+
+    }
+
+    @Override
+    protected void onStop() {
+        System.out.println("Base OnStop");
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        System.out.println("Base OnResume");
+        registerReceiver(mBroadcastReceiver,filter);
+        super.onResume();
+
     }
 
     @Override

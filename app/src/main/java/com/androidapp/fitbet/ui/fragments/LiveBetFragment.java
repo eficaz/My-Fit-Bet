@@ -82,6 +82,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,11 +100,13 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.androidapp.fitbet.polyline.GoogleMapHelper.buildCameraUpdate;
 import static com.androidapp.fitbet.polyline.GoogleMapHelper.getDefaultPolyLines;
 import static com.androidapp.fitbet.utils.Contents.BETDETAILS;
 import static com.androidapp.fitbet.utils.Contents.BET_START_STATUS;
@@ -177,7 +180,7 @@ public class LiveBetFragment extends Fragment implements OnMapReadyCallback , Di
     @Bind(R.id.img_user)
     CircleImageView userImage;
 
-    private Polyline polyline=null;
+    private Polyline polyline=null,locationPolyline=null;
     private int REQUEST_CHECK_SETTINGS = 111;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationManager mLocationManager;
@@ -347,7 +350,7 @@ System.out.println("onViewCreated LiveBetFragment");
         app:layout_constraintVertical_bias="0.0" />*/
     }
 
-    private boolean isTimerRunning,run;
+    private boolean isTimerRunning/*,run*/;
     private void cancelTimer(){
 
         if(isTimerRunning){
@@ -375,14 +378,16 @@ System.out.println("onViewCreated LiveBetFragment");
 
     @Override
     public void onResume() {
-        super.onResume();
+
         if (!SLApplication.isServiceRunning)
             startLocationService(serviceIntent);
-if(locationReceiveListener==null) {
+
     locationReceiveListener = this;
     LocReceiver.registerLocationReceiveListener(locationReceiveListener);
-}
 
+    System.out.println("Live bet Inside on resume");
+    super.onResume();
+    //run=false;
 
 
     }
@@ -390,6 +395,7 @@ if(locationReceiveListener==null) {
     @Override
     public void onStop() {
         System.out.println("Live bet inside onStop ");
+
   /*      run=false;
         if (SLApplication.isServiceRunning) {
             System.out.println("Live bet stopping service ");
@@ -531,9 +537,15 @@ if(googleMap!=null)
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("BET details "+bodyString);
-                    publishBetDetails(bodyString);
+                    if(response.body()!=null) {
+                        String bodyString = new String(response.body().bytes(), "UTF-8");
+                        System.out.println("BET details " + bodyString);
+
+                        publishBetDetails(bodyString);
+                    }else{
+                        System.out.println("Null BET details");
+                        getLiveBetDetails();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -598,7 +610,7 @@ if(CustomProgress.getInstance().isShowing())
                     endLongitude=betDetailsObject.getDouble("endlongitude");
                     locationRoute=betDetailsObject.getString("route");
                     googleMap.addMarker(positionMarkerOptions.position(new LatLng(endLatitude,endLongitude)));
-                    drawPolyLine(locationRoute,Color.BLACK);
+                    drawLocationPolyLine(locationRoute,Color.BLACK);
                     // drawMapRout(jsonObject2.getString(MYBETS_startlatitude),jsonObject2.getString(MYBETS_startlongitude),jsonObject2.getString(MYBETS_endlatitude),jsonObject2.getString(MYBETS_endlongitude));
                 }
 
@@ -761,38 +773,6 @@ if(CustomProgress.getInstance().isShowing())
 
         System.out.println("onDirectionFinderSuccess");
 
-   /* if (!routes.isEmpty() && polyline != null)
-        polyline.remove();*/
-/*        try {
-            for (Route route : routes) {
-                PolylineOptions polylineOptions = getDefaultPolyLines(route.points);
-
-                polyline = googleMap.addPolyline(polylineOptions);
-            }
-        } catch (Exception e) {
-            Toast.makeText(getActivity(), "Error occurred on finding the directions...", Toast.LENGTH_SHORT).show();
-        }
-    googleMap.animateCamera(buildCameraUpdate(routes.get(0).endLocation), 10, null);*/
-
-/////////////////////////////sunday//////////////////////////////////////////
-       /* if(userRoute.equals(""))
-            userRoute=routes.get(0).pointString;
-        else
-            userRoute = userRoute + "fitbet" + routes.get(0).pointString;
-
-
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if(!userRoute.equals("")) {
-                    userRoute=userRoute.replaceAll("\\\\", "");
-                    System.out.println("Userroute == "+userRoute);
-                    drawPolyLine(userRoute, Color.RED);
-                }
-
-            }
-        });*/
-/////////////////////////////////////////////////////////////////////////////
     }
 
 
@@ -823,40 +803,31 @@ private int i=2;
     private double userDistanceDouble=0.0;
     @Override
     public void onLocationReceived(Double lat, Double lon) {
-   /*     i++;*/
-
-   ////////////////////////////////////sunday////////////////////////////////////////////////////////////////
-    /*  if(positionLatitude!=0.0)
-        userDistanceDouble=userDistanceDouble+getDistance(positionLatitude,positionLongitude,lat,lon);
-
-        positionLatitude = lat;
-        positionLongitude = lon;
-
-        *//*if(i%3==0) {*//*
-
-
-            Log.d("onLocationRcvd LIVE "+i, "location : " + lat + "," + lon+"poslat "+positionLatitude);
-
-            destination=""+lat+","+lon;
-
-            if (!origin.equals(""))
-                fetchDirections(origin, destination);
-            origin = destination;*/
- //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //  new UpdateAsyncTask().execute();
-      /*      i=0;
-        }
-*/
-
-       //////////////////////////sunday//////////////
+i++;
         Log.d("onLocationRcvd LIVE ",""+lat+" , "+lon);
+        if(positionMarker!=null) {
+            // positionMarker.remove();
+            positionMarker.setPosition(new LatLng(lat,lon));
+            // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
+            System.out.println("onLocationReceived drawing position marker");
+        }
 
-
-        if(!run) {
+        if (i == 3) {
+          i=0;
             System.gc();
-            if(positionLatitude!=0.0)
-            appPreference.saveDistance(String.valueOf(Double.parseDouble(appPreference.getSavedDistance() )+ getDistance(positionLatitude, positionLongitude, lat, lon)));
-            System.out.println("appPreference.getSavedDistance() = "+appPreference.getSavedDistance());
+
+            if (positionLatitude != 0.0) {
+                double distance=Double.parseDouble(appPreference.getSavedDistance());
+                distance=distance+getDistance(positionLatitude, positionLongitude, lat, lon);
+
+                appPreference.saveDistance(String.valueOf(distance));
+                System.out.println("position lat n long  "+positionLatitude+" , "+positionLongitude);
+                System.out.println("current lat n long "+lat+" , "+lon);
+
+                System.out.println("Calculated distance "+distance);
+
+            }
+            System.out.println("appPreference.getSavedDistance() = " + appPreference.getSavedDistance());
 
             positionLatitude = lat;
             positionLongitude = lon;
@@ -866,19 +837,20 @@ private int i=2;
 
 
 
-        mHandler.post(new Runnable() {
+
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
-                if(!appPreference.getSavedUserRoute().equals("")) {
-                    userRoute=appPreference.getSavedUserRoute().replaceAll("\\\\", "");
-                    System.out.println("Userroute == "+userRoute);
-                    //drawPolyLine(userRoute, Color.RED);
-                }
+
+List<Route> routes=appPreference.getRouteList();
+if(routes!=null){
+    drawInteractivePolyLine(routes);
+}
 
             }
         });
-      //////////////////////////////////
-        onMapReady(googleMap);
+
+
 
     }
 
@@ -896,6 +868,56 @@ private int i=2;
         }
     }
 
+
+
+    private void drawInteractivePolyLine(List<Route> userRoutes){
+
+System.out.println(" drawInteractivePolyLine ");
+      /*  if (!userRoutes.isEmpty())
+        try {
+            for (Route route : userRoutes) {
+                final PolylineOptions polylineOptions = getDefaultPolyLines(route.points);
+                if(getActivity()!=null)
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            polyline = googleMap.addPolyline(polylineOptions);
+
+
+                        }
+                    });
+
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }*/
+
+      List<LatLng> points=new ArrayList<>();
+      if(!userRoutes.isEmpty())
+          for (Route route:userRoutes) {
+       String point=route.pointString;
+       points.addAll(DirectionFinder.decodePolyLine(point));
+          }
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.width(15);
+        polylineOptions.color(Color.RED);
+        googleMap.addPolyline(polylineOptions.addAll(points));
+
+      try {
+      }catch (Exception e){
+          System.out.println("Polyline exception "+e.getLocalizedMessage());
+      }
+        googleMap.animateCamera(buildCameraUpdate(userRoutes.get(0).endLocation), 10, null);
+    }
+
+
+
+
+
+
+    PolylineOptions polylineOptions = null;
     private void drawPolyLine(@NotNull String userRoute, final int color) {
         List<LatLng> latLngList = new ArrayList<>();
 
@@ -947,7 +969,7 @@ private int i=2;
 
 
 //////////////////////////////////////////////////////////////////////
-        PolylineOptions polylineOptions = null;
+
         for (String route:routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
@@ -986,7 +1008,53 @@ private int i=2;
     }
 
 
+    private void drawLocationPolyLine(@NotNull String userRoute, final int color) {
+        List<LatLng> latLngList = new ArrayList<>();
+PolylineOptions polylineOptions=null;
+        String[] splitRoutes = userRoute.split("fitbet");
+        List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
+        System.out.println("Location routeList.size()"+routeList.size());
+        Set<String> routeSets=new LinkedHashSet<>(routeList);
+        routeList.clear();
+        routeList.addAll(routeSets);
 
+
+
+        for (String route:routeList) {
+            latLngList.clear();
+            latLngList = DirectionFinder.decodePolyLine(route);
+            System.out.println("Routes "+route);
+            final List<LatLng> finalLatLngList = latLngList;
+            if(locationPolyline==null) {
+                polylineOptions = getDefaultPolyLines(finalLatLngList, color);
+            }else{
+
+                if (polylineOptions != null) {
+                    polylineOptions.addAll(finalLatLngList);
+                }
+            }
+
+
+            if(getActivity()!=null) {
+                final PolylineOptions finalPolylineOptions = polylineOptions;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        locationPolyline = googleMap.addPolyline(finalPolylineOptions);
+
+                    }
+                });
+            }
+
+
+//////////
+        }
+
+
+
+    }
     private void scheduleTimer() {
         timer = new Timer("update");
         Date executionDate = new Date(); // no params = now
@@ -1016,21 +1084,41 @@ private int i=2;
         double ang = Math.acos(cosAng);
         double dist=ang *6371;
         return dist*1000 ;*/
+double d=0.0;
+try {
 
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        return dist*1000;
+    double theta = lon1 - lon2;
+    double dist = Math.sin(deg2rad(lat1))
+            * Math.sin(deg2rad(lat2))
+            + Math.cos(deg2rad(lat1))
+            * Math.cos(deg2rad(lat2))
+            * Math.cos(deg2rad(theta));
+    dist = Math.acos(dist);
+    dist = rad2deg(dist);
+    dist = dist * 60 * 1.1515;
+
+    d=dist*1000;
+    d=truncate(d,12);
+    System.out.println("distance === " + d);
+}catch (Exception e){
+    System.out.println("Number exception "+e.getLocalizedMessage());
+}
 
 
+return  d;
     }
 
+
+    public static double truncate(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = (long) value;
+        return (double) tmp / factor;
+    }
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
@@ -1060,21 +1148,29 @@ private int i=2;
             return null;
         }
     }
-boolean actFlag;// to avoid starting of activity twice
+
+    private boolean actFlag;// to avoid starting of activity twice
     private void getUpdates() {
-run=true;
+/*run=true;*/
 
 //System.out.println("Formatted distance "+formatNumber2Decimals(userDistanceDouble));
         System.out.println("Formatted distance "+formatNumber2Decimals(Double.parseDouble(appPreference.getSavedDistance())));
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveDetailsUpdation(challengerId,appPreference.getSavedDistance(),positionLongitude,positionLatitude, appPreference.getPref(REG_KEY,""),betType, appPreference.getSavedUserRoute());
+        System.out.println("Params getUpdates == "+challengerId+" , "+appPreference.getSavedDistance()+" , "+positionLongitude+" , "+positionLatitude+" , "+ appPreference.getPref(REG_KEY,"")+" , "+betType+" , "+ appPreference.getSavedUserRoute());
+      Call  call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveDetailsUpdation(challengerId,appPreference.getSavedDistance(),positionLongitude,positionLatitude, appPreference.getPref(REG_KEY,""),betType, appPreference.getSavedUserRoute());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                System.out.println("response code ="+response.code());
+
                 if(CustomProgress.getInstance().isShowing())
                     CustomProgress.getInstance().hideProgress();
                 try {
-run=false;
-                    final String bodyString = new String(response.body().bytes(), "UTF-8");
+/*run=false;*/
+                    final String bodyString;
+                    if (response.body() != null) {
+                        bodyString = new String(response.body().bytes(), "UTF-8");
+
                     System.out.println("BET updation ==="+bodyString);
                      JSONObject jsonObject;
 
@@ -1107,6 +1203,7 @@ run=false;
                                 if (regNo.equals(appPreference.getPref(REG_KEY, ""))) {
                                     if (!regNo.equals("") && !winName.equals("") && !won.equals("") && !betId.equals("")) {
                                         if (winner&&!actFlag) {
+
                                             appPreference.savePref(BET_START_STATUS,"false");
                                             actFlag=true;
                                             stopLocationService(serviceIntent);
@@ -1157,6 +1254,9 @@ run=false;
                             });
 
                         }
+                    }else{
+                        System.out.println("Null response");
+                    }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1181,6 +1281,7 @@ run=false;
         appPreference.savedStatusFlag(false);
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
+        appPreference.setLatLongList(null);
     }
 
     private void publishLiveDetails(String bodyString) {
@@ -1280,6 +1381,8 @@ run=false;
 
                     }
                 }
+
+                challengerId = jsonObject2.getString(MYBETS_challengerid);
 
                 liveBetUserListAdapter = new LiveBetUserListAdapter(getActivity(), liveBetDetailsArrayList);
                 betMembersRecyclerView.setHasFixedSize(true);

@@ -21,6 +21,7 @@ import com.androidapp.fitbet.model.MyBets;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
+import com.androidapp.fitbet.ui.EditBetCreationActivity;
 import com.androidapp.fitbet.ui.UpcomingBetDetailActivity;
 import com.androidapp.fitbet.ui.fragments.CreateGroupFragment;
 import com.androidapp.fitbet.utils.AppPreference;
@@ -54,6 +55,9 @@ public class UpcommingBetsDetailsListAdapter extends RecyclerView.Adapter  {
     SimpleDateFormat sdf;
 private MyDialog noInternetDialog;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+    private boolean canJoin;
+    private int currentPosition;
+
     public UpcommingBetsDetailsListAdapter(Context context, ArrayList<MyBets> myDataset) {
         this.constant = context;
         this.groupListModels = myDataset;
@@ -70,6 +74,7 @@ private MyDialog noInternetDialog;
     }
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+        this.currentPosition=position;
         final MyBets m = groupListModels.get(position);
         final UpcommingBetsDetailsListAdapter.ViewHolder viewholder = (UpcommingBetsDetailsListAdapter.ViewHolder) holder;
         viewholder.tv_Name.setText(m.getBetname());
@@ -122,7 +127,7 @@ private MyDialog noInternetDialog;
                                     public void onClick(DialogInterface dialog, int which) {
 
                                         if(Utils.isConnectedToInternet(constant)) {
-                                            CustomProgress.getInstance().showProgress(constant, "", false);
+
                                             callJoinApi(position);
                                         }else  noInternetDialog.show();
                                     }
@@ -209,8 +214,7 @@ private MyDialog noInternetDialog;
 
                         }
 
-                        MyDialog myDialog=new MyDialog(constant,null,"",message,"OK","",false,"");
-                        myDialog.show();
+                      showMessage(message);
 
 
                     } catch (JSONException e) {
@@ -230,25 +234,71 @@ private MyDialog noInternetDialog;
         });
     }
 
+
+    private void showMessage(String message){
+
+        MyDialog myDialog=new MyDialog(constant,null,"",message,constant.getString(R.string.ok),"",false,"edit_bet_error");
+        myDialog.show();
+    }
+
+
+    private void showConfirmDialog(String message) {
+
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(constant)
+                .setTitle("")
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if(Utils.isConnectedToInternet(constant)) {
+                                    canJoin=true;
+callJoinApi(currentPosition);
+                                }else  noInternetDialog.show();
+                            }
+                        }) .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                    }
+                }).create();
+        dialog.show();
+
+    }
     private void callJoinApi(final int position) {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(groupListModels.get(position).getBetid(),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-        call.enqueue(new Callback<ResponseBody>() {
+        CustomProgress.getInstance().showProgress(constant, "", false);
+        Call<ResponseBody> joinCall;
+        if(canJoin){
+            joinCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmJoinBet(groupListModels.get(position).getBetid(),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        }else{
+            joinCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(groupListModels.get(position).getBetid(),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        }
+
+        joinCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("Join bets "+bodyString);
                     try {
                         JSONObject jsonObject = new JSONObject(bodyString);
+                        CustomProgress.getInstance().hideProgress();
                         String msg = jsonObject.getString("Msg");
-                        if(!jsonObject.getString("Status").equals("Error")){
-                            Utils.showCustomToastMsg(constant, msg);
-                            CustomProgress.getInstance().hideProgress();
+                        CustomProgress.getInstance().hideProgress();
+                        if(jsonObject.getString("Status").equals("Ok")){
+
                             groupListModels.remove(position);
                             notifyDataSetChanged();
                         }else{
-                            Utils.showCustomToastMsg(constant, msg);
+                            if(jsonObject.getString("can_join").equals("yes")){
+                             showConfirmDialog(msg);
+                            }else{
+                              showMessage(msg);
+                            }
                         }
-                        CustomProgress.getInstance().hideProgress();
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }

@@ -63,8 +63,8 @@ public static String BetScreenName="Bet";
         return Double.parseDouble(twoDForm.format(d));
     }
 
-    public final static boolean isValidEmail(String target) {
-        if (target == null) {
+    public  static boolean isValidEmail(String target) {
+        if (target.equals("")) {
             return false;
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();

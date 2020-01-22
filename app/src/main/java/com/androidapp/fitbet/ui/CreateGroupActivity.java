@@ -53,11 +53,7 @@ public class CreateGroupActivity extends AppCompatActivity implements CommonUsag
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-                AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
-                Intent intent = new Intent(CreateGroupActivity.this, DashBoardActivity.class);
-                startActivity(intent);
-                finish();
+           onBackPressed();
             }
         });
     }
@@ -85,10 +81,6 @@ public class CreateGroupActivity extends AppCompatActivity implements CommonUsag
 
     @Override
     public void onBackPressed() {
-        AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-        AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
-        Intent intent = new Intent(CreateGroupActivity.this, DashBoardActivity.class);
-        startActivity(intent);
         finish();
         super.onBackPressed();
     }

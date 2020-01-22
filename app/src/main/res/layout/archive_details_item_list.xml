@@ -61,7 +61,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginStart="@dimen/margin_10"
                 android:orientation="vertical">
 
 
@@ -79,7 +79,7 @@
                         android:textSize="14dp"
                         android:fontFamily="@font/lato_regular"
                         android:textColor="@color/main_text_color"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
                 </TableRow>
                 <TableRow
@@ -93,9 +93,9 @@
                         android:layout_height="match_parent"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|left|top"
+                        android:gravity="center|start|top"
                         />
                 </TableRow>
             </LinearLayout>
@@ -147,7 +147,7 @@
                     android:textStyle="bold"
                     android:fontFamily="@font/lato_regular"
                     android:textSize="12dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     />
             </LinearLayout>
 

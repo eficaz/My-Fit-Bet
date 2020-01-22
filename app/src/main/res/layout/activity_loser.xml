@@ -87,8 +87,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="@color/md_grey_100"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_height="2dp"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,8 +120,8 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
                 android:background="@drawable/won_list_bg"
                 android:layout_weight="1">
 
@@ -154,7 +154,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:orientation="vertical">
 
 
@@ -172,7 +172,7 @@
                                 android:textSize="14dp"
                                 android:fontFamily="@font/lato_regular"
                                 android:textColor="@color/main_text_color"
-                                android:gravity="center|left"
+                                android:gravity="center|start"
                                 />
                         </TableRow>
                         <TableRow
@@ -186,9 +186,9 @@
                                 android:layout_height="match_parent"
                                 android:singleLine="true"
                                 android:maxLines="1"
-                                android:textSize="10dp"
+                                android:textSize="10sp"
                                 android:fontFamily="@font/lato_regular"
-                                android:gravity="center|left|top"
+                                android:gravity="center|start|top"
                                 />
                         </TableRow>
                     </LinearLayout>
@@ -229,14 +229,14 @@
                             android:layout_height="30dp"
                             android:layout_centerInParent="true"
                             android:visibility="gone"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
                             android:src="@drawable/play_button"
                             android:layout_gravity="center"/>
                         <com.androidapp.fitbet.utils.CircleImageView
                             android:id="@+id/img_type"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/image_button"
                             android:layout_gravity="center"/>

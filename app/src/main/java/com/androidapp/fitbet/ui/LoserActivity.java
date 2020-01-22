@@ -182,6 +182,7 @@ private AppPreference appPreference;
         appPreference.savedStatusFlag(false);
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
+        appPreference.setLatLongList(null);
     }
     private void loserDetail() {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoserDetail(betId,AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));

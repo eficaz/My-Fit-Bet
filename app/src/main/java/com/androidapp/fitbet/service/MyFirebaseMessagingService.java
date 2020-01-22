@@ -11,13 +11,14 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.ui.DashBoardActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class Firebase_messagingService extends FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM Service";
     @Override
@@ -60,11 +61,18 @@ public class Firebase_messagingService extends FirebaseMessagingService {
         manager.notify(0, builder.build());
 
 
-
+      sendMessageToReceiver(remoteMessage.getNotification().getBody());
 
     }
 
+    private void sendMessageToReceiver(String message) {
+System.out.println("sendMessageToReceiver "+message);
+Intent intent = new Intent();
+intent.putExtra("message",message);
+intent.setAction("count_down");
+LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
+    }
 
 
 }

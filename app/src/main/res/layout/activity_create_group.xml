@@ -8,8 +8,8 @@
         android:layout_height="0dp"
         android:layout_gravity="bottom|center"
         android:gravity="center|bottom"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
         android:layout_weight="3">
 
         <LinearLayout
@@ -29,8 +29,8 @@
                     android:id="@+id/et_groupName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:textColorHint="@color/white"
                     android:hint="@string/group_name"
                     android:fontFamily="@font/lato_regular"
@@ -46,8 +46,8 @@
                     android:id="@+id/et_short_descreption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:textSize="12dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/lato_regular"
@@ -79,11 +79,11 @@
                     android:layout_weight="1" >
                     <com.androidapp.fitbet.utils.CircleImageView
                         android:id="@+id/img_user"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
-
+                        android:layout_marginTop="@dimen/margin_5"
                         android:src="@drawable/img_upload" />
                     <!-- <Button
                         android:id="@+id/bt_camera"
@@ -95,9 +95,9 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="@dimen/margin_10"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1" >
 
                     <Button
@@ -106,7 +106,7 @@
                         android:layout_height="30dp"
                         android:background="@drawable/shape_button_roud_corner"
                         android:backgroundTint="@color/white"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/create_group"
                         android:textColor="@color/light_blue" />
@@ -116,7 +116,7 @@
                         android:layout_height="30dp"
                         android:background="@drawable/shape_button_roud_corner"
                         android:backgroundTint="@color/white"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:visibility="gone"
                         android:text="@string/update_group"
                         android:textColor="@color/light_blue" />
@@ -130,7 +130,6 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="80dp"
         android:layout_weight="9">
 
         <LinearLayout
@@ -141,10 +140,10 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_10"
-                android:layout_gravity="center|left"
-                android:gravity="center|left"
-                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_gravity="center|start"
+                android:gravity="center|start"
+                android:layout_marginEnd="@dimen/margin_10"
                 >
 
                 <TableRow
@@ -160,19 +159,19 @@
                         android:layout_height="match_parent"
                         android:singleLine="true"
                         android:text="0"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:drawablePadding="7dp"
-                        android:drawableLeft="@drawable/group_icons_hover"
+                        android:drawableStart="@drawable/group_icons_hover"
                         android:textSize="12dp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
                     <ImageView
                         android:id="@+id/edit"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:layout_marginTop="@dimen/margin_15"
                         android:layout_marginBottom="@dimen/margin_15"
                         android:src="@drawable/edit_button"
@@ -183,10 +182,10 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:layout_marginTop="@dimen/margin_15"
                         android:layout_marginBottom="@dimen/margin_15"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:src="@drawable/delete_btn"
                         android:visibility="gone" />
 
@@ -199,7 +198,7 @@
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="text|textNoSuggestions"
                     android:background="@drawable/shape_button_roud_corner1"
-                    android:drawableLeft="@drawable/search"
+                    android:drawableStart="@drawable/search"
                     android:maxLength="30"
                     android:textIsSelectable="false"
                     android:padding="10dp"
@@ -233,9 +232,8 @@
                     android:text="@string/no_group" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/group_list"
-                    android:background="@color/transparent"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>

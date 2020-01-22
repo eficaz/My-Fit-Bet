@@ -173,7 +173,10 @@ if(appPreference!=null)
     }
 
     @Override
-    public void onDirectionFinderSuccess(List<Route> route) { ;
+    public void onDirectionFinderSuccess(List<Route> route) {
+
+        appPreference.setLatLongList(route);
+
         route.get(0).pointString.replaceAll("\\\\", "");
         if(appPreference.getSavedUserRoute().equals("")) {
 

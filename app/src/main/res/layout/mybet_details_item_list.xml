@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/layout_whight_border"
     android:layout_width="match_parent"
-    android:layout_marginRight="20dp"
-    android:layout_marginLeft="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginStart="20dp"
     android:layout_marginBottom="5dp"
     android:padding="@dimen/margin_10"
     android:id="@+id/row"
@@ -45,7 +45,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
                     android:orientation="vertical">
 
                     <TextView
@@ -60,7 +60,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:textColor="@color/main_text_color"
                         android:text=""
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
 
                     <TextView
@@ -73,7 +73,7 @@
                         android:singleLine="true"
                         android:maxLines="1"
                         android:textColor="@color/main_text_color"
-                        android:gravity="center|left"
+                        android:gravity="center|start"
                         />
 
                 </LinearLayout>

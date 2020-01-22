@@ -145,6 +145,12 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     @Bind(R.id.map_row)
     LinearLayout map_row;
 
+    @Bind(R.id.table_winner_card)
+    TableRow tableWinnerCard;
+
+    @Bind(R.id.txt_bet_not_completed)
+    TextView txtBetNotCompleted;
+
     String winnerPositionLat ="", winnerPositionLog ="";
     String imagepath;
     String videopath;
@@ -352,17 +358,23 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             String data = jsonObject.getString(STATUS_A);
             if (data.equals("Ok")) {
 
-                    String data1 = jsonObject.getString(PARTICIPANT);
-                    JSONArray jsonArray = new JSONArray(data1);
-                    archivesDetailsList = new ArrayList<>();
-                    archivesDetailsList.clear();
+
+                if(jsonObject.getString("winnerkey").equals("no_winner")){
+                    tableWinnerCard.setVisibility(View.GONE);
+                    txtBetNotCompleted.setVisibility(View.VISIBLE);
+                }
+
+                     String data1 = jsonObject.getString(PARTICIPANT);
+                     JSONArray jsonArray = new JSONArray(data1);
+                     archivesDetailsList = new ArrayList<>();
+                     archivesDetailsList.clear();
                      betName=jsonObject.getString(MYBETS_betname);
                      betid=jsonObject.getString(MYBETS_betid);
                      bet_TOTAL_PARTICIPANTS=jsonObject.getString(TOTAL_PARTICIPANTS);
-                    group_name.setText(jsonObject.getString(MYBETS_betname));
-                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                    double decimal= Double.parseDouble(String.valueOf(jsonObject.getString(MYBETS_distance)).replace("-",""));
-                    String input;
+                     group_name.setText(jsonObject.getString(MYBETS_betname));
+                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                     double decimal= Double.parseDouble(String.valueOf(jsonObject.getString(MYBETS_distance)).replace("-",""));
+                     String input;
                     if(jsonObject.getString(MYBETS_distance).length()>5){
                          input = String.valueOf(decimal).substring(0,5);
                     }else{

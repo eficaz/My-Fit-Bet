@@ -19,8 +19,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_gravity="center|left"
-                android:gravity="center|left"
+                android:layout_gravity="center|start"
+                android:gravity="center|start"
                 android:layout_height="match_parent" >
                 <TableRow
                     android:id="@+id/btn_back"
@@ -32,9 +32,9 @@
                         android:id="@+id/imageView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_10"
                         android:layout_marginBottom="@dimen/margin_10"
-                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:layout_marginTop="@dimen/margin_10"
                         android:background="@drawable/back_white" />
                 </TableRow>
@@ -65,24 +65,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.8"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
                 android:background="@drawable/dashboard_shape_button_roud_corner1"
                 android:orientation="vertical">
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_gravity="center|left"
+                    android:layout_gravity="center|start"
                     android:visibility="gone"
-                    android:gravity="center|left"
+                    android:gravity="center|start"
                     android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/textView42"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:textColor="@color/main_text_color"
                         android:text="TextView" />
                 </TableRow>
@@ -91,8 +91,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:layout_weight="1.5">
                     <TableRow
@@ -102,7 +102,7 @@
                         android:layout_gravity="center"
                         android:background="@drawable/shape_button_roud_corner"
                         android:backgroundTint="@color/light_blue"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:layout_weight="1">
                         <TextView
@@ -129,7 +129,7 @@
                         android:background="@drawable/shape_button_roud_corner"
                         android:backgroundTint="@color/light_blue"
                         android:gravity="center"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_weight="1">
                         <TextView
                             android:id="@+id/textView40"
@@ -155,7 +155,7 @@
                         android:background="@drawable/shape_button_roud_corner"
                         android:backgroundTint="@color/light_blue"
                         android:gravity="center"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_weight="1">
                         <TextView
                             android:id="@+id/textView39"
@@ -205,9 +205,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="4"
-                android:layout_marginRight="60dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginLeft="60dp"
+                android:layout_marginStart="60dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/bg_buy_now"
                 android:orientation="vertical">
@@ -251,7 +251,7 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/main_text_color"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:fontFamily="@font/lato_regular"
                         android:text="@string/total_credit" />
                 </TableRow>
@@ -358,7 +358,7 @@
                         android:layout_width="wrap_content"
                         android:layout_gravity="center"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:textColor="@color/golden_color"
                         android:textSize="8dp"
                         android:text="A$"
@@ -376,7 +376,7 @@
                         android:layout_width="wrap_content"
                         android:textColor="@color/main_text_color"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
+                        android:textSize="10sp"
                         android:text="@string/total_amount" />
                 </TableRow>
             </LinearLayout>
@@ -426,10 +426,10 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_button_roud_corner"
                     android:backgroundTint="@color/light_blue"
-                    android:layout_marginRight="70dp"
+                    android:layout_marginEnd="70dp"
                     android:padding="10dp"
                     android:fontFamily="@font/lato_bold"
-                    android:layout_marginLeft="70dp"
+                    android:layout_marginStart="70dp"
                     android:textSize="18dp"
                     android:text="@string/buy_now"
                     android:textColor="@color/white" />

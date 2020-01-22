@@ -3,6 +3,13 @@ package com.androidapp.fitbet.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.androidapp.fitbet.polyline.Route;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -13,11 +20,12 @@ public class AppPreference {
     private  SharedPreferences.Editor editor;
     private Context context;
 
-private static final String TAG_DISTANCE="distance_in double";
+private static final String TAG_DISTANCE="distance_in_double";
 
     private static final String TAG_ROUTE="tag_user_route";
     private static final String TAG_ORIGIN="tag_origin";
     private static final String TAG_SAVED_STATUS="saved_status";
+    private static final String TAG_SAVED_LAT_LONG_LIST="savedlist";
 
 
     public AppPreference() {
@@ -119,6 +127,33 @@ editor.commit();
     public boolean getSavedStatusFlag(){
         return sharedPreferences.getBoolean(TAG_SAVED_STATUS,false);
 
+    }
+
+    public <T> void setLatLongList(List<Route> list) {
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        setList(TAG_SAVED_LAT_LONG_LIST, json);
+    }
+
+    public void setList(String key, String value) {
+        if (sharedPreferences != null) {
+
+            editor.putString(key, value);
+            editor.commit();
+        }
+    }
+
+    public List<Route> getRouteList() {
+        if (sharedPreferences != null) {
+
+            Gson gson = new Gson();
+            List<Route> routeList;
+String json=sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST,"");
+            Type type = new TypeToken<List<Route>>() {}.getType();
+            routeList = gson.fromJson(json, type);
+            return routeList;
+        }
+        return null;
     }
 
 }

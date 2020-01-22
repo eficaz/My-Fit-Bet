@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidapp.fitbet.customview.CustomProgress;
+import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
@@ -26,9 +27,11 @@ import com.androidapp.fitbet.ui.DashBoardActivity;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.Utils;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
@@ -49,6 +52,7 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -119,13 +123,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
    /* @Bind(R.id.space1)
     Space space1;*/
 
-
+    private MyDialog noInternetDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ButterKnife.bind(this);
+
         mCallbackManager = CallbackManager.Factory.create();
         AppPreference.getPrefsHelper().savePref(Contents.UPDATE_METER, "0");
         AppPreference.getPrefsHelper().savePref(Contents.BAT_POSICTION, "0");
@@ -133,26 +138,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "0");
         AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
-
-        //userInput.setTypeface(Utils.getFont(getActivity()), Typeface.BOLD);
-      /*  FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            //Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-                        deviceID=token;
-                        //deviceID= Utils.getAndroidDeviceUniqueID(this);
-                        // Log and toast
-                        // String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("----------------TAG", token);
-                        //Toast.makeText(SplashActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });*/
+        noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
+        mLoginButton.setReadPermissions(Arrays.asList("public_profile,email,user_birthday"));
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -168,6 +155,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         CountryName = getResources().getConfiguration().locale.getDisplayCountry();
         CountryCode= getResources().getConfiguration().locale.getCountry();
+
+
         GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -183,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                     startActivityForResult(intent,RC_SIGN_IN);
                 } else{
-                    Utils.showCustomToastMsg(LoginActivity.this, R.string.no_internet);
+                  noInternetDialog.show();
                 }
             }
         });
@@ -210,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (Utils.isConnectedToInternet(LoginActivity.this)){
                     mLoginButton.performClick();
                 } else{
-                    Utils.showCustomToastMsg(LoginActivity.this, R.string.no_internet);
+             noInternetDialog.show();
                 }
                // CustomProgress.getInstance().showProgress(LoginActivity.this, "", false);
             }
@@ -231,7 +220,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (Utils.isConnectedToInternet(LoginActivity.this)){
                     reg();
                 } else{
-                    Utils.showCustomToastMsg(LoginActivity.this, R.string.no_internet);
+           noInternetDialog.show();
                 }
             }
         });
@@ -242,7 +231,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (Utils.isConnectedToInternet(LoginActivity.this)){
                     login();
                 } else{
-                    Utils.showCustomToastMsg(LoginActivity.this, R.string.no_internet);
+                    noInternetDialog.show();
                 }
 
             }
@@ -274,18 +263,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onSuccess(LoginResult loginResult) {
                 System.out.println("onSuccess");
-                String accessToken = loginResult.getAccessToken().getToken();
-                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        // Get facebook data from login
-                        Bundle bFacebookData = getFacebookData(object);
-                    }
-                });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location"); // Parámetros que pedimos a facebook
-                request.setParameters(parameters);
-                request.executeAsync();
+
+                getUserProfile(loginResult.getAccessToken());
             }
             @Override
             public void onCancel() {
@@ -314,7 +293,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 callloginApi(et_username.getText().toString().trim(),et_password.getText().toString().trim());
                 CustomProgress.getInstance().showProgress(this, "", false);
             } else{
-                Utils.showCustomToastMsg(LoginActivity.this, R.string.no_internet);
+   noInternetDialog.show();
             }
 
         }
@@ -327,7 +306,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    loginSucess(bodyString);
+                    loginSuccess(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -338,12 +317,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
     }
-    private void loginSucess(String bodyString) {
+    private void loginSuccess(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");
             String msg = jsonObject.getString("Msg");
             if(status.trim().equals("Ok")){
+                AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
                 CustomProgress.getInstance().hideProgress();
                 startActivity(new Intent(LoginActivity.this, DashBoardActivity.class));
                 finish();
@@ -395,6 +375,36 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
+    private void getUserProfile(AccessToken currentAccessToken) {
+        if(!CustomProgress.getInstance().isShowing())
+        CustomProgress.getInstance().showProgress(this, "", false);
+        GraphRequest request = GraphRequest.newMeRequest(
+                currentAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.d("TAG", object.toString());
+                        try {
+                            String first_name = object.getString("first_name");
+                            String last_name = object.getString("last_name");
+                            String email = object.getString("email");
+                            String id = object.getString("id");
+                            String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+                            System.out.println("Graph request "+first_name+" , "+last_name+" , "+email+" , "+id+" , "+image_url);
+                            gotoFbProfile(first_name+" "+last_name,email,deviceID,id,image_url);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name,last_name,email,id");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+    }
+
     private Bundle getFacebookData(JSONObject object) {
         try {
             Bundle bundle = new Bundle();
@@ -430,16 +440,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 f_email,
                 deviceID,
                 f_facebookID,
-                String.valueOf(profile_pic),
+                profile_pic,
                 DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    if(!response.body().equals("")){
+                    if(response.body()!=null){
                         String bodyString = new String(response.body().bytes(), "UTF-8");
-                        AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
-                        loginSucess(bodyString);
+
+                        loginSuccess(bodyString);
                     }else{
                         Utils.showCustomToastMsg(LoginActivity.this, ""+response.body());
                     }
@@ -478,7 +488,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
-                    loginSucess(bodyString);
+                    loginSuccess(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -2,6 +2,7 @@ package com.androidapp.fitbet.ui;
 
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Rect;
@@ -28,12 +29,14 @@ import androidx.annotation.RequiresApi;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
+import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.customview.RulesDialog;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -148,11 +151,11 @@ public class BetCreationActivity extends BaseActivity {
     SimpleDateFormat sdf1;
 
 
-    boolean fromORto=false;
+    boolean fromORto;
 
-    boolean distanceKm=false;
+    boolean distanceKm;
 
-    boolean distanceLocation=false;
+    boolean distanceLocation;
 
 
     String credits="0";
@@ -168,8 +171,9 @@ public class BetCreationActivity extends BaseActivity {
     private LocationManager mLocationManager;
 
     private int REQUEST_CHECK_SETTINGS=111;
+private boolean canCreate;
 
-
+private MyDialog noInternetDialog;
 
     //Bundle bundle;
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -190,6 +194,13 @@ public class BetCreationActivity extends BaseActivity {
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //distanceKm=true;
         showKeyboard(bet_name);
+        noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
+
+        if(Utils.isConnectedToInternet(this))
+            callDashboardDetailsApi();
+        else
+            noInternetDialog.show();
+
         edBet_km.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -251,15 +262,7 @@ public class BetCreationActivity extends BaseActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppPreference.getPrefsHelper().savePref(Contents.BAT_POSICTION, "2");
-
-                AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-                AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
-
-                Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
-                startActivity(intent);
-                finish();
-                CallInappPurchass();
+             onBackPressed();
             }
              });
                 int Radius = 6371;
@@ -357,7 +360,7 @@ if(!startLat.equals("0")) {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-        callDashboardDetailsApi();
+
         date_pic_from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -390,7 +393,7 @@ if(!startLat.equals("0")) {
                                     String output = null;
                                     output = outputformat.format(date);
 
-                                    if(fromORto==true){
+                                    if(fromORto){
                                         fromDate=sdf.format(date);
                                         bet_from_date.setText(""+output);
                                     } else{
@@ -508,7 +511,7 @@ if(!startLat.equals("0")) {
                                                                 bet_to_date.setText("");
                                                                 //catalog_outdated = 1;
                                                             }else{
-                                                                if(fromORto==true){
+                                                                if(fromORto){
                                                                     fromDate=sdf.format(date);
                                                                     bet_from_date.setText(""+output);
                                                                 } else{
@@ -538,7 +541,7 @@ if(!startLat.equals("0")) {
                                                 .display();
 
                                     }else{
-                                        if(fromORto==true){
+                                        if(fromORto){
                                             fromDate=sdf.format(date);
                                             bet_from_date.setText(""+output);
                                         } else{
@@ -639,8 +642,10 @@ if(!startLat.equals("0")) {
                     bet_credit.setText("");
                 } else if(bet_credit.getText().toString().equals("")){
                     Utils.showCustomToastMsg(BetCreationActivity.this, R.string.enter_credit);
-                }else if(bet_credit.getText().toString().equals("")){
-                    Utils.showCustomToastMsg(BetCreationActivity.this, R.string.enter_credit);
+
+                }else if((Integer.parseInt(credits)<Integer.parseInt(bet_credit.getText().toString()))){
+                    showMessage("Your credits are less than the bet score, so not possible to create bet!");
+
                 }else if(fromDate.equals("")||toDate.equals("")){
                     Utils.showCustomToastMsg(BetCreationActivity.this, R.string.select_date);
 
@@ -658,7 +663,7 @@ if(!startLat.equals("0")) {
                         if(!edBet_km.getText().toString().equals("")){
                             if(distanceKm){
                                 callAddBetApi();
-                                CustomProgress.getInstance().showProgress(BetCreationActivity.this, "", false);
+
                             }
                         } else if(kmInDec==0 ||distanceLocation){
                             Utils.showCustomToastMsg(BetCreationActivity.this, R.string.enter_km);
@@ -666,7 +671,7 @@ if(!startLat.equals("0")) {
                     }
                 }else if(distanceLocation){
                     callAddLocationTypeBetApi();
-                    CustomProgress.getInstance().showProgress(BetCreationActivity.this, "", false);
+
                 }
             }
         });
@@ -679,12 +684,9 @@ new RulesDialog(BetCreationActivity.this);
 
     @Override
     public void onBackPressed() {
-        AppPreference.getPrefsHelper().savePref(Contents.BAT_POSICTION, "2");
-        AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-        AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
-        Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
-        startActivity(intent);
+        SLApplication.isBetCreatedOrEdited=false;
         finish();
+
         super.onBackPressed();
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -804,86 +806,69 @@ new RulesDialog(BetCreationActivity.this);
             e.printStackTrace();
         }
     }
+
+
     private void callAddLocationTypeBetApi() {
+        CustomProgress.getInstance().showProgress(BetCreationActivity.this, "", false);
         double dis= Double.parseDouble(distance_draw.replace("km","").replace("m",""));
         String distance_draw_meter= String.valueOf(dis);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddBet(bet_name.getText().toString(),
-                bet_description.getText().toString(),fromDate,toDate, distance_draw_meter,
-                from_address.getText().toString(),to_address.getText().toString(),startLog,endLog,startLat,endLat,overview_polyline, bet_credit.getText().toString().trim(),
-                AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"location");
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<ResponseBody> locCall;
+        if(canCreate){
+            locCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmAddBet(bet_name.getText().toString(),
+                    bet_description.getText().toString(),fromDate,toDate, distance_draw_meter,
+                    from_address.getText().toString(),to_address.getText().toString(),startLog,endLog,startLat,endLat,overview_polyline, bet_credit.getText().toString().trim(),
+                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"location");
+        }else{
+            locCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddBet(bet_name.getText().toString(),
+                    bet_description.getText().toString(),fromDate,toDate, distance_draw_meter,
+                    from_address.getText().toString(),to_address.getText().toString(),startLog,endLog,startLat,endLat,overview_polyline, bet_credit.getText().toString().trim(),
+                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"location");
+        }
+
+        locCall.enqueue(new Callback<ResponseBody>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("Add bet location = "+bodyString);
                     final JSONObject jsonObject = new JSONObject(bodyString);
                     String msg = jsonObject.getString("Msg");
                     String data = jsonObject.getString("Status");
-                    if(Integer.parseInt(credits)>Integer.parseInt(bet_credit.getText().toString())){
-                        if(data.equals("Ok")){
-                            CustomProgress.getInstance().hideProgress();
-                            AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-                            AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
-                            Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }else{
-                        CustomProgress.getInstance().hideProgress();
-                        AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-                        AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
-                        Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                CustomProgress.getInstance().hideProgress();
-            }
-        });
-    }
-    private void callAddBetApi() {
-        double distance;
-        distance = Double.parseDouble(edBet_km.getText().toString().trim())*1000;
-        //double dis= Double.parseDouble(distance_draw.replace("km","").replace("m",""))/1000;
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddBet(bet_name.getText().toString(),
-                bet_description.getText().toString(),fromDate,toDate, ""+distance,
-                "","","","","","","", bet_credit.getText().toString().trim(),
-                AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"distance");
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String bodyString = new String(response.body().bytes(), "UTF-8");
-                    final JSONObject jsonObject = new JSONObject(bodyString);
-                    String msg = jsonObject.getString("Msg");
-                    String data = jsonObject.getString("Status");
-                        if(data.equals("Ok")){
-                            CustomProgress.getInstance().hideProgress();
-                            AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-                            AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
-                            Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }else if(data.equals("Error_credit")){
-                            CustomProgress.getInstance().hideProgress();
-                            Utils.showCustomToastMsg(BetCreationActivity.this, msg);
-                            hideKeyboard();
-                            bet_credit.setText("");
-                        }else if(data.equals("Error_date")){
-                            CustomProgress.getInstance().hideProgress();
-                            Utils.showCustomToastMsg(BetCreationActivity.this, msg);
-                            hideKeyboard();
-                        }
-                        else{
-                            CustomProgress.getInstance().hideProgress();
-                            Utils.showCustomToastMsg(BetCreationActivity.this, msg);
-                            hideKeyboard();
+                    CustomProgress.getInstance().hideProgress();
+                        switch (data){
+
+                            case "Ok":
+
+                                AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
+                                AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
+                            /*Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
+                            startActivity(intent);*/
+                                SLApplication.isBetCreatedOrEdited=true;
+                                finish();
+                                break;
+                            case "Error_credit":
+
+                                hideKeyboard();
+                                showMessage(msg);
+                                bet_credit.setText("");
+                                break;
+                            case "Error_date":
+
+                                hideKeyboard();
+                                showMessage(msg);
+                                break;
+                            case "Error":
+                                if(jsonObject.getString("can_create").equals("yes")) {
+                                    hideKeyboard();
+                                    showConfirmDialog(msg);
+
+                                }else {
+
+                                    hideKeyboard();
+                                    showMessage(msg);
+                                }
+                                break;
                         }
 
                 } catch (Exception e) {
@@ -896,6 +881,142 @@ new RulesDialog(BetCreationActivity.this);
             }
         });
     }
+
+
+    private void callAddBetApi() {
+
+        CustomProgress.getInstance().showProgress(BetCreationActivity.this, "", false);
+        double distance;
+        distance = Double.parseDouble(edBet_km.getText().toString().trim())*1000;
+        //double dis= Double.parseDouble(distance_draw.replace("km","").replace("m",""))/1000;
+        Call<ResponseBody> distanceCall;
+        if(canCreate){
+    distanceCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmAddBet(bet_name.getText().toString(),
+            bet_description.getText().toString(),fromDate,toDate, ""+distance,
+            "","","","","","","", bet_credit.getText().toString().trim(),
+            AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"distance");
+}else{
+    distanceCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddBet(bet_name.getText().toString(),
+            bet_description.getText().toString(),fromDate,toDate, ""+distance,
+            "","","","","","","", bet_credit.getText().toString().trim(),
+            AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"distance");
+}
+
+        distanceCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("Add bet == "+bodyString);
+                    final JSONObject jsonObject = new JSONObject(bodyString);
+                    String msg = jsonObject.getString("Msg");
+                    String data = jsonObject.getString("Status");
+                    CustomProgress.getInstance().hideProgress();
+                    switch (data){
+
+                        case "Ok":
+
+                            AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
+                            AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
+                            /*Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
+                            startActivity(intent);*/
+                            SLApplication.isBetCreatedOrEdited=true;
+                            finish();
+                            break;
+                        case "Error_credit":
+
+                            hideKeyboard();
+                            showMessage(msg);
+                            bet_credit.setText("");
+                            break;
+                        case "Error_date":
+
+                            hideKeyboard();
+                            showMessage(msg);
+                            break;
+                        case "Error":
+                        if(jsonObject.getString("can_create").equals("yes")) {
+                            hideKeyboard();
+                            showConfirmDialog(msg);
+
+                        }else {
+
+                            hideKeyboard();
+                            showMessage(msg);
+                        }
+                            break;
+                    }
+
+            /*            if(data.equals("Ok")){
+                            CustomProgress.getInstance().hideProgress();
+                            AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
+                            AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
+                            *//*Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
+                            startActivity(intent);*//*
+                            finish();
+                        }else if(data.equals("Error_credit")){
+                            CustomProgress.getInstance().hideProgress();
+                            Utils.showCustomToastMsg(BetCreationActivity.this, msg);
+                            hideKeyboard();
+                            bet_credit.setText("");
+                        }else if(data.equals("Error_date")){
+                            CustomProgress.getInstance().hideProgress();
+                            Utils.showCustomToastMsg(BetCreationActivity.this, msg);
+                            hideKeyboard();
+                        }
+                        else {
+                            CustomProgress.getInstance().hideProgress();
+                            Utils.showCustomToastMsg(BetCreationActivity.this, msg);
+                            hideKeyboard();
+                        }*/
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                CustomProgress.getInstance().hideProgress();
+            }
+        });
+    }
+
+    private void showConfirmDialog(String message) {
+
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(BetCreationActivity.this)
+                .setTitle("")
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if(Utils.isConnectedToInternet(BetCreationActivity.this)) {
+                                    canCreate=true;
+                                    if(distanceKm)
+                                callAddBetApi();
+                                    else
+                                        callAddLocationTypeBetApi();
+                                }else  noInternetDialog.show();
+                            }
+                        }) .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                    }
+                }).create();
+        dialog.show();
+
+    }
+
+
+    private void showMessage(String message){
+
+        MyDialog myDialog=new MyDialog(BetCreationActivity.this,null,"",message,getString(R.string.ok),"",false,"create_error");
+        myDialog.show();
+    }
+
     private void CallInappPurchass() {
         /*Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");

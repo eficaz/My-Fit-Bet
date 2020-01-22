@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
         android:orientation="vertical">
 
         <LinearLayout
@@ -41,7 +41,7 @@
                 android:layout_weight="5"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginStart="@dimen/margin_20"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -50,14 +50,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
-                    android:gravity="center|left"
+                    android:gravity="center|start"
                     android:fontFamily="@font/lato_regular"
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:text="" />
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_gravity="center|left"
+                    android:layout_gravity="center|start"
                     android:gravity="left|center"
                     android:layout_height="40dp" >
 
@@ -74,9 +74,9 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:layout_gravity="left|center"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/lato_regular"
-                    android:gravity="center|left"
+                    android:gravity="center|start"
                     android:textSize="12dp"
                     android:text="" />
                 </TableRow>
@@ -88,8 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".8"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
         android:orientation="vertical">
 
         <TableRow
@@ -126,7 +126,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/lato_regular"
                     android:gravity="center"
-                    android:textSize="10dp"
+                    android:textSize="10sp"
                     android:text="@string/won" />
             </LinearLayout>
             <View
@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="10dp"
+                    android:textSize="10sp"
                     android:fontFamily="@font/lato_regular"
                     android:text="@string/lost" />
             </LinearLayout>
@@ -205,8 +205,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:textSize="10dp"
+                        android:layout_marginStart="5dp"
+                        android:textSize="10sp"
                         android:gravity="center"
                         android:fontFamily="@font/lato_regular"
                         android:text="@string/credit" />
@@ -220,8 +220,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
         android:orientation="vertical">
 
         <LinearLayout
@@ -235,8 +235,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
 
                 android:orientation="vertical">
                 <LinearLayout
@@ -250,15 +250,15 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:layout_marginRight="@dimen/margin_10"
-                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_10"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:layout_height="match_parent" >
 
                         <TextView
                             android:id="@+id/week"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginEnd="5dp"
                             android:gravity="center"
                             android:fontFamily="@font/lato_regular"
                             android:textSize="12dp"
@@ -270,7 +270,7 @@
                             android:id="@+id/month"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginEnd="5dp"
                             android:gravity="center"
                             android:textSize="12dp"
                             android:textColor="@color/hint_text_color"
@@ -286,7 +286,7 @@
                             android:textSize="12dp"
                             android:textColor="@color/hint_text_color"
                             android:fontFamily="@font/lato_regular"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginEnd="5dp"
                             android:layout_height="match_parent"
                             android:text="@string/month6" />
 
@@ -331,8 +331,8 @@
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center"
                             android:textStyle="bold"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
                             android:textSize="18dp"
                             android:text=""
                             android:textColor="@color/light_blue" />

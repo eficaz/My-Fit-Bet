@@ -359,6 +359,7 @@ public class JoinBetsDetailsListAdapter extends RecyclerView.Adapter{
         AppPreference.getPrefsHelper().savedStatusFlag(false);
         AppPreference.getPrefsHelper().saveUserRoute("");
         AppPreference.getPrefsHelper().saveOrigin("");
+        AppPreference.getPrefsHelper().setLatLongList(null);
     }
 
     private void showAlertInfo(final int position) {

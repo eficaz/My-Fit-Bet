@@ -32,8 +32,8 @@ ext{
             //injection
             butter_knife    : 'com.jakewharton:butterknife:7.0.1',
             google: 'com.google.android.gms:play-services-auth:17.0.0',
-           /* facebook: 'com.facebook.android:facebook-login:[5,6+)',*/
-            facebook: 'com.facebook.android:facebook-login:4.30.0',
+            facebook: 'com.facebook.android:facebook-login:[5,6+)',
+           /* facebook: 'com.facebook.android:facebook-login:4.30.0',*/
             easy_image: 'com.github.jkwiecien:EasyImage:2.0.0',
     ]
     designDependencies = [

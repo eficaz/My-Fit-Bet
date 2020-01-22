@@ -5,6 +5,12 @@ apply plugin: 'io.fabric'
 android {
 
 
+    android {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
@@ -15,7 +21,7 @@ android {
 
     signingConfigs {
         releaseConfig {
-            storeFile file('E:\\Nidhin_Projects\\Nidhin_Projects\\BackUp\\Fitbet\\13.10.2019\\13.10.2019\\Fit_Bet\\app\\release\\app.aab')
+            storeFile file('E:\\Sreenadh\\keystore\\fitbetandroid.jks')
         }
     }
     compileSdkVersion 28
@@ -145,6 +151,7 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.4+'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile project(path: ':videocompressor')
 }
 apply plugin: 'com.google.gms.google-services'
 repositories {

@@ -151,7 +151,17 @@ mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILIT
 
     }
 
-public void setImageToFab(){
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void setImageToFab(){
 
     mFab.setImageResource(R.drawable.tab_center_icon_active1);
     mBottomNavigationView.getMenu().getItem(0).setChecked(false);
@@ -316,6 +326,7 @@ public void setImageToFab(){
                 if(CustomProgress.getInstance().isShowing())
                     CustomProgress.getInstance().hideProgress();
                 String message=jsonObject.getString("Msg");
+                appPreference.savePref(BET_START_STATUS,"false");
                 //callJoinBetsAPi();
                 System.out.println("inside error - not ok");
                 if(live_bet){
@@ -342,6 +353,7 @@ public void setImageToFab(){
         appPreference.savedStatusFlag(false);
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
+        appPreference.setLatLongList(null);
     }
 
 

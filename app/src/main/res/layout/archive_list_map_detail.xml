@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:tint="@color/black"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/close_button" />
 
@@ -88,17 +88,17 @@
                                 android:id="@+id/row_startpoint"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_gravity="center|left"
+                                android:layout_gravity="center|start"
                                 android:layout_weight="1"
-                                android:gravity="center|left">
+                                android:gravity="center|start">
 
                                 <TextView
                                     android:id="@+id/startpoint"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_gravity="center|left"
-                                    android:layout_marginLeft="@dimen/margin_10"
-                                    android:gravity="center|left"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginStart="@dimen/margin_10"
+                                    android:gravity="center|start"
                                     android:hint="@string/start_location"
                                     android:maxLines="2"
                                     android:textColor="@color/white"
@@ -112,17 +112,17 @@
                                 android:id="@+id/row_endpoint"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_gravity="center|left"
+                                android:layout_gravity="center|start"
                                 android:layout_weight="1"
-                                android:gravity="center|left">
+                                android:gravity="center|start">
 
                                 <TextView
                                     android:id="@+id/endpoint"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_gravity="center|left"
-                                    android:layout_marginLeft="@dimen/margin_10"
-                                    android:gravity="center|left"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginStart="@dimen/margin_10"
+                                    android:gravity="center|start"
                                     android:maxLines="2"
                                     android:hint="@string/end_location"
                                     android:fontFamily="@font/lato_regular"
@@ -356,7 +356,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="right"
-            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
             android:gravity="right"
             android:orientation="vertical">
 
