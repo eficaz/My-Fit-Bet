@@ -29,6 +29,7 @@ import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.ui.adapters.ArchiveDetailsListAdapter;
 import com.androidapp.fitbet.utils.CircleImageView;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.squareup.picasso.Picasso;
 
@@ -185,6 +186,15 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     private String originalDistance, originalEndLat, originalEndLog,startAddress,endAddress;
 
     @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_archive_details);
@@ -268,7 +278,7 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
         video_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(ArchiveDetailsActivity.this,videoplayer.class);
+                Intent i=new Intent(ArchiveDetailsActivity.this, Videoplayer.class);
                 i.putExtra("url",videopath);
                 startActivity(i);
             }

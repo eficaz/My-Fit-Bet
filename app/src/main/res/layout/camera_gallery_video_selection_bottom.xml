@@ -22,7 +22,7 @@
             android:fontFamily="@font/lato_bold"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <Button
@@ -37,7 +37,7 @@
             android:textAllCaps="false"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textStyle="bold" />
         <Button
             android:id="@+id/bt_video"
@@ -50,7 +50,7 @@
             android:textAllCaps="false"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textStyle="bold" />
         <Button
             android:id="@+id/bt_cancel"
@@ -62,7 +62,7 @@
             android:textAllCaps="false"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>
 

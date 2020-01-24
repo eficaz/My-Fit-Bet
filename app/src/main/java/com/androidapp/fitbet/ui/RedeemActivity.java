@@ -1,5 +1,6 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 
 import org.json.JSONObject;
@@ -90,6 +92,15 @@ public class RedeemActivity extends BaseActivity {
 
     int dinamic_adminCharge=0,dinamic_stripe_charge=0;
 private MyDialog noInternetDialog;
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

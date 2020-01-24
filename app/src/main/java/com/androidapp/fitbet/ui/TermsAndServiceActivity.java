@@ -1,5 +1,6 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -8,6 +9,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 
 import com.androidapp.fitbet.R;
+import com.androidapp.fitbet.utils.SLApplication;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -74,7 +76,14 @@ public class TermsAndServiceActivity extends BaseActivity {
             "  Payment for the FitBet must be done via Apple and Google InApp purchases. The payment amount would include InApp charges. Amounts paid for buying betting credits are not refundable.</p>";
 
 
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -23,6 +23,7 @@ import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CircleImageView;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -79,6 +80,16 @@ public class LoserActivity extends BaseActivity {
 
     String uaser_image,winer_name,credit,winner_description;
 private AppPreference appPreference;
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +135,7 @@ private AppPreference appPreference;
         video_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(LoserActivity.this,videoplayer.class);
+                Intent i=new Intent(LoserActivity.this, Videoplayer.class);
                 i.putExtra("url",videopath);
                 startActivity(i);
             }
@@ -193,15 +204,16 @@ private AppPreference appPreference;
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     final JSONObject jsonObject;
                     jsonObject = new JSONObject(bodyString);
-                    //Log.i("----------betloserdetails---------",jsonObject.toString());
+                 System.out.println("Loser details = "+bodyString);
                     String data = jsonObject.getString("Status");
+                    CustomProgress.getInstance().hideProgress();
                     if(data.equals("Ok")){
-                        CustomProgress.getInstance().hideProgress();
+
                         tv_Name.setText(jsonObject.getString("winner_name"));
                         tv_credit.setText(jsonObject.getString("winner_credit"));
                         userPostion.setText(jsonObject.getString("user_position"));
                         if (!jsonObject.getString("winner_profile_pic").equals("NA")) {
-                            if (jsonObject.getString(REG_TYPE).equals("normal") && jsonObject.getString(IMAGE_STATUS).equals("0")) {
+                            if (jsonObject.getString(IMAGE_STATUS).equals("0")) {
                                 Picasso.get().load(Constant.BASE_APP_IMAGE__PATH + jsonObject.getString("winner_profile_pic"))
                                         .placeholder(R.drawable.image_loader)
                                         .into(img_user);

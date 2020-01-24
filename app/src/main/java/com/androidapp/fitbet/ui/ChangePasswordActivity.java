@@ -1,5 +1,6 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 
 import org.json.JSONObject;
@@ -42,6 +44,14 @@ public class ChangePasswordActivity extends BaseActivity {
     @Bind(R.id.btn_back)
     TableRow btn_back;
 
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

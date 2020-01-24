@@ -1,5 +1,6 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.model.MyBets;
+import com.androidapp.fitbet.utils.SLApplication;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,14 @@ public class UpcommingBetActivity extends BaseActivity {
 
     ArrayList<MyBets> groupDetails;
 
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

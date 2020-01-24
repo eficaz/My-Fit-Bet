@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
                         android:textColor="@color/main_text_color"
                         android:gravity="center|start"
@@ -121,7 +121,7 @@
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="@string/map"
                     />
             </LinearLayout>
@@ -146,7 +146,7 @@
                     android:textColor="@color/light_blue"
                     android:textStyle="bold"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:layout_marginStart="5dp"
                     />
             </LinearLayout>

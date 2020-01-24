@@ -36,7 +36,7 @@
                     android:fontFamily="@font/lato_regular"
                     android:textColor="@color/white"
                     android:inputType="textPersonName"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:backgroundTint="@color/white"
                     android:maxLength="30"
                     android:maxLines="1"
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/lato_regular"
                     android:textColor="@color/white"
@@ -162,7 +162,7 @@
                         android:layout_marginStart="10dp"
                         android:drawablePadding="7dp"
                         android:drawableStart="@drawable/group_icons_hover"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
                         />
@@ -205,7 +205,7 @@
                     android:singleLine="true"
                     android:text=""
                     android:textColor="@color/main_text_color"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     />
                <!-- <SearchView
                     android:id="@+id/searchview"

@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:textColor="@color/black"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:fontFamily="@font/lato_regular"
                     android:text="ahagsfbnsdf"
                     />
@@ -117,7 +117,7 @@
                     android:id="@+id/price_amount"
                     android:layout_width="wrap_content"
                     android:singleLine="true"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:fontFamily="@font/lato_regular"
                     android:layout_height="wrap_content"
                     android:text="0" />

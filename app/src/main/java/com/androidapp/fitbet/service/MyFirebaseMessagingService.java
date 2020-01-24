@@ -21,6 +21,11 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM Service";
+    private LocalBroadcastManager broadcaster;
+    @Override
+    public void onCreate() {
+        broadcaster = LocalBroadcastManager.getInstance(this);
+    }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO: Handle FCM messages here.
@@ -60,8 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
         manager.notify(0, builder.build());
 
-
-      sendMessageToReceiver(remoteMessage.getNotification().getBody());
+        //sendMessageToReceiver(remoteMessage.getNotification().getBody());
 
     }
 
@@ -70,7 +74,7 @@ System.out.println("sendMessageToReceiver "+message);
 Intent intent = new Intent();
 intent.putExtra("message",message);
 intent.setAction("count_down");
-LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+broadcaster.sendBroadcast(intent);
 
     }
 

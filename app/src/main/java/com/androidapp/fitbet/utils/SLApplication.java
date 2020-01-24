@@ -25,7 +25,8 @@ import static com.google.firebase.remoteconfig.FirebaseRemoteConfig.TAG;
 
 public class SLApplication extends MultiDexApplication implements Application.ActivityLifecycleCallbacks{
     public static boolean isServiceRunning=false;
-    private static SLApplication mInstance;
+    public static boolean isCountDownRunning=false;
+    public static SLApplication mInstance;
     public static boolean isBetCreatedOrEdited;
 
     private Activity activeActivity;

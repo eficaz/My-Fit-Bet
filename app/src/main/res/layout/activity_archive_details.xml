@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/white"
             android:text="@string/archies_details" />
@@ -47,8 +47,8 @@
         <TableRow
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_gravity="right|center"
-            android:gravity="right|center"
+            android:layout_gravity="end|center"
+            android:gravity="end|center"
             android:layout_marginEnd="30dp"
             android:layout_height="wrap_content">
             <ImageView
@@ -64,7 +64,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
                 android:gravity="center"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/lato_regular"
                 android:text="0" />
@@ -74,8 +74,8 @@
         <TableRow
             android:layout_width="0dp"
             android:layout_weight="2"
-            android:layout_gravity="right|center"
-            android:gravity="right|center"
+            android:layout_gravity="end|center"
+            android:gravity="end|center"
             android:layout_marginEnd="30dp"
             android:layout_height="wrap_content">
             <ImageView
@@ -91,7 +91,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
                 android:gravity="center"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/lato_regular"
                 android:text="0" />
@@ -149,7 +149,7 @@
                         android:id="@+id/group_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="left|center|bottom"
+                        android:layout_gravity="start|center|bottom"
                         android:gravity="center|start|bottom"
                         android:textColor="@color/white"
                         android:text="" />
@@ -170,9 +170,9 @@
                             android:id="@+id/discreption"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_gravity="left|center|top"
+                            android:layout_gravity="start|center|top"
                             android:gravity="center|start|top"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/white"
                             android:text="" />
                     </TableRow>

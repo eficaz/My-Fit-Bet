@@ -1,5 +1,6 @@
 package com.nagihong.videocompressor.transcoder;
 
+import android.media.MediaCodecInfo;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMetadataRetriever;
@@ -134,7 +135,12 @@ public class VideoCompressEngine {
         //read
         MediaExtractorUtils.TrackResult trackResult = MediaExtractorUtils.getFirstVideoAndAudioTrack(extractor);
         MediaFormat videoOutputFormat = formatStrategy.createVideoOutputFormat(trackResult.mVideoTrackFormat);
+        //////////////////////////////////////////////////////////////////////
+        videoOutputFormat.setInteger("profile", MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline);
+        videoOutputFormat.setInteger("level", MediaCodecInfo.CodecProfileLevel.AVCLevel13);
+        //////////////////////////////////////////////////////////////////////////////////////////
         MediaFormat audioOutputFormat = formatStrategy.createAudioOutputFormat(trackResult.mAudioTrackFormat);
+
         if (videoOutputFormat == null && audioOutputFormat == null) {
             //our project want the output file when no need to transcode
             FileUtils.copyFile(inputPath, outputPath);

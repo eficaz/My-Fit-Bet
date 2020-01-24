@@ -106,7 +106,7 @@
                                 android:textColor="@color/white"
                                 android:fontFamily="@font/lato_regular"
                                 android:textColorHint="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14sp" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                                 android:textColor="@color/white"
                                 android:fontFamily="@font/lato_regular"
                                 android:textColorHint="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14sp" />
                         </TableRow>
 
                         <TableRow
@@ -146,7 +146,7 @@
                                 android:fontFamily="@font/lato_regular"
                                 android:textColor="@color/white"
                                 android:textColorHint="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14sp" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                                 android:textColor="@color/white"
                                 android:fontFamily="@font/lato_regular"
                                 android:textColorHint="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14sp" />
                         </TableRow>
 
                     </LinearLayout>
@@ -191,7 +191,7 @@
                                 android:gravity="center"
                                 android:fontFamily="@font/lato_regular"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14sp" />
                         </TableRow>
 
                         <TableRow
@@ -241,7 +241,7 @@
                     android:backgroundTint="@color/light_blue"
                     android:textColor="@color/white"
                     android:padding="@dimen/margin_10"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:layout_height="wrap_content"
                     android:text="@string/start_point" />
             </TableRow>
@@ -261,7 +261,7 @@
                     android:backgroundTint="@color/light_blue"
                     android:textColor="@color/white"
                     android:padding="@dimen/margin_10"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="@string/end_point" />
             </TableRow>
 
@@ -280,7 +280,7 @@
                     android:backgroundTint="@color/light_blue"
                     android:textColor="@color/white"
                     android:padding="@dimen/margin_10"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="@string/distance" />
             </TableRow>
             <TableRow
@@ -300,7 +300,7 @@
                     android:backgroundTint="@color/light_blue"
                     android:textColor="@color/white"
                     android:padding="@dimen/margin_10"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="@string/set" />
             </TableRow>
         </TableRow>

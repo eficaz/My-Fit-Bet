@@ -175,6 +175,15 @@ private boolean canCreate;
 
 private MyDialog noInternetDialog;
 
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
+
     //Bundle bundle;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override

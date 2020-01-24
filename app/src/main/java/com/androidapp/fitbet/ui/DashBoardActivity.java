@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -40,6 +39,7 @@ import com.androidapp.fitbet.ui.fragments.SettingsFragment;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CACHEDKEY;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -109,24 +109,59 @@ private int flag=0;
     private MyDialog noInternetDialog;
     private int REQUEST_CHECK_SETTINGS=111;
 private AppPreference appPreference;
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+
+        System.out.println("Dashboard activity onMessageReceived = "+message);
+
+        SLApplication.isCountDownRunning=true;
+        mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+        mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+        mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+        mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+        mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+        mFab.setImageResource(R.drawable.tab_center_icon_active1);
+        getSupportFragmentManager().beginTransaction().remove(getCurrentFragment()).add(R.id.content_main,new LiveBetFragment(),Utils.BetScreenName).commitAllowingStateLoss();
+    }
+
+    Fragment getCurrentFragment() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if(fragments.isEmpty()) {
+            return null;
+        }
+        return fragments.get(fragments.size()-1);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sactivity_dashboard);
         ButterKnife.bind(this);
+        System.out.println("onCreate dashboard activity");
         appPreference=AppPreference.getPrefsHelper(this);
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         dashBoardPresenter = new DashBoardPresenter(this);
         mOnNavigationItemSelectedListener=this;
-mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-disableShiftMode(mBottomNavigationView);
-mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        disableShiftMode(mBottomNavigationView);
+        mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
-
-        if(Utils.isConnectedToInternet(this)) {
-            callLiveBetApi();}else
-        if(!noInternetDialog.isShowing())
-            noInternetDialog.show();
+if(SLApplication.isCountDownRunning){
+    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+    mFab.setImageResource(R.drawable.tab_center_icon_active1);
+    getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new LiveBetFragment(),Utils.BetScreenName).commitAllowingStateLoss();
+}else {
+    if (Utils.isConnectedToInternet(this)) {
+        callLiveBetApi();
+    } else if (!noInternetDialog.isShowing())
+        noInternetDialog.show();
+}
 
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -153,11 +188,13 @@ mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILIT
 
     @Override
     protected void onStop() {
+        System.out.println("onStop Dashboard");
         super.onStop();
     }
 
     @Override
     protected void onResume() {
+        System.out.println("onResume Dashboard");
         super.onResume();
     }
 

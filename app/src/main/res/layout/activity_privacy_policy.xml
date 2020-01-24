@@ -43,7 +43,7 @@
                     android:id="@+id/txt_page_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:text="@string/privacy_and_policy" />
 

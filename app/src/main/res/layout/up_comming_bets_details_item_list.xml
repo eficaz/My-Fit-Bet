@@ -61,7 +61,7 @@
                         android:maxLines="1"
                         android:textColor="@color/main_text_color"
                         android:text=""
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
                         />

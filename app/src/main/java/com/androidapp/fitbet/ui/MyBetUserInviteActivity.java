@@ -101,6 +101,7 @@ public class MyBetUserInviteActivity extends BaseActivity {
 
     }
     private void filter(String text) {
+if(inviteListAdapter!=null)
         inviteListAdapter.filterList(text);
     }
     private void inviteGroupList() {

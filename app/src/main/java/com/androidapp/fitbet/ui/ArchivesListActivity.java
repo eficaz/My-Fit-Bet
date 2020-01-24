@@ -79,7 +79,14 @@ public class ArchivesListActivity extends BaseActivity {
     ArchivesListAdapter archivesListAdapter;
     //Bundle bundle;
 
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

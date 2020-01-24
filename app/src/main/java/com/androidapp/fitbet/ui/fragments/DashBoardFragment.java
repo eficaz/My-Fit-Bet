@@ -113,12 +113,13 @@ public class DashBoardFragment extends Fragment {
     ArrayList<String> dateDes = new ArrayList<>();
     ArrayList<String> speed = new ArrayList<>();
     private MyDialog noInternetDialog;
-
+private  AppPreference appPreference;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated DashBoardFragment");
-        AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"0");
+        appPreference=AppPreference.getPrefsHelper(getActivity());
+        appPreference.savePref(DASH_BOARD_POSICTION,"0");
         noInternetDialog=new MyDialog(getActivity(),null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
         intintView();
     }
@@ -136,7 +137,7 @@ noInternetDialog.show();
             @Override
             public void onClick(View v) {
                Intent i = new Intent(getActivity(), WinnerActivity.class);
-                i.putExtra(REG_KEY,AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+                i.putExtra(REG_KEY,appPreference.getPref(Contents.REG_KEY,""));
                 i.putExtra(FIRST_NAME,"Nidhin");
                 i.putExtra(MYBETS_betid,"23");
                 i.putExtra(WON,"100");
@@ -251,12 +252,13 @@ noInternetDialog.show();
     }
     private void callDashboardDetailsApi() {
 
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(appPreference.getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("dashboard details "+bodyString);
                     DashboardDetailReportapiresult(bodyString);
                     //CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
@@ -277,6 +279,7 @@ noInternetDialog.show();
                 String data1 = jsonObject.getString(DASH_BOARD_USERS);
                 JSONObject jsonObject1 = new JSONObject(data1);
                 name.setText(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
+                appPreference.saveProfileName(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
                 address.setText(jsonObject1.getString(DASH_BOARD_COUNTRY));
                 won.setText(jsonObject1.getString(DASH_BOARD_WON));
                 lost.setText(jsonObject1.getString(DASH_BOARD_LOST));
@@ -288,14 +291,17 @@ noInternetDialog.show();
                         Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
+                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC));
                     }else{
                         Picasso.get().load(jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
+                        appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                     }
                 }
                 else{
-                    img_user.setImageDrawable(mContext.getResources().getDrawable(R.drawable.user_profile_avatar));
+                    img_user.setImageResource(R.drawable.user_profile_avatar);
+                    appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                 }
             }else if(status.equals("No Users")){
                 Intent i = new Intent(getActivity(), LoginActivity.class);
@@ -308,7 +314,7 @@ noInternetDialog.show();
         }
     }
     private void callweekApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardWeek(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardWeek(appPreference.getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -327,7 +333,7 @@ noInternetDialog.show();
         });
     }
     private void callmonthApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardMonth(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardMonth(appPreference.getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -389,7 +395,7 @@ noInternetDialog.show();
     }
 
     private void callsex_monthApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Dashboard6Month(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Dashboard6Month(appPreference.getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -448,7 +454,7 @@ noInternetDialog.show();
     }
 
     private void callyear_Api() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardYear(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardYear(appPreference.getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

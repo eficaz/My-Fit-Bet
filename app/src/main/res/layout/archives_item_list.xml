@@ -90,7 +90,7 @@
                         android:layout_weight="1"
                         android:visibility="visible"
                         android:gravity="center"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:fontFamily="@font/lato_bold"
                         android:textColor="@color/light_blue"
                         android:layout_height="wrap_content"

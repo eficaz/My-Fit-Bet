@@ -62,7 +62,7 @@
                         android:maxLines="1"
                         android:textColor="@color/black"
                         android:text=""
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
                         />
@@ -93,7 +93,7 @@
                         android:singleLine="true"
                         android:textStyle="bold"
                         android:fontFamily="@font/lato_regular"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:text="0"
                         android:gravity="center"
                         />
@@ -107,7 +107,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:drawablePadding="7dp"
                         android:drawableStart="@drawable/coin_icon"
                         android:fontFamily="@font/lato_regular"

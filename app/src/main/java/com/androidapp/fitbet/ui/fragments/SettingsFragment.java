@@ -2,13 +2,11 @@ package com.androidapp.fitbet.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.se.omapi.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +28,6 @@ import com.androidapp.fitbet.camera.CameraGalleryPickerBottom;
 import com.androidapp.fitbet.customview.CustomProgress;
 import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
-import com.androidapp.fitbet.map.LocationMonitoringService;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
@@ -48,7 +44,6 @@ import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
@@ -71,8 +66,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.androidapp.fitbet.utils.Contents.COUNTRY_NAME;
-import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_COUNTRY;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_FIRSTNAME;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_USERS;
@@ -84,8 +77,6 @@ import static com.androidapp.fitbet.utils.Contents.REG_TYPE;
 
 public class SettingsFragment extends Fragment  {
 
-    @Bind(R.id.country_selection)
-    TextView country_selection;
 
     @Bind(R.id.name)
     EditText name;
@@ -125,11 +116,9 @@ TableRow rulesRegulations;
     File filePath;
 
 
-    int AUTOCOMPLETE_REQUEST_CODE = 123;
-    String oldName="";
-    boolean editable =false;
-    boolean imageupload =false;
-    boolean first_time=false;
+
+    private boolean imageupload;
+   private  boolean first_time;
 private AppPreference appPreference;
 private MyDialog noInternetDialog;
     @Override
@@ -139,26 +128,30 @@ private MyDialog noInternetDialog;
         appPreference=AppPreference.getPrefsHelper(getActivity());
         appPreference.savePref(DASH_BOARD_POSICTION,"4");
         noInternetDialog=new MyDialog(getActivity(),null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
-        intintView();
+        initView();
     }
-    private void intintView() {
+    private void initView() {
         bt_submit.setVisibility(View.GONE);
-        callDashboardDetailsApi();
         first_time=true;
-        CustomProgress.getInstance().showProgress(getActivity(), "", false);
-
         if(appPreference.getPref(Contents.REG_WITH_F_OR_G,"").equals("true")){
             change_password.setVisibility(View.GONE);
         }else{
             change_password.setVisibility(View.VISIBLE);
         }
-        country_selection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               /* Intent intent=new Intent(getActivity(),CountrySelectionActivity.class);
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);*/
-            }
-        });
+
+        name.setText(appPreference.getSavedProfileName());
+
+
+        if (!appPreference.getSavedProfileImage().equals("NA")) {
+
+                Picasso.get().load(appPreference.getSavedProfileImage())
+                        .placeholder(R.drawable.image_loader)
+                        .into(img_user);
+
+        } else {
+            img_user.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.user_profile_avatar));
+        }
+
         redeem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,22 +186,15 @@ private MyDialog noInternetDialog;
             }
             @Override
             public void afterTextChanged(Editable s) {
-                if(first_time==true){
-                    editable=false;
+                if(first_time){
+
                     bt_submit.setVisibility(View.GONE);
                     first_time=false;
-                }else if(first_time==false){
-                    editable=true;
+                }else if(!first_time){
+
                     bt_submit.setVisibility(View.VISIBLE);
                 }
 
-                     /*   if(oldName.equals(s.toString())){
-                            editable=false;
-                            bt_submit.setVisibility(View.GONE);
-                        }else{
-                            editable=true;
-                            bt_submit.setVisibility(View.VISIBLE);
-                        }*/
             }
         });
         row_credit_purchase.setOnClickListener(new View.OnClickListener() {
@@ -240,10 +226,11 @@ private MyDialog noInternetDialog;
                 if(!name.getText().toString().equals("")){
                     submitSettingsDetailsApi();
                     CustomProgress.getInstance().showProgress(getActivity(), "", false);
-                    if(imageupload==true){
+                    if(imageupload) {
                         updateProfilePic();
-                        //CustomProgress.getInstance().showProgress(getActivity(), "", false);
-                    }
+
+                    }//CustomProgress.getInstance().showProgress(getActivity(), "", false);
+
                 }else{
                     Utils.showCustomToastMsg(getActivity(), R.string.please_enter_name);
                 }
@@ -304,7 +291,6 @@ private MyDialog noInternetDialog;
         editText.requestFocus();
         InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         manager.showSoftInput(editText, 0);
-        editable=true;
         bt_submit.setVisibility(View.VISIBLE);
     }
 
@@ -384,6 +370,8 @@ private MyDialog noInternetDialog;
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
+                    System.out.println("settings update pic = "+bodyString);
+
                     try {
                         JSONObject jsonObject = new JSONObject(bodyString);
                         String status = jsonObject.getString("Status");
@@ -429,6 +417,7 @@ private MyDialog noInternetDialog;
                     try {
                         JSONObject jsonObject = new JSONObject(bodyString);
                         String status = jsonObject.getString("Status");
+                        System.out.println("submit settings = "+bodyString);
                         if(status.trim().equals("Ok")){
 
                             //Utils.showCustomToastMsg(getActivity(), R.string.updated_successfully);
@@ -465,6 +454,10 @@ private MyDialog noInternetDialog;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_settings, container, false);
         ButterKnife.bind(this, view);
+
+
+
+
         ((DashBoardActivity) getActivity()).passVal(new CameraGalaryCaputer() {
             @Override
             public <T> void requestFailure(int requestCode, T data) {
@@ -525,22 +518,26 @@ private MyDialog noInternetDialog;
             if (status.trim().equals("Ok")) {
                 String data1 = jsonObject.getString(DASH_BOARD_USERS);
                 JSONObject jsonObject1 = new JSONObject(data1);
-                oldName=jsonObject1.getString(DASH_BOARD_FIRSTNAME);
+
                 name.setText(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
-                country_selection.setText(jsonObject1.getString(DASH_BOARD_COUNTRY));
+                appPreference.saveProfileName(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
+
                 final Context mContext = getActivity() ;
                 if (!jsonObject1.getString(PROFILE_PIC).equals("NA")) {
                     if (jsonObject1.getString(REG_TYPE).equals("normal")&&jsonObject1.getString(IMAGE_STATUS).equals("0")){
                         Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
+                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC));
                     }else{
                         Picasso.get().load(jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
+                        appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                     }
                 } else {
                     img_user.setImageDrawable(mContext.getResources().getDrawable(R.drawable.user_profile_avatar));
+                    appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                 }
                 CustomProgress.getInstance().hideProgress();
             }
@@ -548,15 +545,5 @@ private MyDialog noInternetDialog;
             e.printStackTrace();
         }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            String message=data.getStringExtra(COUNTRY_NAME);
-            country_selection.setText(message);
-            editable=true;
-            bt_submit.setVisibility(View.VISIBLE);
-        }
 
-    }
 }

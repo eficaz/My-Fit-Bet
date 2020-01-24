@@ -43,6 +43,7 @@ import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_COUNTRY;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_FIRSTNAME;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_LOST;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_MONTH;
+import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_SIX_MONTH;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_USERS;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_WEEK;
@@ -105,10 +106,11 @@ public class UserProfileDashBoardFragment extends Fragment {
 
     ArrayList<String> dateDes = new ArrayList<>();
     ArrayList<String> speed = new ArrayList<>();
-
+private AppPreference appPreference;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        appPreference=AppPreference.getPrefsHelper(getActivity());
         intintView();
     }
     private void intintView() {
@@ -116,18 +118,6 @@ public class UserProfileDashBoardFragment extends Fragment {
         callDashboardDetailsApi();
 
 
-
-       /* name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), WinnerActivity.class);
-                i.putExtra(USER_PROFILE_REG_KEY,AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY,""));
-                i.putExtra(FIRST_NAME,"Nidhin");
-                i.putExtra(MYBETS_betid,"10");
-                i.putExtra(WON,"100");
-                startActivity(i);
-            }
-        });*/
         week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,6 +229,7 @@ public class UserProfileDashBoardFragment extends Fragment {
         });
     }
     private void DashboardDetailReportapiresult(String bodyString) {
+        System.out.println("dashboard "+bodyString);
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");
@@ -246,10 +237,11 @@ public class UserProfileDashBoardFragment extends Fragment {
                 String data1 = jsonObject.getString(DASH_BOARD_USERS);
                 JSONObject jsonObject1 = new JSONObject(data1);
                 name.setText(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
+                appPreference.saveProfileName(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
                 address.setText(jsonObject1.getString(DASH_BOARD_COUNTRY));
                 won.setText(jsonObject1.getString(DASH_BOARD_WON));
                 lost.setText(jsonObject1.getString(DASH_BOARD_LOST));
-                //credit.setText(jsonObject1.getString(DASH_BOARD_CREDIT_SCORE));
+
 
                 final Context mContext = getActivity() ;
                 if (!jsonObject1.getString(PROFILE_PIC).equals("NA")) {
@@ -258,65 +250,18 @@ public class UserProfileDashBoardFragment extends Fragment {
                         Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
+                  appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC));
 
-                     /*   Glide.with(getActivity())
-                                .load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
-                                .centerCrop()
-                                .placeholder(R.drawable.user_profile_avatar)
-                                .into(img_user);*/
-                      /*  try {
-                            RequestOptions requestOptions = new RequestOptions();
-                            requestOptions.placeholder(R.drawable.user_profile_avatar);
-                            requestOptions.error(R.drawable.user_profile_avatar);
-                            Glide.with(getActivity())
-                                    .setDefaultRequestOptions(requestOptions)
-                                    .load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
-                                    .into(img_user);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }*/
-                        /*Glide.with(getActivity())
-                                .load(""+ Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
-                                .listener(new RequestListener<String, GlideDrawable>() {
-                                    @Override
-                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                        img_user.setImageDrawable(mContext.getResources().getDrawable(R.drawable.user_profile_avatar));
-                                        return false;
-                                    }
-                                    @Override
-                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                        return false;
-                                    }
-                                })
-                                .transform(new CircleTransform(getActivity()))
-                                .into(img_user);*/
                     }else{
                         Picasso.get().load(jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
-                        /*Glide.with(getActivity())
-                                .load(jsonObject1.getString(PROFILE_PIC))
-                                .centerCrop()
-                                .placeholder(R.drawable.user_profile_avatar)
-                                .into(img_user);*/
-                        /*Glide.with(getActivity())
-                                .load(jsonObject1.getString(PROFILE_PIC))
-                                .listener(new RequestListener<String, GlideDrawable>() {
-                                    @Override
-                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                        img_user.setImageDrawable(mContext.getResources().getDrawable(R.drawable.user_profile_avatar));
-                                        return false;
-                                    }
-                                    @Override
-                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                        return false;
-                                    }
-                                })
-                                .transform(new CircleTransform(getActivity()))
-                                .into(img_user);*/
+                        appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
+
                     }
                 }
                 else{
+                    appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                     img_user.setImageDrawable(mContext.getResources().getDrawable(R.drawable.user_profile_avatar));
                 }
             }

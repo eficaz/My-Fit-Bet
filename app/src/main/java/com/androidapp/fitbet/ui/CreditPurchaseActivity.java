@@ -68,10 +68,8 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
     CheckBox checkBox;
 
 
-    String am1="10";
-    String am2="20";
-    String am3="30";
-    String am4="50";
+    private int am1=10,am2=20,am3=30,am4=50;
+
     String am_zero="0";
 
 
@@ -280,14 +278,14 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
             @Override
             public void onClick(View v) {
                 int amount=Integer.parseInt(total_am.getText().toString().trim());
-                int totalAddAmount= amount-Integer.parseInt(am1);
+                int totalAddAmount= amount-am1;
                 if(total_am.getText().toString().trim().equals("0")){
                     total_am.setText(""+am_zero);
                     total_am_sub.setText(""+am_zero);
                 }else{
 
                     total_am.setText(""+totalAddAmount);
-                    total_am_sub.setText(""+totalAddAmount);
+                    total_am_sub.setText(""+calculatedAmount(totalAddAmount));
                 }
                 if(totalAddAmount==10){
                     Drawable buttonDrawable = cer1.getBackground();
@@ -399,9 +397,9 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
             @Override
             public void onClick(View v) {
                 int amount=Integer.parseInt(total_am.getText().toString().trim());
-                int totalAddAmount= amount+Integer.parseInt(am1);
+                int totalAddAmount= amount+am1;
                 total_am.setText(""+totalAddAmount);
-                total_am_sub.setText(""+totalAddAmount);
+                total_am_sub.setText(""+calculatedAmount(totalAddAmount));
                 if(totalAddAmount==10){
                     Drawable buttonDrawable = cer1.getBackground();
                     buttonDrawable = DrawableCompat.wrap(buttonDrawable);
@@ -487,7 +485,7 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
                     cer2.setBackground(buttonDrawable3);
                 }else if(totalAddAmount>=100){
                     total_am.setText("100");
-                    total_am_sub.setText("100");
+                    total_am_sub.setText(""+calculatedAmount(100));
                     Utils.showCustomToastMsg(CreditPurchaseActivity.this, R.string.max_alowed_five_cashier);
                 }else {
                     Drawable buttonDrawable = cer1.getBackground();
@@ -534,8 +532,8 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
                 buttonDrawable3 = DrawableCompat.wrap(buttonDrawable3);
                 DrawableCompat.setTint(buttonDrawable3, getResources().getColor(R.color.light_blue));
                 cer4.setBackground(buttonDrawable3);
-                total_am.setText(am1);
-                total_am_sub.setText(am1);
+                total_am.setText(""+am1);
+                total_am_sub.setText(""+calculatedAmount(am1));
             }
         });
         cer2.setOnClickListener(new View.OnClickListener() {
@@ -560,8 +558,8 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
                 buttonDrawable3 = DrawableCompat.wrap(buttonDrawable3);
                 DrawableCompat.setTint(buttonDrawable3, getResources().getColor(R.color.light_blue));
                 cer4.setBackground(buttonDrawable3);
-                total_am.setText(am2);
-                total_am_sub.setText(am2);
+                total_am.setText(""+am2);
+                total_am_sub.setText(""+calculatedAmount(am2));
 
             }
         });
@@ -588,8 +586,8 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
                 buttonDrawable = DrawableCompat.wrap(buttonDrawable);
                 DrawableCompat.setTint(buttonDrawable, getResources().getColor(R.color.light_green));
                 cer3.setBackground(buttonDrawable);
-                total_am.setText(am3);
-                total_am_sub.setText(am3);
+                total_am.setText(""+am3);
+                total_am_sub.setText(""+calculatedAmount(am3));
             }
         });
         cer4.setOnClickListener(new View.OnClickListener() {
@@ -615,12 +613,20 @@ public class CreditPurchaseActivity extends BaseActivity implements IabBroadcast
                 buttonDrawable3 = DrawableCompat.wrap(buttonDrawable3);
                 DrawableCompat.setTint(buttonDrawable3, getResources().getColor(R.color.light_blue));
                 cer2.setBackground(buttonDrawable3);
-                total_am.setText(am4);
-                total_am_sub.setText(am4);
+                total_am.setText(""+am4);
+                total_am_sub.setText(""+calculatedAmount(am4));
 
 
             }
         });
+    }
+
+
+    private double calculatedAmount(int amount){
+
+
+
+        return  (amount/10)*9.99;
     }
 
 

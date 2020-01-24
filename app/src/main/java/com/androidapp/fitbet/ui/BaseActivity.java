@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.customview.CountDownDialog;
 import com.androidapp.fitbet.service.GPSTracker;
@@ -22,20 +23,30 @@ import com.androidapp.fitbet.utils.SLApplication;
 
 public class BaseActivity extends AppCompatActivity implements DialogInterface.OnCancelListener {
 
+    private static boolean firstConnect=true;
+
 private IntentFilter filter=new IntentFilter("count_down");
 
 private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
-     System.out.println("Base activity onReceive");
-    startCountDown(context);
+        if(intent!=null) {
+            if (firstConnect) {
+                firstConnect = false;
+                System.out.println("Base activity onReceive");
+                String message = intent.getStringExtra("message");
+                onMessageReceived(message);
+            }
+        }else{
+            firstConnect=true;
+        }
 
     }
 };
 
-    private void startCountDown(Context context) {
+protected void onMessageReceived(String message) {
 
-new CountDownDialog(context);
+System.out.println("Base onMessageReceived");
 
     }
 
@@ -44,7 +55,7 @@ new CountDownDialog(context);
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 System.out.println("Base OnCreate");
-        registerReceiver(mBroadcastReceiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
 
     }
 
@@ -54,11 +65,17 @@ System.out.println("Base OnCreate");
 
         super.onStop();
     }
+    @Override
+    protected void onDestroy() {
+        System.out.println("Base onDestroy");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+        super.onDestroy();
+    }
 
     @Override
     protected void onResume() {
         System.out.println("Base OnResume");
-        registerReceiver(mBroadcastReceiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
         super.onResume();
 
     }

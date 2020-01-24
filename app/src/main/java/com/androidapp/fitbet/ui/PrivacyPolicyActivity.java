@@ -1,5 +1,6 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidapp.fitbet.R;
+import com.androidapp.fitbet.utils.SLApplication;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -86,6 +88,15 @@ public class PrivacyPolicyActivity extends BaseActivity {
             "  <strong><u>MORE INFORMATION</u></strong><br>\n" +
             "  Contact us at info@fitbet.com.au if you have further questions or concerns about your data. Last updated: 09/10/2019</p>";
 
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
 
 
     @Override

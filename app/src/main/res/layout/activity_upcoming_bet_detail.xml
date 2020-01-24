@@ -26,15 +26,15 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/white"
                 android:text="@string/bet_details" />
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_gravity="right|center"
-                android:gravity="right|center"
+                android:layout_gravity="end|center"
+                android:gravity="end|center"
                 android:layout_marginEnd="30dp"
                 android:layout_height="wrap_content">
                 <ImageView
@@ -50,7 +50,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:gravity="center"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/lato_regular"
                     android:text="0" />
@@ -106,9 +106,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|start"
-                            android:gravity="left|center"
+                            android:gravity="start|center"
                             android:textColor="@color/white"
-                            android:textSize="14dp"
+                            android:textSize="14sp"
                             android:fontFamily="@font/lato_regular"
                             android:text="" />
                     </TableRow>
@@ -126,7 +126,7 @@
                             android:maxLines="4"
                             android:singleLine="true"
                             android:fontFamily="@font/lato_regular"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/white"
                             android:text="" />
                     </TableRow>
@@ -314,10 +314,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|start"
-                            android:gravity="left|center"
+                            android:gravity="start|center"
                             android:fontFamily="@font/lato_regular"
                             android:textColor="@color/white"
-                            android:textSize="14dp"
+                            android:textSize="14sp"
                             android:text="" />
                     </TableRow>
 
@@ -333,7 +333,7 @@
                             android:layout_height="wrap_content"
                             android:maxLines="4"
                             android:fontFamily="@font/lato_regular"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/white"
                             android:text="" />
                     </TableRow>
@@ -705,7 +705,6 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/invite_group_list"
-                android:background="@color/transparent"
                 android:layout_width="match_parent"
                 android:layout_marginTop="30dp"
                 android:layout_marginStart="10dp"

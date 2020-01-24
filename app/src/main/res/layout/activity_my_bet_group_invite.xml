@@ -40,7 +40,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/white"
                 android:text="@string/invite_group_" />
@@ -86,7 +86,7 @@
                             android:singleLine="true"
                             android:text=""
                             android:textColor="@color/main_text_color"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             />
                     </TableRow>
 
@@ -105,7 +105,7 @@
                             android:text="@string/no_group" />
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/invite_group_list"
-                            android:background="@color/transparent"
+
                             android:layout_width="match_parent"
                             android:layout_marginTop="40dp"
                             android:layout_height="match_parent" />

@@ -19,6 +19,7 @@ import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.ui.adapters.MyBetDetailsAdapter;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -131,6 +132,15 @@ public class UpcomingBetDetailActivity extends BaseActivity {
     Bundle bundle;
     String startlongitude,endlongitude,startlatitude,endlatitude;
     String winerLat="",winerLog="";
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

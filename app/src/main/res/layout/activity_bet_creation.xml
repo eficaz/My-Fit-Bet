@@ -44,7 +44,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/light_blue"
                 android:text="@string/create_bet" />
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/bet_name"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="textAutoCorrect"
                      />
 
@@ -109,7 +109,7 @@
                     android:hint="@string/bet_credit"
                     android:maxLength="5"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="number"
                      />
             </TableRow>
@@ -150,7 +150,7 @@
                     android:layout_marginStart="10dp"
                     android:clickable="false"
                     android:cursorVisible="false"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                     />
             </TableRow>
@@ -176,7 +176,7 @@
                     android:fontFamily="@font/lato_regular"
                     android:gravity="center|start"
                     android:layout_marginStart="10dp"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                    />
             </TableRow>
@@ -203,7 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/bet_description"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:maxLength="100"
                     android:fontFamily="@font/lato_regular"
                     android:inputType="text"
@@ -236,7 +236,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/bet_distance_by_km"
                         android:textColor="@color/light_blue"
-                        android:textSize="12dp" />
+                        android:textSize="12sp" />
                     <View
                         android:id="@+id/view1"
                         android:layout_width="match_parent"
@@ -260,7 +260,7 @@
                         android:text="OR"
                         android:visibility="gone"
                         android:textColor="@color/black"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
 
                         />
                 </LinearLayout>
@@ -282,7 +282,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/bet_distance_location"
                         android:textColor="@color/light_blue"
-                        android:textSize="12dp" />
+                        android:textSize="12sp" />
                     <View
                         android:id="@+id/view2"
                         android:layout_width="match_parent"
@@ -305,7 +305,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/distance"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="numberDecimal"
                     />
                 <TextView
@@ -315,7 +315,7 @@
                     android:hint="@string/distance"
                     android:fontFamily="@font/lato_regular"
                     android:visibility="gone"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                      />
             </TableRow>
@@ -337,7 +337,7 @@
                     android:hint="@string/from"
                     android:fontFamily="@font/lato_regular"
                     android:singleLine="true"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                     />
             </TableRow>
@@ -359,7 +359,7 @@
                     android:hint="@string/to"
                     android:fontFamily="@font/lato_regular"
                     android:singleLine="true"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:inputType="text"
                     />
             </TableRow>

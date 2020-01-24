@@ -40,7 +40,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:fontFamily="@font/montserrat_light"
                 android:textColor="@color/white"
                 android:text="@string/invite_group_details" />
@@ -162,7 +162,7 @@
                         android:layout_marginStart="@dimen/margin_20"
                         android:fontFamily="@font/lato_regular"
                         android:textColor="@color/white"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:layout_height="wrap_content"
                          />
                 </TableRow>
@@ -183,7 +183,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="top|center|start"
                         android:gravity="center|top|left"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"
                         />
 
@@ -231,7 +231,7 @@ android:paddingStart="@dimen/margin_16"
                             android:layout_marginStart="10dp"
                             android:drawablePadding="7dp"
                             android:drawableStart="@drawable/group_icons_hover"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center|start"
                             />
@@ -276,7 +276,7 @@ android:paddingStart="@dimen/margin_16"
                         android:singleLine="true"
                         android:text=""
                         android:textColor="@color/main_text_color"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         />
                   <!--  <EditText
                         android:id="@+id/searchview"
@@ -286,7 +286,7 @@ android:paddingStart="@dimen/margin_16"
                         android:hint="@string/search_users"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="30"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:singleLine="true"
                         android:text="" />-->
                     <!-- <SearchView

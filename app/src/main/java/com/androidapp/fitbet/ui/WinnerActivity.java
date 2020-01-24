@@ -35,6 +35,7 @@ import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CACHEDKEY;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.loopj.android.http.BuildConfig;
@@ -107,6 +108,15 @@ public class WinnerActivity extends BaseActivity implements CommonUsage {
     public static int VIDEO_CAPTURED = 1;
     CameraGalaryCaputer cameraGalaryCaputer;
 private AppPreference appPreference;
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -374,7 +384,7 @@ if(!ed_discreption.getText().toString().equals(""))
                                     System.out.println("file not Deleted :" + fdelete.getName());
                                 }
                             }
-                            finish();
+                            skip.performLongClick();
                         }
                     }catch (Exception e){
 System.out.println("upload exception "+e.getLocalizedMessage());

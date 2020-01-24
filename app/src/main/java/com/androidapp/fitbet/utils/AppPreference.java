@@ -26,6 +26,8 @@ private static final String TAG_DISTANCE="distance_in_double";
     private static final String TAG_ORIGIN="tag_origin";
     private static final String TAG_SAVED_STATUS="saved_status";
     private static final String TAG_SAVED_LAT_LONG_LIST="savedlist";
+    private static final String TAG_PROFILE_NAME="profile_name";
+    private static final String TAG_PROFILE_IMAGE="profile_image";
 
 
     public AppPreference() {
@@ -154,6 +156,29 @@ String json=sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST,"");
             return routeList;
         }
         return null;
+    }
+
+
+    public void saveProfileImage(String imageUrl){
+        editor.putString(TAG_PROFILE_IMAGE,imageUrl);
+        editor.commit();
+
+    }
+
+    public String getSavedProfileImage(){
+
+        return sharedPreferences.getString(TAG_PROFILE_IMAGE,"");
+    }
+
+    public void saveProfileName(String name){
+        editor.putString(TAG_PROFILE_NAME,name);
+        editor.commit();
+
+    }
+
+    public String getSavedProfileName(){
+
+        return sharedPreferences.getString(TAG_PROFILE_NAME,"");
     }
 
 }

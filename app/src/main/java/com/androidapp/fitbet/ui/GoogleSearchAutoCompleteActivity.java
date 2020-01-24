@@ -1,8 +1,10 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.androidapp.fitbet.R;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -12,6 +14,15 @@ import java.util.Arrays;
 
 public class GoogleSearchAutoCompleteActivity extends BaseActivity {
 
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

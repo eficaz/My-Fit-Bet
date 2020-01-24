@@ -4,12 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.androidapp.fitbet.R;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.juanpabloprado.countrypicker.CountryPicker;
 import com.juanpabloprado.countrypicker.CountryPickerListener;
 
 import static com.androidapp.fitbet.utils.Contents.COUNTRY_NAME;
 
 public class CountrySelectionActivity extends BaseActivity {
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

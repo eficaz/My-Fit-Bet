@@ -92,9 +92,9 @@
                     android:textColor="@color/white"
                     android:padding="@dimen/margin_10"
                     android:visibility="gone"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="start|center"
                     android:gravity="center|start"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:text="" />
 
                 <View
@@ -103,9 +103,9 @@
                     android:layout_height="1dp"/>
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_gravity="center|right"
+                    android:layout_gravity="center|end"
                     android:layout_marginTop="5dp"
-                    android:gravity="right|center"
+                    android:gravity="end|center"
                     android:layout_height="wrap_content" >
 
                     <Button

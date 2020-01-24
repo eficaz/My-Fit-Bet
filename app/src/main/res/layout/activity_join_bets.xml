@@ -39,7 +39,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/light_blue"
                 android:text="@string/join_bets" />
@@ -85,7 +85,7 @@
                             android:singleLine="true"
                             android:text=""
                             android:textColor="@color/main_text_color"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
 
                             />
                     </TableRow>
@@ -97,7 +97,6 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/invite_group_list"
-                            android:background="@color/transparent"
                             android:layout_marginEnd="@dimen/margin_5"
                             android:layout_marginStart="@dimen/margin_5"
                             android:layout_width="match_parent"

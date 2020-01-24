@@ -33,7 +33,7 @@
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:fontFamily="@font/lato_regular"
                     android:background="@drawable/android_circle_textview"
                     android:text="1" />
@@ -78,7 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
                         android:textColor="@color/main_text_color"
                         android:gravity="center|start"
@@ -127,7 +127,7 @@
                     android:maxLength="7"
                     android:maxLines="1"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:layout_marginStart="@dimen/margin_10"
                     />
             </LinearLayout>

@@ -1,5 +1,6 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import com.androidapp.fitbet.ui.adapters.MessageArchivesListAdapter;
 import com.androidapp.fitbet.ui.adapters.MessageUpcommingListAdapter;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -100,6 +102,15 @@ public class MessageListActivity extends BaseActivity {
     MessageUpcommingListAdapter messageUpcommingListAdapter;
 
     boolean findrow=false;
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

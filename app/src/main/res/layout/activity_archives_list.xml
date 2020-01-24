@@ -87,7 +87,7 @@
                             android:singleLine="true"
                             android:text=""
                             android:textColor="@color/main_text_color"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             />
                     </TableRow>
 

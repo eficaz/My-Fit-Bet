@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.TableRow;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -17,9 +16,8 @@ import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
 import com.androidapp.fitbet.model.CommonUsage;
 import com.androidapp.fitbet.ui.fragments.CreateGroupFragment;
-import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CACHEDKEY;
-import com.androidapp.fitbet.utils.Contents;
+import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 
 import java.io.File;
@@ -32,8 +30,8 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 import static com.androidapp.fitbet.utils.Contents.CAMERA_REQUEST_CODE;
 import static com.androidapp.fitbet.utils.Contents.GALLERY_REQUEST_CODE;
 
-public class CreateGroupActivity extends AppCompatActivity implements CommonUsage {
-    @Bind(R.id.content_main)
+public class CreateGroupActivity extends BaseActivity implements CommonUsage {
+    @Bind(R.id.content_main2)
     FrameLayout content_main;
 
     @Bind(R.id.btn_back)
@@ -43,6 +41,15 @@ public class CreateGroupActivity extends AppCompatActivity implements CommonUsag
 
 
     CameraGalaryCaputer cameraGalaryCaputer;
+
+    @Override
+    protected void onMessageReceived(String message) {
+        super.onMessageReceived(message);
+        SLApplication.isCountDownRunning=true;
+        startActivity(new Intent(this,DashBoardActivity.class));
+        finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

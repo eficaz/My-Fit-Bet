@@ -90,7 +90,7 @@
         </provider>
         -->
         <activity
-            android:name="com.androidapp.fitbet.ui.videoplayer"
+            android:name="com.androidapp.fitbet.ui.Videoplayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
             android:theme="@style/NOAppTheme" />
@@ -344,6 +344,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity android:name=".ui.BaseActivity" />
 
         <!--<service android:name="com.eficaz_fitbet_android.fitbet.service.BService" />-->
         <!--<service

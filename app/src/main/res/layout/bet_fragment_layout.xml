@@ -312,7 +312,7 @@
                                 android:id="@+id/upcomming_bets_img"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:layout_gravity="left|center"
+                                android:layout_gravity="start|center"
                                 android:layout_marginEnd="5dp"
                                  />
 
@@ -362,7 +362,7 @@
                                 android:id="@+id/my_bets_img"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:layout_gravity="left|center"
+                                android:layout_gravity="start|center"
                                 android:layout_marginEnd="5dp"
                                  />
 
@@ -419,7 +419,7 @@
                         android:singleLine="true"
                         android:text=""
                         android:textColor="@color/main_text_color"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         />
                     <!-- <SearchView
                          android:id="@+id/searchview"

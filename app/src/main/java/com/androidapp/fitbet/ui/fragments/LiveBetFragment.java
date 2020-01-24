@@ -1,10 +1,10 @@
 package com.androidapp.fitbet.ui.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.fitbet.R;
+import com.androidapp.fitbet.customview.CountDownDialog;
 import com.androidapp.fitbet.customview.CustomProgress;
 import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.interfaces.LocationReceiveListener;
@@ -82,13 +83,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,7 +99,6 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -136,7 +134,7 @@ import static com.androidapp.fitbet.utils.Contents.USER_start_longitude;
 import static com.androidapp.fitbet.utils.Contents.WINNER_PARTICIPANT;
 import static com.androidapp.fitbet.utils.Contents.WON;
 
-public class LiveBetFragment extends Fragment implements OnMapReadyCallback , DirectionFinderListener, LocationReceiveListener {
+public class LiveBetFragment extends Fragment implements OnMapReadyCallback , DirectionFinderListener, LocationReceiveListener, CountDownDialog.CountDownStopListener {
 
     @Bind(R.id.contstraint_layout)
     ConstraintLayout constraintLayout;
@@ -182,14 +180,13 @@ public class LiveBetFragment extends Fragment implements OnMapReadyCallback , Di
 
     private Polyline polyline=null,locationPolyline=null;
     private int REQUEST_CHECK_SETTINGS = 111;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationManager mLocationManager;
     private Handler counterHandler;
     private Runnable counterRunnable;
-    private String origin="", destination="";
+
     private GoogleMap googleMap;
-    private Double startLatitude = 0.0, startLongitude = 0.0, positionLatitude = 0.0, positionLongitude = 0.0,endLatitude=0.0,endLongitude=0.0;
-    private String challengerId, betType, userDistance, userRoute="";
+    private Double startLatitude = 0.0, startLongitude = 0.0, positionLatitude = 0.0, positionLongitude = 0.0,endLatitude=0.0,endLongitude=0.0,cdStartLat,cdStartLon;
+    private String challengerId, betType;
     private Intent serviceIntent;
     private ArrayList<LiveBetDetails> liveBetDetailsArrayList = null;
     private LiveBetUserListAdapter liveBetUserListAdapter;
@@ -210,6 +207,7 @@ public class LiveBetFragment extends Fragment implements OnMapReadyCallback , Di
 private LocationReceiveListener locationReceiveListener=null;
 private DashBoardActivity dashBoardActivity;
 private AppPreference appPreference;
+private CountDownDialog.CountDownStopListener countDownStopListener;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -235,7 +233,9 @@ private AppPreference appPreference;
         locationReceiveListener=this;
         LocReceiver.registerLocationReceiveListener(locationReceiveListener);
 
-System.out.println("onViewCreated LiveBetFragment");
+        countDownStopListener=this;
+
+        System.out.println("onViewCreated LiveBetFragment");
         mapView.onCreate(savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null);
         mapView.onResume(); // needed to get the map to display immediately
         mapView.getMapAsync(this);
@@ -244,18 +244,16 @@ System.out.println("onViewCreated LiveBetFragment");
 
         noInternetDialog = new MyDialog(getActivity(), null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getActivity())) {
-            Log.e("fitbet ds", "Gps not enabled");
-            createLocationRequest();
-        } else {
-            if (Utils.isConnectedToInternet(getActivity())) {
 
-                getLiveBetDetails();
-            } else {
-                noInternetDialog.show();
-            }
+        if(SLApplication.isCountDownRunning) {
+         System.out.println("inside countdown live");
+           new CountDownDialog(getActivity(),countDownStopListener,5);
 
+       }else {
+            initLiveBet();
         }
+
+
 
         arrowImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +271,22 @@ System.out.println("onViewCreated LiveBetFragment");
             }
         });
 
+    }
+
+    private void initLiveBet() {
+
+        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getActivity())) {
+            Log.e("fitbet ds", "Gps not enabled");
+            createLocationRequest();
+        } else {
+            if (Utils.isConnectedToInternet(getActivity())) {
+
+                getLiveBetDetails();
+            } else {
+                noInternetDialog.show();
+            }
+
+        }
     }
 
     private void setupNewConstraints() {
@@ -301,12 +315,6 @@ System.out.println("onViewCreated LiveBetFragment");
 
         constraintSet.applyTo(constraintLayout);
 
-/*        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_bet_name"
-        app:layout_constraintVertical_bias="0.0"*/
 
     }
     private void releaseNewConstraints() {
@@ -338,16 +346,6 @@ System.out.println("onViewCreated LiveBetFragment");
 
         constraintSet.applyTo(constraintLayout);
 
-     /*      <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_bet_name"
-        app:layout_constraintVertical_bias="0.0" />*/
     }
 
     private boolean isTimerRunning/*,run*/;
@@ -568,8 +566,6 @@ if(CustomProgress.getInstance().isShowing())
                 JSONObject betDetailsObject = mainJsonObject.getJSONObject("betdetails");
 
                 txtBetName.setText(betDetailsObject.getString(MYBETS_betname));
-                origin = betDetailsObject.getString(USER_start_latitude) + "," + betDetailsObject.getString(USER_start_longitude);
-                destination = betDetailsObject.getString(USER_start_latitude) + "," + betDetailsObject.getString(USER_start_longitude);
 
                 startLatitude = betDetailsObject.getDouble(USER_start_latitude);
                 startLongitude = betDetailsObject.getDouble(USER_start_longitude);
@@ -599,7 +595,7 @@ if(CustomProgress.getInstance().isShowing())
                 }
 
                 challengerId = betDetailsObject.getString(MYBETS_challengerid);
-                userRoute = betDetailsObject.getString("userroute");
+
                 betType = betDetailsObject.getString(MYBETS_bettype);
                // userDistance=betDetailsObject.getString("distance");
 
@@ -791,65 +787,73 @@ if(getActivity()!=null) {
         }
     }
 
-    private void fetchDirections(String origin, String destination) {
-        System.out.println("fetchDirections "+"origin "+origin+" , "+"destination "+destination);
-        try {
-            new DirectionFinder(this, origin, destination).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
+
 private int i=2;
     private double userDistanceDouble=0.0;
     @Override
     public void onLocationReceived(Double lat, Double lon) {
-i++;
-        Log.d("onLocationRcvd LIVE ",""+lat+" , "+lon);
-        if(positionMarker!=null) {
-            // positionMarker.remove();
-            positionMarker.setPosition(new LatLng(lat,lon));
-            // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
-            System.out.println("onLocationReceived drawing position marker");
-        }
-
-        if (i == 3) {
-          i=0;
-            System.gc();
-
-            if (positionLatitude != 0.0) {
-                double distance=Double.parseDouble(appPreference.getSavedDistance());
-                distance=distance+getDistance(positionLatitude, positionLongitude, lat, lon);
-
-                appPreference.saveDistance(String.valueOf(distance));
-                System.out.println("position lat n long  "+positionLatitude+" , "+positionLongitude);
-                System.out.println("current lat n long "+lat+" , "+lon);
-
-                System.out.println("Calculated distance "+distance);
-
+        cdStartLat=lat;
+        cdStartLon=lon;
+        if(!SLApplication.isCountDownRunning) {
+            i++;
+            Log.d("onLocationRcvd LIVE ", "" + lat + " , " + lon);
+            if (positionMarker != null) {
+                // positionMarker.remove();
+                positionMarker.setPosition(new LatLng(lat, lon));
+                // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
+                System.out.println("onLocationReceived drawing position marker");
             }
-            System.out.println("appPreference.getSavedDistance() = " + appPreference.getSavedDistance());
 
-            positionLatitude = lat;
-            positionLongitude = lon;
+            if (i == 3) {
+                i = 0;
+                System.gc();
 
-            getUpdates();
-        }
+                if (positionLatitude != 0.0) {
+                    double distance = Double.parseDouble(appPreference.getSavedDistance());
+                    distance = distance + getDistance(positionLatitude, positionLongitude, lat, lon);
 
+                    appPreference.saveDistance(String.valueOf(distance));
+                    System.out.println("position lat n long  " + positionLatitude + " , " + positionLongitude);
+                    System.out.println("current lat n long " + lat + " , " + lon);
 
+                    System.out.println("Calculated distance " + distance);
 
+                }
+                System.out.println("appPreference.getSavedDistance() = " + appPreference.getSavedDistance());
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
+                positionLatitude = lat;
+                positionLongitude = lon;
 
-List<Route> routes=appPreference.getRouteList();
-if(routes!=null){
-    drawInteractivePolyLine(routes);
-}
-
+                getUpdates();
             }
-        });
 
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+
+                    List<Route> routes = appPreference.getRouteList();
+                    if (routes != null) {
+                        drawInteractivePolyLine(routes);
+                    }
+
+                }
+            });
+
+
+        }
+    }
+
+    @Override
+    public void onCountDownStopped(Dialog dialog) {
+        // Countdown stopped - call start bet and init live bet
+        Utils.showCustomToastMsg(getActivity(),"Countdown stopped");
+        SLApplication.isCountDownRunning=false;
+
+        startBet(dialog);
+    }
+
+    private void startBet(Dialog dialog) {
 
 
     }
