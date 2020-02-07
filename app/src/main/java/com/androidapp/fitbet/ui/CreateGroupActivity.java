@@ -1,7 +1,10 @@
 package com.androidapp.fitbet.ui;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.TableRow;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
@@ -42,27 +46,68 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
 
     CameraGalaryCaputer cameraGalaryCaputer;
 
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group_main);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new CreateGroupFragment(), Utils.BetScreenName).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main2,new CreateGroupFragment(), Utils.BetScreenName).commitAllowingStateLoss();
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
            onBackPressed();
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
     }
 
 

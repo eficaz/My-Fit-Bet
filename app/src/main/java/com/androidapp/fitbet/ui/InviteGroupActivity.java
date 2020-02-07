@@ -1,6 +1,9 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,20 +96,44 @@ public class InviteGroupActivity extends BaseActivity {
 
     InviteDetailsListAdapter inviteListAdapter;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_group);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,6 +244,25 @@ public class InviteGroupActivity extends BaseActivity {
         });
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(InviteGroupActivity.this, CreateGroupActivity.class));

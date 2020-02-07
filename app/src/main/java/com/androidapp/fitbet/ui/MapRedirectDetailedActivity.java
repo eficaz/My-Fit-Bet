@@ -1,10 +1,16 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.polyline.DirectionFinder;
@@ -20,6 +26,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,23 +61,46 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
     Bundle bundle;
     String originalPositionLat , originalPositionLog ,originalStartLat,originalStartLog,originalRoute,originalDistance,startAddress,endAddress;
     Double startLongitude=0.0, positionLongitude, startLatitude, positionLatitude,distanceInMeters;
-    Polyline polyline;
+    private Polyline polyline;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
 
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_redirect_detaiuld_by_loction);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         bundle =  getIntent().getExtras();
         originalPositionLat =bundle.getString(Contents.POSITION_LATITUDE);
         originalPositionLog =bundle.getString(Contents.POSITION_LONGITUDE);
@@ -100,40 +131,40 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
         startpoint.setText(startAddress);
         endpoint.setText(endAddress);
         distance.setText(formatNumber2Decimals(distanceInMeters));
-
+new Handler().post(new Runnable() {
+    @Override
+    public void run() {
         drawPolyLines(originalRoute);
+    }
+});
 
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
 
     private void drawPolyLines(String userRoute) {
 
+   String r= StringEscapeUtils.unescapeJava(userRoute);
+   System.out.println("map route "+r);
+        List<LatLng> latLngList = DirectionFinder.decodePolyLine(r);
 
-        List<LatLng> latLngList = new ArrayList<>();
-
-        String[] splitRoutes = userRoute.split("fitbet");
-        List<String> routeList= Arrays.asList(splitRoutes);
-        System.out.println("routeList.size() map redir"+routeList.size());
-
-        for (String route:routeList) {
-            latLngList.clear();
-            latLngList = DirectionFinder.decodePolyLine(route);
-            System.out.println("Routes "+route);
-            final List<LatLng> finalLatLngList = latLngList;
+            PolylineOptions polylineOptions = getDefaultPolyLines(latLngList);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    PolylineOptions polylineOptions = getDefaultPolyLines(finalLatLngList);
 
                     polyline = mMap.addPolyline(polylineOptions);
                 }
             });
 
 
-
-        }
-
-        zoomRoute(mMap,latLngList);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(positionLatitude,positionLongitude),14f));
     }
 
     public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute) {
@@ -154,7 +185,7 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
     @Override
     public void onResume() {
         super.onResume();
-        //mMapView.onResume();
+LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -166,7 +197,7 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //mMapView.onDestroy();
+       LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override

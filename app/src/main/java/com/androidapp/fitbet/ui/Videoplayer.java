@@ -1,11 +1,15 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.utils.SLApplication;
@@ -21,18 +25,42 @@ public class Videoplayer extends BaseActivity {
 private MKPlayer player;
     String url;
 
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.videoplayer);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         url=getIntent().getStringExtra("url");
         player=new MKPlayer(this);
         player.onComplete(new Runnable() {
@@ -89,6 +117,13 @@ private MKPlayer player;
         player.play(url);
         //player.setTitle(url);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -103,6 +138,7 @@ private MKPlayer player;
         if (player != null) {
             player.onResume();
         }
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -111,6 +147,7 @@ private MKPlayer player;
         if (player != null) {
             player.onDestroy();
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override

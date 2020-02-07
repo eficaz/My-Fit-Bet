@@ -21,21 +21,22 @@ import com.androidapp.fitbet.service.GPSTracker;
 
 import com.androidapp.fitbet.utils.SLApplication;
 
-public class BaseActivity extends AppCompatActivity implements DialogInterface.OnCancelListener {
+public abstract class BaseActivity extends AppCompatActivity implements DialogInterface.OnCancelListener {
 
     private static boolean firstConnect=true;
 
 private IntentFilter filter=new IntentFilter("count_down");
 
-private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+private  BroadcastReceiver  mBroadcastReceiver=new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent!=null) {
             if (firstConnect) {
                 firstConnect = false;
-                System.out.println("Base activity onReceive");
+
                 String message = intent.getStringExtra("message");
                 onMessageReceived(message);
+
             }
         }else{
             firstConnect=true;
@@ -43,21 +44,22 @@ private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
 
     }
 };
+protected abstract void onMessageReceived(String message);
 
-protected void onMessageReceived(String message) {
-
-System.out.println("Base onMessageReceived");
-
-    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 System.out.println("Base OnCreate");
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+
+
+
+
 
     }
+
+
 
     @Override
     protected void onStop() {
@@ -68,14 +70,14 @@ System.out.println("Base OnCreate");
     @Override
     protected void onDestroy() {
         System.out.println("Base onDestroy");
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+  ;
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
+
         System.out.println("Base OnResume");
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
         super.onResume();
 
     }

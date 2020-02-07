@@ -1,6 +1,9 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +34,7 @@ import com.androidapp.fitbet.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -94,14 +99,35 @@ public class MessageActivity extends BaseActivity {
     String chant="";
 
 
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +135,8 @@ public class MessageActivity extends BaseActivity {
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
         bundle = getIntent().getExtras();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         callMessageListApi();
         CustomProgress.getInstance().showProgress(this, "", false);
 
@@ -175,6 +203,25 @@ public class MessageActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
     private void sendMessageAPi() {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SendMessage(bundle.getString(MYBETS_betid),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),ed_message.getText().toString());
         call.enqueue(new Callback<ResponseBody>() {

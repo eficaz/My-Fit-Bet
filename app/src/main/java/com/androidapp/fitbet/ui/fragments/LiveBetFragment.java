@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,8 +82,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -133,6 +135,10 @@ import static com.androidapp.fitbet.utils.Contents.USER_start_latitude;
 import static com.androidapp.fitbet.utils.Contents.USER_start_longitude;
 import static com.androidapp.fitbet.utils.Contents.WINNER_PARTICIPANT;
 import static com.androidapp.fitbet.utils.Contents.WON;
+import static java.lang.Math.asin;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 public class LiveBetFragment extends Fragment implements OnMapReadyCallback , DirectionFinderListener, LocationReceiveListener, CountDownDialog.CountDownStopListener {
 
@@ -208,6 +214,7 @@ private LocationReceiveListener locationReceiveListener=null;
 private DashBoardActivity dashBoardActivity;
 private AppPreference appPreference;
 private CountDownDialog.CountDownStopListener countDownStopListener;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -220,7 +227,7 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         appPreference=AppPreference.getPrefsHelper(getActivity());
-        appPreference.savePref(Contents.BET_START_STATUS,"true");
+
         appPreference.savePref(Contents.DASH_BOARD_POSICTION,"2");
       /*  _context.registerReceiver(broadcastReceiver,new IntentFilter("location_update"));*/
         dashBoardActivity=(DashBoardActivity)getActivity();
@@ -247,7 +254,7 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
 
         if(SLApplication.isCountDownRunning) {
          System.out.println("inside countdown live");
-           new CountDownDialog(getActivity(),countDownStopListener,5);
+           new CountDownDialog(getActivity(),countDownStopListener,appPreference.getSavedCountdownTime());
 
        }else {
             initLiveBet();
@@ -310,9 +317,7 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
         constraintSet.constrainWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
         constraintSet.setVerticalBias(R.id.mapView,0.0f);
         constraintSet.setHorizontalBias(R.id.mapView,0.0f);
-
-       constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPx);
-
+        constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPx);
         constraintSet.applyTo(constraintLayout);
 
 
@@ -341,9 +346,7 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
         constraintSet.constrainWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
         constraintSet.setVerticalBias(R.id.mapView,0.0f);
         constraintSet.setHorizontalBias(R.id.mapView,0.0f);
-
         constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPxLl);
-
         constraintSet.applyTo(constraintLayout);
 
     }
@@ -380,26 +383,29 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
         if (!SLApplication.isServiceRunning)
             startLocationService(serviceIntent);
 
-    locationReceiveListener = this;
+  if(locationReceiveListener!=null)
     LocReceiver.registerLocationReceiveListener(locationReceiveListener);
 
     System.out.println("Live bet Inside on resume");
-    super.onResume();
-    //run=false;
 
+new Handler().post(new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("On resume saved user route "+appPreference.getSavedUserRoute());
+        if(!appPreference.getSavedUserRoute().equals(""))
+            drawPolyLine(appPreference.getSavedUserRoute(),Color.RED);
+    }
+});
+
+
+    super.onResume();
 
     }
 
     @Override
     public void onStop() {
         System.out.println("Live bet inside onStop ");
-
-  /*      run=false;
-        if (SLApplication.isServiceRunning) {
-            System.out.println("Live bet stopping service ");
-            stopLocationService(serviceIntent);
-            new LocService().stopSelf();
-        }*/
+        LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
         super.onStop();
     }
 
@@ -412,6 +418,7 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
     @Override
     public void onPause() {
         super.onPause();
+        LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
        // run=false;
     }
 
@@ -528,6 +535,7 @@ if(googleMap!=null)
     }
 
     private void getLiveBetDetails() {
+        appPreference.savePref(Contents.BET_START_STATUS,"true");
         if(!CustomProgress.getInstance().isShowing())
         CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveBetDetails(appPreference.getPref(REG_KEY, ""));
@@ -569,8 +577,8 @@ if(CustomProgress.getInstance().isShowing())
 
                 startLatitude = betDetailsObject.getDouble(USER_start_latitude);
                 startLongitude = betDetailsObject.getDouble(USER_start_longitude);
-                positionLatitude=startLatitude;
-                positionLongitude=startLongitude;
+                /*positionLatitude=startLatitude;
+                positionLongitude=startLongitude;*/
                 positionMarker=googleMap.addMarker(positionMarkerOptions.position(new LatLng(startLatitude,startLatitude)));
                startMarker= googleMap.addMarker(startMarkerOptions.position(new LatLng(startLatitude, startLongitude)));
                 if(!appPreference.getSavedStatusFlag()) {
@@ -672,8 +680,10 @@ if(CustomProgress.getInstance().isShowing())
 
 
                         double remainingDistance=betDetailsObject.getDouble(TOTAL_DISTANCE)-arrayObject.getDouble(DISTANCE);
-
+if(remainingDistance>0)
                         txtRemainingKm.setText(formatNumber2Decimals(remainingDistance)+" km");
+else
+    txtRemainingKm.setText(formatNumber2Decimals(0)+" km");
 
                     }
 
@@ -688,8 +698,6 @@ if(CustomProgress.getInstance().isShowing())
 
             }
             startLocationService(serviceIntent);
-      locationReceiveListener = LiveBetFragment.this;
-      LocReceiver.registerLocationReceiveListener(locationReceiveListener);
 
 
         } catch (JSONException | ParseException e) {
@@ -697,16 +705,7 @@ if(CustomProgress.getInstance().isShowing())
         }
 
 
-        //getUpdates();
 
-        //////////////////////////////sunday/////////////////
-/*new Handler().postDelayed(new Runnable() {
-    @Override
-    public void run() {
-        scheduleTimer();
-    }
-},1000);*/
-        /////////////////////////////////////////////////////
 
     }
 
@@ -795,14 +794,12 @@ private int i=2;
         cdStartLat=lat;
         cdStartLon=lon;
         if(!SLApplication.isCountDownRunning) {
+
             i++;
+
+
             Log.d("onLocationRcvd LIVE ", "" + lat + " , " + lon);
-            if (positionMarker != null) {
-                // positionMarker.remove();
-                positionMarker.setPosition(new LatLng(lat, lon));
-                // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
-                System.out.println("onLocationReceived drawing position marker");
-            }
+
 
             if (i == 3) {
                 i = 0;
@@ -810,7 +807,7 @@ private int i=2;
 
                 if (positionLatitude != 0.0) {
                     double distance = Double.parseDouble(appPreference.getSavedDistance());
-                    distance = distance + getDistance(positionLatitude, positionLongitude, lat, lon);
+                    distance = distance + getDistanceL(positionLatitude, positionLongitude, lat, lon);
 
                     appPreference.saveDistance(String.valueOf(distance));
                     System.out.println("position lat n long  " + positionLatitude + " , " + positionLongitude);
@@ -825,7 +822,19 @@ private int i=2;
                 positionLongitude = lon;
 
                 getUpdates();
+           }
+
+            if (positionMarker != null) {
+                // positionMarker.remove();
+                positionMarker.setPosition(new LatLng(lat, lon));
+                // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
+
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  lat,   lon), 18f));
+                System.out.println("onLocationReceived drawing position marker");
+                onMapReady(googleMap);
+
             }
+
 
 
             new Handler().post(new Runnable() {
@@ -847,13 +856,60 @@ private int i=2;
     @Override
     public void onCountDownStopped(Dialog dialog) {
         // Countdown stopped - call start bet and init live bet
-        Utils.showCustomToastMsg(getActivity(),"Countdown stopped");
-        SLApplication.isCountDownRunning=false;
+
 
         startBet(dialog);
     }
 
     private void startBet(Dialog dialog) {
+
+
+        Call<ResponseBody> call
+                //Utils.showCustomToastMsg(constant, "------latitude------2--"+""+AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LAT,"")+"------longitude-------2-"+""+AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LOG,""));
+
+                = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(appPreference.getSavedChallengerId(),"0"
+                ,String.valueOf(cdStartLat),
+                String.valueOf(cdStartLon),
+                AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String bodyString = new String(response.body().bytes(), "UTF-8");
+                    final JSONObject jsonObject;
+                    try {
+                        jsonObject = new JSONObject(bodyString);
+                        System.out.println("Start bet count down "+bodyString);
+                        String data = jsonObject.getString("Status");
+                        dialog.dismiss();
+                        SLApplication.isCountDownRunning=false;
+                        if(data.equals("Ok")){
+
+                            AppPreference.getPrefsHelper().savePref(Contents.BET_START_STATUS, "true");
+                            clearSavedBetItems();
+                            initLiveBet();
+
+                        }else{
+                            String msg = jsonObject.getString("Msg");
+                            Utils.showCustomToastMsg(getActivity(), msg);
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //groupDetailsList(bodyString,position);
+                    //listOrderGroup(bodyString);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                CustomProgress.getInstance().hideProgress();
+            }
+        });
 
 
     }
@@ -1031,6 +1087,7 @@ PolylineOptions polylineOptions=null;
             final List<LatLng> finalLatLngList = latLngList;
             if(locationPolyline==null) {
                 polylineOptions = getDefaultPolyLines(finalLatLngList, color);
+
             }else{
 
                 if (polylineOptions != null) {
@@ -1066,54 +1123,9 @@ PolylineOptions polylineOptions=null;
         isTimerRunning=true;
     }
 
-    private double getDistance(double lat1,double lon1,double lat2,double lon2) {
-
-      /*  Location startLocation = new Location("start");
-        startLocation.setLatitude(startLat);
-        startLocation.setLongitude(startLon);
-        Location positionLocation = new Location("position");
-        positionLocation.setLatitude(positionLat);
-        positionLocation.setLongitude(positionLon);
-        System.out.println("Distance between " + startLocation.distanceTo(positionLocation));
-        return    startLocation.distanceTo(positionLocation);*/
 
 
-/*
-        double latA = Math.toRadians(startLat);
-        double lonA = Math.toRadians(startLon);
-        double latB = Math.toRadians(positionLat);
-        double lonB = Math.toRadians(positionLon);
-        double cosAng = (Math.cos(latA) * Math.cos(latB) * Math.cos(lonB-lonA)) +
-                (Math.sin(latA) * Math.sin(latB));
-        double ang = Math.acos(cosAng);
-        double dist=ang *6371;
-        return dist*1000 ;*/
-double d=0.0;
-try {
-
-    double theta = lon1 - lon2;
-    double dist = Math.sin(deg2rad(lat1))
-            * Math.sin(deg2rad(lat2))
-            + Math.cos(deg2rad(lat1))
-            * Math.cos(deg2rad(lat2))
-            * Math.cos(deg2rad(theta));
-    dist = Math.acos(dist);
-    dist = rad2deg(dist);
-    dist = dist * 60 * 1.1515;
-
-    d=dist*1000;
-    d=truncate(d,12);
-    System.out.println("distance === " + d);
-}catch (Exception e){
-    System.out.println("Number exception "+e.getLocalizedMessage());
-}
-
-
-return  d;
-    }
-
-
-    public static double truncate(double value, int places) {
+    private  static double truncate(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
         }
@@ -1124,33 +1136,12 @@ return  d;
         return (double) tmp / factor;
     }
 
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
 
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
     private String formatNumber2Decimals(double number ){
         number=number/1000;
 
 
         return String.format(Locale.getDefault(), "%.2f", number) ;
-    }
-
-    private class UpdateAsyncTask extends AsyncTask<Void,Void,Void>{
-  /*      WeakReference<LiveBetFragment> liveBetFragmentWeakReference;
-        UpdateAsyncTask(LiveBetFragment liveBetFragment)
-        {
-            liveBetFragmentWeakReference = new WeakReference<>(liveBetFragment);
-        }*/
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            getUpdates();
-
-            return null;
-        }
     }
 
     private boolean actFlag;// to avoid starting of activity twice
@@ -1381,7 +1372,10 @@ return  d;
                         double numberAsString1= Double.parseDouble(input1);
                         txtRemainingKm.setText(""+decimalFormat1.format(numberAsString1/1000)+" km");*/
                         System.out.println("formatNumber2Decimals(remainingDistance)"+remainingDistance+" "+formatNumber2Decimals(remainingDistance));
-                        txtRemainingKm.setText(formatNumber2Decimals(remainingDistance));
+                        if(remainingDistance>0)
+                            txtRemainingKm.setText(formatNumber2Decimals(remainingDistance)+" km");
+                        else
+                            txtRemainingKm.setText(formatNumber2Decimals(0)+" km");
 
                     }
                 }
@@ -1392,7 +1386,6 @@ return  d;
                 betMembersRecyclerView.setHasFixedSize(true);
                 betMembersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 betMembersRecyclerView.setAdapter(liveBetUserListAdapter);
-
 
 
             }
@@ -1454,6 +1447,35 @@ Handler mHandler=new Handler();
         }
     }
 */
+
+
+    double  haversineDistance(double lat1, double lon1,double lat2,double lon2) {
+        double R = 6371.0710; // Radius of the Earth in km
+        double rlat1 = lat1 * (Math.PI/180); // Convert degrees to radians
+        double  rlon1 = lon1 * (Math.PI/180); // Convert degrees to radians
+        double rlat2 = lat2 * (Math.PI/180); // Convert degrees to radians
+        double  rlon2 = lon2 * (Math.PI/180); // Convert degrees to radians
+        double difflat = rlat2-rlat1; // Radian difference (latitudes)
+        double difflon = rlon2-rlon1; // Radian difference (longitudes)
+
+        double d = 2 * R * asin(sqrt(sin(difflat/2)* sin(difflat/2)+ cos(rlat1)* cos(rlat2)* sin(difflon/2)* sin(difflon/2)));
+
+        d=d*1000;
+
+        return truncate(d,15);
+    }
+
+    private int getDistanceL(double startLat,double startLon,double positionLat,double positionLon) {
+
+        Location startLocation = new Location("start");
+        startLocation.setLatitude(startLat);
+        startLocation.setLongitude(startLon);
+        Location positionLocation = new Location("position");
+        positionLocation.setLatitude(positionLat);
+        positionLocation.setLongitude(positionLon);
+
+        return (int)startLocation.distanceTo(positionLocation);
+    }
 
 
 }

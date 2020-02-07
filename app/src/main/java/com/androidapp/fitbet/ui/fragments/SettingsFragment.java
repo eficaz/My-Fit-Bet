@@ -361,10 +361,15 @@ private MyDialog noInternetDialog;
         });
     }
     private void updateProfilePic() {
-        RequestBody reg_key=RequestBody.create(MediaType.parse("multipart/form-data"),appPreference.getPref(Contents.REG_KEY,""));
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), filePath);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("image", filePath.getName(), requestFile);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadProfilePic(part,reg_key);
+
+        RequestBody reg_key = RequestBody.create(MediaType.parse("text/plain"),appPreference.getPref(Contents.REG_KEY,""));
+
+        RequestBody fBody = RequestBody.create(MediaType.parse("image/jpg"), filePath);
+
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", filePath.getName(),fBody);
+
+
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadProfilePic(filePart,reg_key);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -512,6 +517,7 @@ private MyDialog noInternetDialog;
         });
     }
     private void DashboardDetailReportapiresult(String bodyString) {
+
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");

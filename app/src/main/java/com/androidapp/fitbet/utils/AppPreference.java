@@ -28,6 +28,10 @@ private static final String TAG_DISTANCE="distance_in_double";
     private static final String TAG_SAVED_LAT_LONG_LIST="savedlist";
     private static final String TAG_PROFILE_NAME="profile_name";
     private static final String TAG_PROFILE_IMAGE="profile_image";
+    private static final String TAG_BET_ID="bet_id";
+    private static final String TAG_BET_DATE="bet_date";
+    private static final String TAG_CHALLENGER_ID="challenger_id";
+    private static final String TAG_COUNTDOWN_TIME="countdown_time";
 
 
     public AppPreference() {
@@ -179,6 +183,58 @@ String json=sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST,"");
     public String getSavedProfileName(){
 
         return sharedPreferences.getString(TAG_PROFILE_NAME,"");
+    }
+
+
+
+
+    public void saveBetId(String betid){
+        editor.putString(TAG_BET_ID,betid);
+        editor.commit();
+
+    }
+
+    public String getSavedBetId(){
+
+        return sharedPreferences.getString(TAG_BET_ID,"");
+    }
+
+
+
+    public void saveBetDate(String date){
+        editor.putString(TAG_BET_DATE,date);
+        editor.commit();
+
+    }
+
+    public String getSavedBetDate(){
+
+        return sharedPreferences.getString(TAG_BET_DATE,"");
+    }
+
+
+
+    public void saveChallengerId(String challengerId){
+        editor.putString(TAG_CHALLENGER_ID,challengerId);
+        editor.commit();
+
+    }
+
+    public String getSavedChallengerId(){
+
+        return sharedPreferences.getString(TAG_CHALLENGER_ID,"");
+    }
+
+
+    public void saveCountDownTime(int count){
+        editor.putInt(TAG_COUNTDOWN_TIME,count);
+        editor.commit();
+
+    }
+
+    public int getSavedCountdownTime(){
+
+        return sharedPreferences.getInt(TAG_COUNTDOWN_TIME,0);
     }
 
 }

@@ -1,9 +1,11 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.graphics.Rect;
 import android.location.Address;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 import com.androidapp.fitbet.R;
@@ -172,20 +175,42 @@ public class BetCreationActivity extends BaseActivity {
 
     private int REQUEST_CHECK_SETTINGS=111;
 private boolean canCreate;
-
+private static final String TAG ="BetCreationActivity";
 private MyDialog noInternetDialog;
 
+
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+        System.out.println(TAG+" onMessageReceived");
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
-    //Bundle bundle;
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +218,9 @@ private MyDialog noInternetDialog;
         ButterKnife.bind(this);
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         startLat= bundle.getString(Contents.pass_startlatitude);
         startLog= bundle.getString(Contents.pass_startlongitude);
@@ -684,6 +712,28 @@ if(!startLat.equals("0")) {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
     }
 
     private void showRulesAndRegulations() {

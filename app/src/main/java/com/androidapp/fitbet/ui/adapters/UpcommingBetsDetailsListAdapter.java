@@ -312,45 +312,7 @@ callJoinApi(currentPosition);
             }
         });
     }
-    private void callStartApi(final int position, final ViewHolder viewholder) {
-        String latitudeLongitude = Utils.getLocationFromNetwork();
-        String[] Lat = latitudeLongitude.split(",");
-        lat= Double.valueOf(Lat[0]);
-        log= Double.valueOf(Lat[1]);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(groupListModels.get(position).getChallengerid(),groupListModels.get(position).getDistance(),log.toString(),lat.toString(),
-                AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String bodyString = new String(response.body().bytes(), "UTF-8");
-                    final JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(bodyString);
-                        String data = jsonObject.getString("Status");
-                        if(data.equals("Ok")){
-                            CustomProgress.getInstance().hideProgress();
-                            viewholder.join_now.setVisibility(View.GONE);
-                            viewholder.decline.setVisibility(View.GONE);
-                            //notifyDataSetChanged();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    //groupDetailsList(bodyString,position);
 
-                    //listOrderGroup(bodyString);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                CustomProgress.getInstance().hideProgress();
-            }
-        });
-
-    }
     public void filterList(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         groupListModels.clear();

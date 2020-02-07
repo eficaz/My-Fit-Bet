@@ -32,40 +32,21 @@
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+       <!-- android:debuggable="true"
+        tools:ignore="HardcodedDebugMode"-->
         <activity android:name="com.androidapp.fitbet.ui.ProfileActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name="com.androidapp.fitbet.ui.CreditPurchaseActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
-        <!--
- <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.eficaz_android.fitbet.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-        -->
-        <!--
- <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.eficaz_android.fitbet.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:authorities">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-        -->
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.easyphotopicker.fileprovider"
@@ -77,18 +58,7 @@
                 android:resource="@xml/filepaths"
                 tools:replace="android:resource" />
         </provider>
-        <!--
-  <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.eficaz_android.fitbet.easyphotopicker.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:authorities">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-        -->
+
         <activity
             android:name="com.androidapp.fitbet.ui.Videoplayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -263,6 +233,7 @@
             android:name="com.androidapp.fitbet.ui.DashBoardActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -365,7 +336,7 @@
         <service android:name="com.androidapp.fitbet.service.LocService" />
         <receiver android:name="com.androidapp.fitbet.service.LocReceiver">
             <intent-filter>
-                <action android:name="location_update"></action>
+                <action android:name="location_update"/>
             </intent-filter>
         </receiver>
     </application>

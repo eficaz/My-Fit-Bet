@@ -28,9 +28,10 @@ public class SLApplication extends MultiDexApplication implements Application.Ac
     public static boolean isCountDownRunning=false;
     public static SLApplication mInstance;
     public static boolean isBetCreatedOrEdited;
-
+    public static boolean firstConnect=true;
+    public static boolean firstStartConnect=true;
     private Activity activeActivity;
-    public static FusedLocationProviderClient fusedLocationProviderClient=null;
+
     public static LocationCallback locationCallback=null;
 
 
@@ -46,7 +47,7 @@ public class SLApplication extends MultiDexApplication implements Application.Ac
         Map<String, Object> remoteConfigDefaults = new HashMap();
         remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, false);
         remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, R.string.ver_no);
-        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL, "https://play.google.com/store/apps/details?id=com.sembozdemir.renstagram");
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL, "https://play.google.com/store/apps/details?id=com.androidapp.fitbet");
         firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
         firebaseRemoteConfig.fetch(60) // fetch every minutes
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -110,13 +111,11 @@ public class SLApplication extends MultiDexApplication implements Application.Ac
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        if(fusedLocationProviderClient!=null&& locationCallback!=null)
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
 
     }
 public static void removeLocationUpdates(){
-    if(fusedLocationProviderClient!=null&& locationCallback!=null)
-    fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
 }
 
 }

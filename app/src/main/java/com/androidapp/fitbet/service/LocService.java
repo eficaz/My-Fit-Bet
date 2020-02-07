@@ -23,6 +23,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -107,6 +109,7 @@ if(appPreference!=null)
         broadcastIntent.setAction("location_update");
         broadcastIntent.putExtra("lat",locationResult.getLastLocation().getLatitude());
         broadcastIntent.putExtra("lon",+locationResult.getLastLocation().getLongitude());
+        SLApplication.firstConnect=true;
         sendBroadcast(broadcastIntent);
     }
 
@@ -177,12 +180,12 @@ if(appPreference!=null)
 
         appPreference.setLatLongList(route);
 
-        route.get(0).pointString.replaceAll("\\\\", "");
+        String r= StringEscapeUtils.escapeJava(route.get(0).pointString);
         if(appPreference.getSavedUserRoute().equals("")) {
 
-            appPreference.saveUserRoute(route.get(0).pointString);
+            appPreference.saveUserRoute(r);
         }
         else
-          appPreference.saveUserRoute( appPreference.getSavedUserRoute() + "fitbet" + route.get(0).pointString);
+          appPreference.saveUserRoute( appPreference.getSavedUserRoute() + "fitbet" + r);
     }
 }

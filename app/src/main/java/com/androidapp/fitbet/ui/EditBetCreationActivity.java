@@ -1,8 +1,10 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,6 +24,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.billingclient.api.BillingClient;
 import com.androidapp.fitbet.R;
@@ -183,20 +186,44 @@ public class EditBetCreationActivity extends BaseActivity {
 private MyDialog noInternetDialog;
     private boolean canCreate;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_bet_creation);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -723,6 +750,25 @@ private MyDialog noInternetDialog;
         });
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
     private void callMybetDetailsApi() {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_BET_ID,""),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
         call.enqueue(new Callback<ResponseBody>() {

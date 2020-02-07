@@ -2,7 +2,10 @@ package com.androidapp.fitbet.ui;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -185,20 +189,44 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     private String originalStartLog;
     private String originalDistance, originalEndLat, originalEndLog,startAddress,endAddress;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_archive_details);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         bundle = getIntent().getExtras();
         archivesDetailsGroupList();
         CustomProgress.getInstance().showProgress(this, "", false);
@@ -313,6 +341,30 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
@@ -433,6 +485,15 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
 
                     }else{
                         map_row.setVisibility(View.VISIBLE);
+                        originalRoute=jsonObject.getString("route");
+                        originalDistance=jsonObject.getString("distance");
+
+                        originalStartLat=jsonObject.getString("startlatitude");
+                        originalStartLog=jsonObject.getString("startlongitude");
+                        originalEndLat =jsonObject.getString("endlatitude");
+                        originalEndLog =jsonObject.getString("endlongitude");
+                        startAddress=jsonObject.getString("startlocation");
+                        endAddress=jsonObject.getString("endlocation");
                     }
                     if(jsonObject.getString(FILE_TYPE).equals("image")){
                         imagepath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);

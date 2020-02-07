@@ -292,15 +292,15 @@ public interface RetroInterface {
 
 
 
-    @GET(" user/updatepassword?")
+    @GET("user/updatepassword?")
     Call<ResponseBody> UpdatePassword(@Query("password") String betId,
                                       @Query("reg_key")String regkey);
 
 
     @Multipart
-    @POST("profile/image_upload?")
+    @POST("profile/image_upload")
     Call<ResponseBody> UploadProfilePic(@Part MultipartBody.Part file,
-                                        @Part("reg_key") RequestBody  groupid);
+                                        @Part("reg_key") RequestBody  regKey);
 //
 //    @Multipart
 //    @POST("bet/winner?")
@@ -327,13 +327,14 @@ public interface RetroInterface {
 
 
 
-    @GET("bet/livestartedbetdetail?")
+    @GET("bet/androidlivestartedbetdetail?")
     Call<ResponseBody> LiveBetDetails(@Query("reg_key") String regkey);
 
     @GET("bet/readytostartbetlist?")
     Call<ResponseBody> JoinBetList(@Query("reg_key") String regkey);
 
-
+    @GET("user/androidgetproduct")
+    Call<ResponseBody> getProducts();
 
 /*
     @GET("bet/livestartbet?")
@@ -365,6 +366,17 @@ public interface RetroInterface {
     @GET("json?")
     Call<ResponseBody> PlaceDetails(@Query("placeid") String placeid,
                                   @Query("key") String key);
+
+
+
+    @FormUrlEncoded
+    @POST("user/androidpurchase")
+    Call<ResponseBody>purchaseCredit(@Field("reg_key")String reg_key,
+                                      @Field("productid") String productid ,
+                                      @Field("invoiceid")String invoiceid,
+                                      @Field("purchasedate")String purchasedate,
+                                      @Field("credit")String credit,
+                                      @Field("rate")String rate);
 
 
 

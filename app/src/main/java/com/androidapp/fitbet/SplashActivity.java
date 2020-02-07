@@ -45,6 +45,13 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
     //https://medium.com/@sembozdemir/force-your-users-to-update-your-app-with-using-firebase-33f1e0bcec5a
 
     @Override
+    public void onMessageReceived(String message) {
+
+    }
+
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

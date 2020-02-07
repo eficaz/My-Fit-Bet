@@ -1,11 +1,16 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
@@ -27,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -75,20 +81,44 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
     private String origin,destination;
     private MyDialog noInternetDialog;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_redirect_detaiuld_by_loction);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         bundle =  getIntent().getExtras();
         winnerPositionLat =bundle.getString(Contents.POSITION_LATITUDE);
         winnerPositionLog =bundle.getString(Contents.POSITION_LONGITUDE);
@@ -122,6 +152,19 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
         }else noInternetDialog.show();
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
     private void setLocationDetails(String origin, String dest){
 
         CustomProgress.getInstance().showProgress(ArchiveListMapDetailedActivity.this,"",false);
@@ -161,20 +204,20 @@ new Handler().post(new Runnable() {
             }
         });
     }
-
+    PolylineOptions polylineOptions=null;
     private void drawPolyLines(String userRoute) {
 
-
+        String r= StringEscapeUtils.escapeJava(userRoute);
         List<LatLng> latLngList = new ArrayList<>();
-        String[] splitRoutes = userRoute.split("fitbet");
-        List<String> routeList = Arrays.asList(splitRoutes);
+       /* String[] splitRoutes = userRoute.split("fitbet");
+        List<String> routeList = Arrays.asList(splitRoutes);*/
         ///////////////////////////////////////////////////////////////
-     /*   String[] splitRoutes = userRoute.split("fitbet");
+        String[] splitRoutes = r.split("fitbet");
         List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
-        System.out.println("routeList.size()"+routeList.size());
+
         Set<String> routeSets=new LinkedHashSet<>(routeList);
         routeList.clear();
-        routeList.addAll(routeSets);*/
+        routeList.addAll(routeSets);
 //////////////////////////////////////////////////////////////////////
        /* String[] splitRoutes = userRoute.split("fitbet");
         List<String> routeList = Arrays.asList(splitRoutes);
@@ -199,23 +242,23 @@ new Handler().post(new Runnable() {
 
 
 
-
+System.out.println("replace route "+r);
 
         for (String route : routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
-            System.out.println("Routes " + route);
-            final List<LatLng> finalLatLngList = latLngList;
-       /*     if (polyline == null) {
-                polylineOptions = getDefaultPolyLines(finalLatLngList);
+
+
+            if (polyline == null) {
+                 polylineOptions = getDefaultPolyLines(latLngList);
             } else {
 
                 if (polylineOptions != null) {
-                    polylineOptions.addAll(finalLatLngList);
+                    polylineOptions.addAll(latLngList);
                 }
             }
-*/
-final PolylineOptions polylineOptions=getDefaultPolyLines(finalLatLngList);
+//final PolylineOptions polylineOptions=getDefaultPolyLines(finalLatLngList);
+
 
             this.runOnUiThread(new Runnable() {
                 @Override
@@ -252,6 +295,7 @@ final PolylineOptions polylineOptions=getDefaultPolyLines(finalLatLngList);
     @Override
     public void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         //mMapView.onResume();
     }
 
@@ -264,6 +308,7 @@ final PolylineOptions polylineOptions=getDefaultPolyLines(finalLatLngList);
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
         //mMapView.onDestroy();
     }
 

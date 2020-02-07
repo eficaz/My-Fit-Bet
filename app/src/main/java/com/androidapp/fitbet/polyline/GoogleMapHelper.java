@@ -32,13 +32,13 @@ public class GoogleMapHelper {
 
     public static PolylineOptions getDefaultPolyLines(List<LatLng> points) {
         PolylineOptions polylineOptions = new PolylineOptions()
-                .color(Color.RED);
+                .color(Color.RED).width(15);
         for (LatLng point : points) polylineOptions.add(point);
         return polylineOptions;
     }
     public static PolylineOptions getDefaultPolyLines(List<LatLng> points,int color) {
         PolylineOptions polylineOptions = new PolylineOptions()
-                .color(color);
+                .color(color).width(15);
         for (LatLng point : points) polylineOptions.add(point);
         return polylineOptions;
     }

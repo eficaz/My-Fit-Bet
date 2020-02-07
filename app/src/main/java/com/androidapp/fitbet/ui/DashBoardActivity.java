@@ -2,8 +2,10 @@ package com.androidapp.fitbet.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
@@ -110,21 +113,46 @@ private int flag=0;
     private int REQUEST_CHECK_SETTINGS=111;
 private AppPreference appPreference;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
 
-        System.out.println("Dashboard activity onMessageReceived = "+message);
+if(isMessageDeliverable) {
+    System.out.println("Dashboard activity onMessageReceived = " + message);
 
-        SLApplication.isCountDownRunning=true;
-        mBottomNavigationView.getMenu().getItem(0).setChecked(false);
-        mBottomNavigationView.getMenu().getItem(1).setChecked(false);
-        mBottomNavigationView.getMenu().getItem(3).setChecked(false);
-        mBottomNavigationView.getMenu().getItem(4).setChecked(false);
-        mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
-        mFab.setImageResource(R.drawable.tab_center_icon_active1);
-        getSupportFragmentManager().beginTransaction().remove(getCurrentFragment()).add(R.id.content_main,new LiveBetFragment(),Utils.BetScreenName).commitAllowingStateLoss();
+    SLApplication.isCountDownRunning = true;
+    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+    mFab.setImageResource(R.drawable.tab_center_icon_active1);
+    getSupportFragmentManager().beginTransaction().remove(getCurrentFragment()).replace(R.id.content_main, new LiveBetFragment(), Utils.BetScreenName).commitAllowingStateLoss();
+}
     }
+
+
 
     Fragment getCurrentFragment() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -141,6 +169,9 @@ private AppPreference appPreference;
         ButterKnife.bind(this);
         System.out.println("onCreate dashboard activity");
         appPreference=AppPreference.getPrefsHelper(this);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         dashBoardPresenter = new DashBoardPresenter(this);
         mOnNavigationItemSelectedListener=this;
@@ -187,14 +218,25 @@ if(SLApplication.isCountDownRunning){
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+    }
+
+
+    private boolean isMessageDeliverable=true;
+    @Override
     protected void onStop() {
         System.out.println("onStop Dashboard");
+        isMessageDeliverable=false;
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
         super.onStop();
     }
 
     @Override
     protected void onResume() {
         System.out.println("onResume Dashboard");
+        isMessageDeliverable=true;
         super.onResume();
     }
 
@@ -366,13 +408,14 @@ if(SLApplication.isCountDownRunning){
                 appPreference.savePref(BET_START_STATUS,"false");
                 //callJoinBetsAPi();
                 System.out.println("inside error - not ok");
+                clearSavedBetItems();
                 if(live_bet){
                 MyDialog myDialog=new MyDialog(this,this,"",message,getString(R.string.ok),"",false,"livebet");
                 myDialog.show();
                 live_bet=false;
                 }else{
                     init();
-                    clearSavedBetItems();
+
                 }
 
 

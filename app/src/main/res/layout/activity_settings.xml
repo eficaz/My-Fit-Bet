@@ -61,6 +61,7 @@
                 android:layout_weight="5"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:focusableInTouchMode="true"
                 android:layout_marginStart="@dimen/margin_20"
                 android:layout_height="match_parent"
                 android:orientation="vertical">

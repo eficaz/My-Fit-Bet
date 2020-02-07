@@ -1,7 +1,10 @@
 package com.androidapp.fitbet.ui;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
@@ -53,6 +57,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -166,14 +171,37 @@ private Intent serviceIntent;
 private LocationManager mLocationManager;
 private LocationReceiveListener locationReceiveListener;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +209,7 @@ private LocationReceiveListener locationReceiveListener;
         setContentView(R.layout.activity_map_distance_by_loction);
         Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         distance.setText("");
         locationReceiveListener=this;
         LocReceiver.registerLocationReceiveListener(locationReceiveListener);
@@ -416,6 +445,7 @@ if(!SLApplication.isServiceRunning) {
 
         super.onStop();
         stopLocationService(serviceIntent);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -577,7 +607,8 @@ if(!SLApplication.isServiceRunning) {
                     legs = jb1.getString(LEGS);
                     String overview_polyline_routes_data  = jb1.getString(OVERVIEW_POLYLINE);
                     final JSONObject overview_polyline_routes = new JSONObject(overview_polyline_routes_data);
-                    overview_polyline = overview_polyline_routes.getString(POINTS);
+                   String  poly = overview_polyline_routes.getString(POINTS);
+                    overview_polyline= StringEscapeUtils.escapeJava(poly);
                 }
                 JSONArray legsarray =  new JSONArray(legs);
                 for(int i=0;i<legsarray.length();i++)
@@ -824,24 +855,26 @@ if(!SLApplication.isServiceRunning) {
             }
         }
     }
-   /* @Override
+
+    @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
-*/
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();

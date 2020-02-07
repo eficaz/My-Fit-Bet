@@ -2,8 +2,11 @@ package com.androidapp.fitbet.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Rect;
@@ -23,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.camera.CameraGalleryVideoPickerBottom;
@@ -109,19 +113,44 @@ public class WinnerActivity extends BaseActivity implements CommonUsage {
     CameraGalaryCaputer cameraGalaryCaputer;
 private AppPreference appPreference;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winner);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         appPreference=AppPreference.getPrefsHelper(this);
         clearSavedBetItems();
         (WinnerActivity.this).passVal(new CameraGalaryCaputer() {
@@ -214,6 +243,25 @@ private AppPreference appPreference;
         });
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
     private void callDiscreptionUpdateionAPI() {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SkipWinner(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),betId,ed_discreption.getText().toString());
         call.enqueue(new Callback<ResponseBody>() {
@@ -384,10 +432,14 @@ if(!ed_discreption.getText().toString().equals(""))
                                     System.out.println("file not Deleted :" + fdelete.getName());
                                 }
                             }
-                            skip.performLongClick();
+
+                            clearSavedBetItems();
+                         startActivity(new Intent(WinnerActivity.this,DashBoardActivity.class));
+                            finish();
                         }
                     }catch (Exception e){
-System.out.println("upload exception "+e.getLocalizedMessage());
+                        clearSavedBetItems();
+                        System.out.println("upload exception "+e.getLocalizedMessage());
                     }
                     CustomProgress.getInstance().hideProgress();;
                 } catch (Exception e) {
@@ -447,10 +499,9 @@ System.out.println("upload exception "+e.getLocalizedMessage());
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         CustomProgress.getInstance().hideProgress();
-                       /* AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "2");
-                        AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
+                       clearSavedBetItems();
                         Intent intent = new Intent(WinnerActivity.this, DashBoardActivity.class);
-                        startActivity(intent);*/
+                        startActivity(intent);
                         finish();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:

@@ -1,8 +1,11 @@
 package com.androidapp.fitbet.ui;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
@@ -81,20 +85,43 @@ public class LoserActivity extends BaseActivity {
     String uaser_image,winer_name,credit,winner_description;
 private AppPreference appPreference;
 
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
+
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loser);
         ButterKnife.bind(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         appPreference=AppPreference.getPrefsHelper(this);
         bundle = getIntent().getExtras();
         betId=bundle.getString(MYBETS_betid);
@@ -181,11 +208,35 @@ private AppPreference appPreference;
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearSavedBetItems();
                 AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"0");
                 startActivity(new Intent(LoserActivity.this,DashBoardActivity.class));
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
+    @Override
+    public String getLocationFromNetwork() {
+        return super.getLocationFromNetwork();
     }
 
     private void clearSavedBetItems() {
@@ -274,6 +325,8 @@ private AppPreference appPreference;
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         CustomProgress.getInstance().hideProgress();
+                        clearSavedBetItems();
+                        startActivity(new Intent(LoserActivity.this,DashBoardActivity.class));
                         finish();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:

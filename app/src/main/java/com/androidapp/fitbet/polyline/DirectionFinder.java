@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,7 +81,7 @@ public class DirectionFinder {
     }
 
     public static List<LatLng> decodePolyLine(final String poly) {
-        System.out.println("Direction finder decode polyline = "+poly);
+
         List<LatLng> decoded = new ArrayList<>();
         try {
             int len = poly.length();
@@ -119,6 +120,11 @@ public class DirectionFinder {
         }
         return decoded;
     }
+
+
+
+
+
 
     @SuppressLint("StaticFieldLeak")
     private class DownloadRawData extends AsyncTask<String, Void, String> {

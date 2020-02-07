@@ -180,7 +180,7 @@
 
     <string name="account_number">Account Number</string>
 
-    <string name="rooting_number">Routing Number</string>
+    <string name="rooting_number">BSB Number</string>
 
     <string name="your_credit">YOUR CREDIT</string>
 
@@ -218,7 +218,7 @@
 
     <string name="please_enter_rootingNumber">Please Enter Routing Number</string>
 
-    <string name="please_enter_amount">Please Enter Amount</string>
+    <string name="please_enter_amount">Please Enter Credits</string>
 
     <string name="run_challenge">Run Challenge</string>
 

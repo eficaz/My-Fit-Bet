@@ -160,6 +160,7 @@ public class MyBetsDetailsListAdapter  extends RecyclerView.Adapter  {
                                 jsonObject = new JSONObject(bodyString);
                                 String data = jsonObject.getString("Status");
                                 if(data.equals("Ok")){
+
                                     CustomProgress.getInstance().hideProgress();
                                     groupListModels.remove(position);
                                 }
@@ -179,6 +180,13 @@ public class MyBetsDetailsListAdapter  extends RecyclerView.Adapter  {
         });
     }
 
+    private void clearSavedBetItems() {
+        AppPreference.getPrefsHelper().saveDistance("0.0");
+        AppPreference.getPrefsHelper().savedStatusFlag(false);
+        AppPreference.getPrefsHelper().saveUserRoute("");
+        AppPreference.getPrefsHelper().saveOrigin("");
+        AppPreference.getPrefsHelper().setLatLongList(null);
+    }
     private void showAlertInfo(final int position) {
         final Dialog dialog = new Dialog(constant);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -180,6 +181,9 @@ private LocationReceiveListener locationReceiveListener;
             System.out.println("Bet stopping service ");
             stopLocationService();
         }
+        if(locationReceiveListener!=null)
+        LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
+
         super.onStop();
     }
 
@@ -187,6 +191,7 @@ private LocationReceiveListener locationReceiveListener;
     @Override
     public void onPause() {
         super.onPause();
+        LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
 
     }
 
@@ -354,6 +359,7 @@ private LocationReceiveListener locationReceiveListener;
         bt_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"4");
                 upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
                 my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
                 bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
@@ -695,8 +701,14 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
     @Override
     public void onResume() {
         super.onResume();
+
+        if(locationReceiveListener!=null)
+            LocReceiver.registerLocationReceiveListener(locationReceiveListener);
+
+
         if (!SLApplication.isServiceRunning)
             startLocationService();
+
         if(AppPreference.getPrefsHelper().getPref(Contents.CREATE_BET_STATUS,"").equals("true")) {
             upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
             my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon_active));
@@ -729,6 +741,9 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                 case "3":
                     bt_joinbet.performClick();
                     break;
+                case "4":
+                    bt_joinbet.performClick();
+                    break;
 
             }
 
@@ -750,8 +765,10 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
 
 
         }else if(tab_selection==1){
+            if(!TextUtils.isEmpty(text))
             myBetsListAdapter.filterList(text);
         }else{
+            if(!TextUtils.isEmpty(text))
             joinBetsDetailsListAdapter.filterList(text);
         }
         CustomProgress.getInstance().hideProgress();

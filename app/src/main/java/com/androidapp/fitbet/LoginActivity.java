@@ -298,12 +298,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         }
     }
-
+    String msg="Error";
     private void callloginApi(String username, String password) {
+
+
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrack(username,password,deviceID,"android");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+              msg=msg+response.code();
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     loginSuccess(bodyString);
@@ -313,11 +317,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+
                 CustomProgress.getInstance().hideProgress();
+                msg=msg+"Call failed:"+t.getLocalizedMessage();
+
+
             }
         });
+
+       // showError(msg);
     }
-    private void loginSuccess(String bodyString) {
+
+    private void showError(String message){
+
+
+        MyDialog eDialog=new MyDialog(this,null,"",message,"OK","",false,"error");
+        eDialog.show();
+    }
+
+           private void loginSuccess(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");

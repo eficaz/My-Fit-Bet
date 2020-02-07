@@ -39,7 +39,6 @@ public class LocationMonitoringService extends Service
     @Override
     public void onCreate() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        SLApplication.fusedLocationProviderClient=mFusedLocationClient;
         locationRequest = Utils.getLocationRequest();
         createLocationCallback();
         

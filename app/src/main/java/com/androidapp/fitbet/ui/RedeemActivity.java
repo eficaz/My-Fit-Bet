@@ -1,6 +1,9 @@
 package com.androidapp.fitbet.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
@@ -93,21 +98,43 @@ public class RedeemActivity extends BaseActivity {
     int dinamic_adminCharge=0,dinamic_stripe_charge=0;
 private MyDialog noInternetDialog;
 
+
+    private IntentFilter filter=new IntentFilter("count_down");
+    private boolean firstConnect=true;
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null) {
+                if (firstConnect) {
+                    firstConnect = false;
+
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
+
+                }
+            }else{
+                firstConnect=true;
+            }
+
+        }
+    };
     @Override
-    protected void onMessageReceived(String message) {
-        super.onMessageReceived(message);
+    public void onMessageReceived(String message) {
+
         SLApplication.isCountDownRunning=true;
         startActivity(new Intent(this,DashBoardActivity.class));
         finish();
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_redeem);
         ButterKnife.bind(this);
-
+LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
 
        if(Utils.isConnectedToInternet(this)) {
@@ -139,7 +166,7 @@ private MyDialog noInternetDialog;
 
                         Utils.showCustomToastMsg(RedeemActivity.this, R.string.please_enter_rootingNumber);
 
-                    }else if(amount.getText().toString().equals("")){
+                    }else if(amount.getText().toString().equals("")|| amount.getText().toString().equals("0")){
 
                         Utils.showCustomToastMsg(RedeemActivity.this, R.string.please_enter_amount);
 
@@ -260,6 +287,24 @@ private MyDialog noInternetDialog;
         });*/
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver)
+;    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+    }
+
     private void getAdminCharge() {
 
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).GetAdminCharge();
@@ -367,18 +412,23 @@ private double userCredit;
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
+                    CustomProgress.getInstance().hideProgress();
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     JSONObject jsonObject = new JSONObject(bodyString);
                     System.out.println("Redeem == "+bodyString);
                     String Msg = jsonObject.getString("Msg");
-                    Utils.showCustomToastMsg(RedeemActivity.this, Msg);
-                    CustomProgress.getInstance().hideProgress();
+
+
+
+                    MyDialog myDialog=new MyDialog(RedeemActivity.this,null,"",Msg,getString(R.string.ok),"",false,"redeem");
+                    myDialog.show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                CustomProgress.getInstance().hideProgress();
             }
         });
     }
