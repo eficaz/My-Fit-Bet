@@ -16,6 +16,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidapp.fitbet.customview.CustomProgress;
@@ -37,10 +38,14 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,8 +90,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Bind(R.id.bt_google)
     Button bt_google;*/
 
-
-    private GoogleApiClient googleApiClient;
+private GoogleSignInClient googleSignInClient;
     TextView textView;
     private static final int RC_SIGN_IN = 1;
 
@@ -160,17 +164,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        googleApiClient=new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,LoginActivity.this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         google_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
                 if (Utils.isConnectedToInternet(LoginActivity.this)){
-                    Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                    startActivityForResult(intent,RC_SIGN_IN);
+                    Intent signInIntent = googleSignInClient.getSignInIntent();
+                    startActivityForResult(signInIntent,RC_SIGN_IN);
                 } else{
                   noInternetDialog.show();
                 }
@@ -208,9 +209,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View view) {
                 CustomProgress.getInstance().showProgress(LoginActivity.this, "", false);
-                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                Intent intent = googleSignInClient.getSignInIntent();
                 startActivityForResult(intent,RC_SIGN_IN);
-
             }
         });
         reg.setOnClickListener(new View.OnClickListener() {
@@ -380,16 +380,99 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         if(requestCode==RC_SIGN_IN){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
         }
     }
-    private void handleSignInResult(GoogleSignInResult result){
-        if(result.isSuccess()){
-            gotoProfile(result);
-        }else{
-            //Toast.makeText(getApplicationContext(),"Sign in cancel",Toast.LENGTH_LONG).show();
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            System.out.println("Google sign in success ");
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("Google Login", "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
         }
+    }
+
+
+    private void updateUI(@Nullable GoogleSignInAccount account) {
+        String name="";
+        if (account != null) {
+            CountryName=getResources().getConfiguration().locale.getDisplayCountry();
+
+                name= account.getDisplayName();
+
+            Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrackWithGoogle(
+                    name,
+                    account.getEmail(),
+                    deviceID,
+                   account.getId(),
+                    String.valueOf(account.getPhotoUrl()),
+                    DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        String bodyString = new String(response.body().bytes(), "UTF-8");
+                        System.out.println("Google login resp "+bodyString);
+                        AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
+                        loginSuccess(bodyString);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } else {
+
+        }
+    }
+
+    private void gotoProfile(GoogleSignInResult result){
+
+        String name="";
+        System.out.println("Google sign in result "+result.toString());
+        CountryName = getResources().getConfiguration().locale.getDisplayCountry();
+        if(result.getSignInAccount().getDisplayName().equals(null)){
+            name= result.getSignInAccount().getEmail();
+        }else{
+            name= result.getSignInAccount().getDisplayName();
+        }
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrackWithGoogle(
+                name,
+                result.getSignInAccount().getEmail(),
+                deviceID,
+                result.getSignInAccount().getId(),
+                String.valueOf(result.getSignInAccount().getPhotoUrl()),
+                DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String bodyString = new String(response.body().bytes(), "UTF-8");
+                    AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
+                    loginSuccess(bodyString);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
 
@@ -423,35 +506,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-    private Bundle getFacebookData(JSONObject object) {
-        try {
-            Bundle bundle = new Bundle();
-            String id = object.getString("id");
-            URL profile_pic;
-            try {
-                profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=200&height=150");
-                bundle.putString("profile_pic", profile_pic.toString());
-            } catch (MalformedURLException e) {
-                CustomProgress.getInstance().hideProgress();
-                e.printStackTrace();
-                return null;
-            }
-            bundle.putString("idFacebook", id);
-            if (object.has("first_name"))
-                bundle.putString("first_name", object.getString("first_name"));
-            if (object.has("last_name"))
-                bundle.putString("last_name", object.getString("last_name"));
-            if (object.has("email"))
-                bundle.putString("email", object.getString("email"));
-            gotoFbProfile(object.getString("first_name")+" "+object.getString("last_name"),object.getString("email"),deviceID,id, profile_pic.toString());
-            return bundle;
-        }
-        catch(JSONException e) {
-            CustomProgress.getInstance().hideProgress();
-            Log.d("login fb","Error parsing JSON");
-        }
-        return null;
-    }
     private void gotoFbProfile(String f_firstname, String f_email, String deviceID, String f_facebookID, String profile_pic) {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrackWithfb(
                 f_firstname,
@@ -484,41 +538,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
-    private void gotoProfile(GoogleSignInResult result){
 
-        String name="";
-         CountryName = getResources().getConfiguration().locale.getDisplayCountry();
-         if(result.getSignInAccount().getDisplayName().equals(null)){
-              name= result.getSignInAccount().getEmail();
-         }else{
-              name= result.getSignInAccount().getDisplayName();
-        }
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrackWithGoogle(
-                name,
-                result.getSignInAccount().getEmail(),
-                deviceID,
-                result.getSignInAccount().getId(),
-                String.valueOf(result.getSignInAccount().getPhotoUrl()),
-                DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String bodyString = new String(response.body().bytes(), "UTF-8");
-                    AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
-                    loginSuccess(bodyString);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-
-
-    }
 
 
 }
