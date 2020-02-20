@@ -72,13 +72,7 @@ public class TermsAndServiceActivity extends BaseActivity {
             "<p>WE MAKE NO WARRANTY THAT THE SERVICES WILL BE AVAILABLE ERROR FREE OR THAT THE SERVICES OR THE CONTENT ARE FREE OF COMPUTER VIRUSES OR SIMILAR CONTAMINATION OR DESTRUCTIVE FEATURES. IF YOUR USE OF THE SERVICES OR THE CONTENT RESULTS IN THE NEED FOR SERVICING OR REPLACING EQUIPMENT OR DATA, WE SHALL NOT BE RESPONSIBLE FOR THOSE COSTS.</p>\n" +
             "<p>IN NO EVENT SHALL WE BE LIABLE FOR ANY DAMAGES (INCLUDING, WITHOUT LIMITATION, INCIDENTAL AND CONSEQUENTIAL DAMAGES, LOST PROFITS, OR DAMAGES RESULTING FROM LOST DATA OR BUSINESS INTERRUPTION) RESULTING FROM THE USE OR INABILITY TO USE THE SERVICES AND THE CONTENT, WHETHER BASED ON WARRANTY, CONTRACT, TORT (INCLUDING NEGLIGENCE), OR ANY OTHER LEGAL THEORY, IN EXCESS OF ONE HUNDRED DOLLARS, EVEN IF A WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>\n" +
             "<p><strong><u>No Medical Advice</u></strong><br>\n" +
-            "  THE SERVICES DO NOT CONTAIN OR CONSTITUTE, AND SHOULD NOT BE INTERPRETED AS, MEDICAL ADVICE OR OPINION. We are not licensed medical professionals, and we are not in the business of providing medical advice. You should always consult a qualified and licensed medical professional prior to beginning or modifying any diet or exercise program. YOUR USE OF THE WEBSITE OR THE MOBILE APPLICATION DOES NOT CREATE A DOCTOR-PATIENT RELATIONSHIP BETWEEN YOU AND US.</p>\n" +
-            "<p><strong><u>CREDIT PURCHASE</u></strong><br>\n" +
-            "  For being part of the FitBet betting challenge, every user needs to have betting credits. Betting credits can be purchased as a pack of 10 or 20 credits. A dollar is charged for each credit.</p>\n" +
-            "<p><strong><u>CREDIT ENCASHING</u></strong><br>\n" +
-            "  You have the option to encash the betting credits they possess. This is done via Stripe payment gateway. While encashing, the Payment Gateway charges and Administrative charges would be deducted.</p>\n" +
-            "<p><strong><u>PAYMENT</u></strong><br>\n" +
-            "  Payment for the FitBet must be done via Apple and Google InApp purchases. The payment amount would include InApp charges. Amounts paid for buying betting credits are not refundable.</p>";
+            "  THE SERVICES DO NOT CONTAIN OR CONSTITUTE, AND SHOULD NOT BE INTERPRETED AS, MEDICAL ADVICE OR OPINION. We are not licensed medical professionals, and we are not in the business of providing medical advice. You should always consult a qualified and licensed medical professional prior to beginning or modifying any diet or exercise program. YOUR USE OF THE WEBSITE OR THE MOBILE APPLICATION DOES NOT CREATE A DOCTOR-PATIENT RELATIONSHIP BETWEEN YOU AND US.</p>\n";
 
 
 

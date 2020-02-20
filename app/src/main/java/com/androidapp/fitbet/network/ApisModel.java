@@ -48,7 +48,7 @@ public class ApisModel {
         PLACE_BASE_URL="https://maps.googleapis.com/maps/api/place/details/";
     }
     private void setProductionServer() {
-        BASE_URL = "http://fitbet.com.au/api/"
+        BASE_URL = "https://fitbet.com.au/api/"
                 /*"http://35.244.74.56/api/"*/
                 /*"http://34.87.204.239/api/"*/;
         MAP_BASE_URL="https://maps.googleapis.com/maps/api/directions/";

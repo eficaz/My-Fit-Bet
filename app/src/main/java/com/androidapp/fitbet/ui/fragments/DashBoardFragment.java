@@ -133,17 +133,7 @@ private  AppPreference appPreference;
         }else {
 noInternetDialog.show();
         }
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               Intent i = new Intent(getActivity(), WinnerActivity.class);
-                i.putExtra(REG_KEY,appPreference.getPref(Contents.REG_KEY,""));
-                i.putExtra(FIRST_NAME,"Nidhin");
-                i.putExtra(MYBETS_betid,"23");
-                i.putExtra(WON,"100");
-                startActivity(i);
-            }
-        });
+
         week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

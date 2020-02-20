@@ -32,6 +32,10 @@ private static final String TAG_DISTANCE="distance_in_double";
     private static final String TAG_BET_DATE="bet_date";
     private static final String TAG_CHALLENGER_ID="challenger_id";
     private static final String TAG_COUNTDOWN_TIME="countdown_time";
+    private  static final String TAG_BET_TYPE="bet_type";
+    private static  final String TAG_POSITION_LATITUDE="position_latitude";
+    private static  final String TAG_POSITION_LONGITUDE="position_longitude";
+
 
 
     public AppPreference() {
@@ -235,6 +239,38 @@ String json=sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST,"");
     public int getSavedCountdownTime(){
 
         return sharedPreferences.getInt(TAG_COUNTDOWN_TIME,0);
+    }
+    public void saveBetType(String betType){
+        editor.putString(TAG_BET_TYPE,betType);
+        editor.commit();
+
+    }
+
+    public String getSavedBetType(){
+
+        return sharedPreferences.getString(TAG_BET_TYPE,"");
+    }
+
+    public void savePositionLatitude(String positionLatitude){
+        editor.putString(TAG_POSITION_LATITUDE,positionLatitude);
+        editor.commit();
+
+    }
+
+    public String getPositionLatitude(){
+
+        return sharedPreferences.getString(TAG_POSITION_LATITUDE,"0.0");
+    }
+
+    public void savePositionLongitude(String positionLongitude){
+        editor.putString(TAG_POSITION_LONGITUDE,positionLongitude);
+        editor.commit();
+
+    }
+
+    public String getSavedPositionLongitude(){
+
+        return sharedPreferences.getString(TAG_POSITION_LONGITUDE,"0.0");
     }
 
 }

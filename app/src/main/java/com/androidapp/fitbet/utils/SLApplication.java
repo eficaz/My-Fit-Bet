@@ -26,13 +26,13 @@ import static com.google.firebase.remoteconfig.FirebaseRemoteConfig.TAG;
 public class SLApplication extends MultiDexApplication implements Application.ActivityLifecycleCallbacks{
     public static boolean isServiceRunning=false;
     public static boolean isCountDownRunning=false;
+
     public static SLApplication mInstance;
     public static boolean isBetCreatedOrEdited;
     public static boolean firstConnect=true;
-    public static boolean firstStartConnect=true;
+    public static boolean firstUpdateConnect=true;
     private Activity activeActivity;
 
-    public static LocationCallback locationCallback=null;
 
 
 

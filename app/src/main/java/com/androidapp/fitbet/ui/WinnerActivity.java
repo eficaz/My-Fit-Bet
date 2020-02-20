@@ -374,18 +374,7 @@ private AppPreference appPreference;
     private String mDescription ="";
     private String mFileType;
     private void updateProfilePic() {
-/*        RequestBody reg_key=RequestBody.create(MediaType.parse("multipart/form-data"), AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-        RequestBody discreption;
-        if(!ed_discreption.getText().toString().equals("")){
-             discreption=RequestBody.create(MediaType.parse("multipart/form-data"), ed_discreption.getText().toString());
-        }else{
-             discreption=RequestBody.create(MediaType.parse("multipart/form-data"), "");
-        }
-        RequestBody betId1=RequestBody.create(MediaType.parse("multipart/form-data"), betId);
-        RequestBody fileType=RequestBody.create(MediaType.parse("multipart/form-data"), file_Type);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), mFileFetched);
-               MultipartBody.Part part = MultipartBody.Part.createFormData("file", mFileFetched.getName(), requestFile);
- */
+
 
 if(!ed_discreption.getText().toString().equals(""))
     mDescription =ed_discreption.getText().toString();

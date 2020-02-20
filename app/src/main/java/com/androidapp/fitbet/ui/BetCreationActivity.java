@@ -680,9 +680,6 @@ if(!startLat.equals("0")) {
                 } else if(bet_credit.getText().toString().equals("")){
                     Utils.showCustomToastMsg(BetCreationActivity.this, R.string.enter_credit);
 
-                }else if((Integer.parseInt(credits)<Integer.parseInt(bet_credit.getText().toString()))){
-                    showMessage("Your credits are less than the bet score, so not possible to create bet!");
-
                 }else if(fromDate.equals("")||toDate.equals("")){
                     Utils.showCustomToastMsg(BetCreationActivity.this, R.string.select_date);
 
@@ -1076,11 +1073,7 @@ new RulesDialog(BetCreationActivity.this);
         myDialog.show();
     }
 
-    private void CallInappPurchass() {
-        /*Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);*/
-    }
+
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

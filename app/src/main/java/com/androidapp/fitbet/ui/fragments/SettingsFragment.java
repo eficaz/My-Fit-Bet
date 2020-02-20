@@ -33,10 +33,9 @@ import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.service.LocService;
 import com.androidapp.fitbet.ui.ChangePasswordActivity;
-import com.androidapp.fitbet.ui.CreditPurchaseActivity;
+
 import com.androidapp.fitbet.ui.DashBoardActivity;
 import com.androidapp.fitbet.ui.PrivacyPolicyActivity;
-import com.androidapp.fitbet.ui.RedeemActivity;
 import com.androidapp.fitbet.ui.TermsAndServiceActivity;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CircleImageView;
@@ -90,8 +89,7 @@ public class SettingsFragment extends Fragment  {
     @Bind(R.id.change_password)
     TableRow change_password;
 
-    @Bind(R.id.redeem)
-    TableRow redeem;
+
 
 
     @Bind(R.id.row_privacy_policy)
@@ -103,8 +101,6 @@ public class SettingsFragment extends Fragment  {
     @Bind(R.id.share)
     TableRow share;
 
-    @Bind(R.id.row_credit_purchase)
-    TableRow row_credit_purchase;
 
     @Bind(R.id.rowlogOut)
     TableRow rowlogOut;
@@ -152,12 +148,7 @@ private MyDialog noInternetDialog;
             img_user.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.user_profile_avatar));
         }
 
-        redeem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), RedeemActivity.class));
-            }
-        });
+
 
         change_password.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,13 +188,7 @@ private MyDialog noInternetDialog;
 
             }
         });
-        row_credit_purchase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), CreditPurchaseActivity.class);
-                startActivity(i);
-            }
-        });
+
         terms_and_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -63,7 +63,7 @@ AppPreference appPreference;
 
         return locationRequest;
     }
-    private int i=1;
+    private int i=1,j=2;
 private LocationCallback locationCallback=new LocationCallback(){
     @Override
     public void onLocationResult(LocationResult locationResult) {
@@ -77,11 +77,9 @@ if(appPreference!=null)
             if(appPreference.getPref(Contents.BET_START_STATUS,"").equals("true")){
 
                 i++;
+                j++;
 
          if(i==2) {
-
-           // if(getDistance(Double.parseDouble(appPreference.getPref(Contents.USER_start_latitude, "")), Double.parseDouble(appPreference.getPref(Contents.USER_start_longitude, "")), latitude, longitude)>1)
-
 
              i = 0;
 
@@ -101,7 +99,28 @@ if(appPreference!=null)
 
              }
              appPreference.saveOrigin(destination);
+
+
          }
+if(j==3){
+    j=0;
+
+    if (!appPreference.getPositionLatitude().equals("0.0") ) {
+        double distance = Double.parseDouble(appPreference.getSavedDistance());
+        distance = distance + getDistanceL(Double.parseDouble(appPreference.getPositionLatitude()), Double.parseDouble(appPreference.getSavedPositionLongitude()), latitude, longitude);
+
+        appPreference.saveDistance(String.valueOf(distance));
+    }
+
+    appPreference.savePositionLatitude(String.valueOf(latitude));
+    appPreference.savePositionLongitude(String.valueOf(longitude));
+    SLApplication.firstUpdateConnect=true;
+    Intent serviceIntent=new Intent(LocService.this,BetUpdateService.class);
+    serviceIntent.putExtra("positionLatitude",latitude);
+    serviceIntent.putExtra("positionLongitude",longitude);
+    BetUpdateService.enqueueWork(LocService.this,serviceIntent);
+}
+
 
             }
 
@@ -119,6 +138,18 @@ if(appPreference!=null)
     }
 };
 
+
+    private int getDistanceL(double startLat,double startLon,double positionLat,double positionLon) {
+
+        Location startLocation = new Location("start");
+        startLocation.setLatitude(startLat);
+        startLocation.setLongitude(startLon);
+        Location positionLocation = new Location("position");
+        positionLocation.setLatitude(positionLat);
+        positionLocation.setLongitude(positionLon);
+
+        return (int)startLocation.distanceTo(positionLocation);
+    }
     private void fetchDirections(String origin, String destination) {
 
         System.out.println("fetchDirections "+"origin "+origin+" , "+"destination "+destination);
@@ -150,7 +181,7 @@ if(appPreference!=null)
         super.onDestroy();
         if(mFusedLocationProviderClient!=null)
         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
-        System.out.println("Destroy service");
+        System.out.println("Destroy Loc service");
         SLApplication.isServiceRunning=false;
     }
 

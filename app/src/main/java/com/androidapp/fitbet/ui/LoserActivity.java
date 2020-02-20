@@ -264,7 +264,7 @@ private AppPreference appPreference;
                         tv_credit.setText(jsonObject.getString("winner_credit"));
                         userPostion.setText(jsonObject.getString("user_position"));
                         if (!jsonObject.getString("winner_profile_pic").equals("NA")) {
-                            if (jsonObject.getString(IMAGE_STATUS).equals("0")) {
+                            if (jsonObject.getString("winner_image_status").equals("0")) {
                                 Picasso.get().load(Constant.BASE_APP_IMAGE__PATH + jsonObject.getString("winner_profile_pic"))
                                         .placeholder(R.drawable.image_loader)
                                         .into(img_user);

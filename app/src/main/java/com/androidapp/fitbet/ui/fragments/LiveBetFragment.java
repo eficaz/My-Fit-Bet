@@ -1,8 +1,10 @@
 package com.androidapp.fitbet.ui.fragments;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
@@ -29,6 +31,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -94,6 +97,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.Timer;
@@ -199,8 +203,6 @@ public class LiveBetFragment extends Fragment implements OnMapReadyCallback , Di
     private MyDialog noInternetDialog;
     private String locationRoute="";
 /*    private static LiveBetFragment instance;*/
-
-    private MyTimerTask timerTask=new MyTimerTask();
     private  Timer timer=new Timer("update");
     private String regNo="";
     private  String betId="";
@@ -214,6 +216,108 @@ private LocationReceiveListener locationReceiveListener=null;
 private DashBoardActivity dashBoardActivity;
 private AppPreference appPreference;
 private CountDownDialog.CountDownStopListener countDownStopListener;
+
+    private IntentFilter filter=new IntentFilter("bet_update");
+
+    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("Bet receiver on receive");
+            if(intent!=null) {
+                if (SLApplication.firstUpdateConnect) {
+                    SLApplication.firstUpdateConnect = false;
+
+                    String bodyString=intent.getStringExtra("update_response");
+                    if(CustomProgress.getInstance().isShowing())
+                        CustomProgress.getInstance().hideProgress();
+                        try {
+
+
+                        JSONObject jsonObject = new JSONObject(bodyString);
+                        String data1 = jsonObject.getString(WINNER_PARTICIPANT);
+                        JSONArray jsonArray1 = new JSONArray(data1);
+                        for (int i = 0; i < jsonArray1.length(); i++) {
+                            JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
+                            regNo = jsonObject2.getString(REG_KEY);
+                            winName = jsonObject2.getString(FIRST_NAME);
+                            //won=jsonObject2.getString(WON);
+
+                        }
+                        won = jsonObject.getString(MYBETS_credit);
+                        JSONArray jsonArray = new JSONArray(data1);
+                        String data2 = jsonObject.getString(BETDETAILS);
+                        //JSONArray jsonArray2 = new JSONArray(data2);
+                        JSONObject jsonObject3 = new JSONObject(data2);
+                        betId = jsonObject3.getString(MYBETS_betid);
+                        startLatitude = jsonObject3.getDouble("userstartlatitude");
+                        startLongitude = jsonObject3.getDouble("userstartlongitude");
+                        positionLatitude=jsonObject3.getDouble("positionlatitude");
+                        positionLongitude=jsonObject3.getDouble("positionlongitude");
+
+                        if (jsonArray.length() != 0) {
+                            if (regNo.equals(appPreference.getPref(REG_KEY, ""))) {
+                                if (!regNo.equals("") && !winName.equals("") && !won.equals("") && !betId.equals("")) {
+                                    if (winner&&!actFlag) {
+
+                                        appPreference.savePref(BET_START_STATUS,"false");
+                                        actFlag=true;
+                                        stopLocationService(serviceIntent);
+                                        clearSavedBetItems();
+                                        cancelTimer();
+                                        winner = false;
+                                        counterHandler.removeCallbacks(counterRunnable);
+                                        appPreference.savePref(Contents.UPDATE_METER, "0");
+                                        if(getActivity()!=null) {
+                                            Intent i = new Intent(getActivity(), WinnerActivity.class);
+                                            i.putExtra(REG_KEY, regNo);
+                                            i.putExtra(FIRST_NAME, winName);
+                                            i.putExtra(MYBETS_betid, betId);
+                                            i.putExtra(WON, won);
+                                            startActivity(i);
+                                            getActivity().finish();
+                                        }
+
+                                    }
+                                } else {
+                                    Utils.showCustomToastMsg(getActivity(), R.string.imvalid_entry);
+                                }
+                            } else {
+                                if (loser&&!actFlag) {
+                                    appPreference.savePref(BET_START_STATUS,"false");
+                                    actFlag=true;
+                                    stopLocationService(serviceIntent);
+                                    cancelTimer();
+                                    clearSavedBetItems();
+                                    loser = false;
+                                    counterHandler.removeCallbacks(counterRunnable);
+                                    appPreference.savePref(Contents.UPDATE_METER, "0");
+                                    if(getActivity()!=null) {
+                                        Intent i = new Intent(getActivity(), LoserActivity.class);
+                                        i.putExtra(MYBETS_betid, betId);
+                                        startActivity(i);
+                                        getActivity().finish();
+                                    }
+
+                                }
+                            }
+                        }
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                publishLiveDetails(bodyString);
+                            }
+                        });
+
+
+                }catch (JSONException e){e.printStackTrace();}
+                }
+            }else{
+                SLApplication.firstUpdateConnect=true;
+            }
+
+        }
+    };
+
 
     @Nullable
     @Override
@@ -379,7 +483,7 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
 
     @Override
     public void onResume() {
-
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).registerReceiver(mBroadcastReceiver, filter);
         if (!SLApplication.isServiceRunning)
             startLocationService(serviceIntent);
 
@@ -405,6 +509,7 @@ new Handler().post(new Runnable() {
     @Override
     public void onStop() {
         System.out.println("Live bet inside onStop ");
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
         LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
         super.onStop();
     }
@@ -413,11 +518,13 @@ new Handler().post(new Runnable() {
     public void onDestroy() {
         super.onDestroy();
        // run=false;
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
 
     }
     @Override
     public void onPause() {
         super.onPause();
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
         LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
        // run=false;
     }
@@ -441,44 +548,7 @@ if(googleMap!=null)
     }
 
 
-    private void animateMarker(final Marker marker , final LatLng startPosition, final LatLng toPosition,
-                              final boolean hideMarker) {
 
-
-
-
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-
-        final long duration = 1000;
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * toPosition.longitude + (1 - t)
-                        * startPosition.longitude;
-                double lat = t * toPosition.latitude + (1 - t)
-                        * startPosition.latitude;
-
-                marker.setPosition(new LatLng(lat, lng));
-
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                    if (hideMarker) {
-                        marker.setVisible(false);
-                    } else {
-                        marker.setVisible(true);
-                    }
-                }
-            }
-        });
-    }
     private boolean hasGPSDevice(Context context) {
         final LocationManager mgr = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (mgr == null)
@@ -603,8 +673,9 @@ if(CustomProgress.getInstance().isShowing())
                 }
 
                 challengerId = betDetailsObject.getString(MYBETS_challengerid);
-
+appPreference.saveChallengerId(challengerId);
                 betType = betDetailsObject.getString(MYBETS_bettype);
+                appPreference.saveBetType(betType);
                // userDistance=betDetailsObject.getString("distance");
 
                 if (betDetailsObject.getString(MYBETS_bettype).equals(LOCATION)) {
@@ -655,6 +726,8 @@ if(CustomProgress.getInstance().isShowing())
                     if(arrayObject.getString("reg_key").equals(appPreference.getPref(REG_KEY,""))){
                         positionLatitude=arrayObject.getDouble(POSITION_LATITUDE);
                         positionLongitude=arrayObject.getDouble( POSITION_LONGITUDE);
+                        appPreference.savePositionLatitude(arrayObject.getString(POSITION_LATITUDE));
+                        appPreference.savePositionLongitude(arrayObject.getString(POSITION_LONGITUDE));
                         txtParticipate.setText(arrayObject.getString(POSITION));
                         txtName.setText(arrayObject.getString(FIRST_NAME));
                         if (!arrayObject.getString(PROFILE_PIC).equals("NA")) {
@@ -787,7 +860,7 @@ if(getActivity()!=null) {
     }
 
 
-private int i=2;
+
     private double userDistanceDouble=0.0;
     @Override
     public void onLocationReceived(Double lat, Double lon) {
@@ -795,40 +868,10 @@ private int i=2;
         cdStartLon=lon;
         if(!SLApplication.isCountDownRunning) {
 
-            i++;
-
-
             Log.d("onLocationRcvd LIVE ", "" + lat + " , " + lon);
 
-
-            if (i == 3) {
-                i = 0;
-                System.gc();
-
-                if (positionLatitude != 0.0) {
-                    double distance = Double.parseDouble(appPreference.getSavedDistance());
-                    distance = distance + getDistanceL(positionLatitude, positionLongitude, lat, lon);
-
-                    appPreference.saveDistance(String.valueOf(distance));
-                    System.out.println("position lat n long  " + positionLatitude + " , " + positionLongitude);
-                    System.out.println("current lat n long " + lat + " , " + lon);
-
-                    System.out.println("Calculated distance " + distance);
-
-                }
-                System.out.println("appPreference.getSavedDistance() = " + appPreference.getSavedDistance());
-
-                positionLatitude = lat;
-                positionLongitude = lon;
-
-                getUpdates();
-           }
-
             if (positionMarker != null) {
-                // positionMarker.remove();
                 positionMarker.setPosition(new LatLng(lat, lon));
-                // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
-
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  lat,   lon), 18f));
                 System.out.println("onLocationReceived drawing position marker");
                 onMapReady(googleMap);
@@ -856,7 +899,6 @@ private int i=2;
     @Override
     public void onCountDownStopped(Dialog dialog) {
         // Countdown stopped - call start bet and init live bet
-
 
         startBet(dialog);
     }
@@ -913,21 +955,6 @@ private int i=2;
 
 
     }
-
-    private class MyTimerTask extends TimerTask{
-
-        @Override
-        public void run() {
-
-            if(positionLatitude!=0.0) {
-                System.gc();
-                getUpdates();
-
-            }
-
-        }
-    }
-
 
 
     private void drawInteractivePolyLine(List<Route> userRoutes){
@@ -1116,12 +1143,6 @@ PolylineOptions polylineOptions=null;
 
 
     }
-    private void scheduleTimer() {
-        timer = new Timer("update");
-        Date executionDate = new Date(); // no params = now
-        timer.scheduleAtFixedRate(timerTask, executionDate, 3000L);
-        isTimerRunning=true;
-    }
 
 
 
@@ -1145,131 +1166,7 @@ PolylineOptions polylineOptions=null;
     }
 
     private boolean actFlag;// to avoid starting of activity twice
-    private void getUpdates() {
-/*run=true;*/
 
-//System.out.println("Formatted distance "+formatNumber2Decimals(userDistanceDouble));
-        System.out.println("Formatted distance "+formatNumber2Decimals(Double.parseDouble(appPreference.getSavedDistance())));
-        System.out.println("Params getUpdates == "+challengerId+" , "+appPreference.getSavedDistance()+" , "+positionLongitude+" , "+positionLatitude+" , "+ appPreference.getPref(REG_KEY,"")+" , "+betType+" , "+ appPreference.getSavedUserRoute());
-      Call  call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveDetailsUpdation(challengerId,appPreference.getSavedDistance(),positionLongitude,positionLatitude, appPreference.getPref(REG_KEY,""),betType, appPreference.getSavedUserRoute());
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                System.out.println("response code ="+response.code());
-
-                if(CustomProgress.getInstance().isShowing())
-                    CustomProgress.getInstance().hideProgress();
-                try {
-/*run=false;*/
-                    final String bodyString;
-                    if (response.body() != null) {
-                        bodyString = new String(response.body().bytes(), "UTF-8");
-
-                    System.out.println("BET updation ==="+bodyString);
-                     JSONObject jsonObject;
-
-                        jsonObject = new JSONObject(bodyString);
-                        String data = jsonObject.getString("Status");
-                        if(data.equals("Ok")) {
-                            CustomProgress.getInstance().hideProgress();
-                            jsonObject = new JSONObject(bodyString);
-                            String data1 = jsonObject.getString(WINNER_PARTICIPANT);
-                            JSONArray jsonArray1 = new JSONArray(data1);
-                            for (int i = 0; i < jsonArray1.length(); i++) {
-                                JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
-                                regNo = jsonObject2.getString(REG_KEY);
-                                winName = jsonObject2.getString(FIRST_NAME);
-                                //won=jsonObject2.getString(WON);
-
-                            }
-                            won = jsonObject.getString(MYBETS_credit);
-                            JSONArray jsonArray = new JSONArray(data1);
-                            String data2 = jsonObject.getString(BETDETAILS);
-                            //JSONArray jsonArray2 = new JSONArray(data2);
-                            JSONObject jsonObject3 = new JSONObject(data2);
-                            betId = jsonObject3.getString(MYBETS_betid);
-                            startLatitude = jsonObject3.getDouble("userstartlatitude");
-                            startLongitude = jsonObject3.getDouble("userstartlongitude");
-                            positionLatitude=jsonObject3.getDouble("positionlatitude");
-                            positionLongitude=jsonObject3.getDouble("positionlongitude");
-
-                            if (jsonArray.length() != 0) {
-                                if (regNo.equals(appPreference.getPref(REG_KEY, ""))) {
-                                    if (!regNo.equals("") && !winName.equals("") && !won.equals("") && !betId.equals("")) {
-                                        if (winner&&!actFlag) {
-
-                                            appPreference.savePref(BET_START_STATUS,"false");
-                                            actFlag=true;
-                                            stopLocationService(serviceIntent);
-                                            clearSavedBetItems();
-                                            cancelTimer();
-                                            winner = false;
-                                            counterHandler.removeCallbacks(counterRunnable);
-                                            appPreference.savePref(Contents.UPDATE_METER, "0");
-                                            if(getActivity()!=null) {
-                                                Intent i = new Intent(getActivity(), WinnerActivity.class);
-                                                i.putExtra(REG_KEY, regNo);
-                                                i.putExtra(FIRST_NAME, winName);
-                                                i.putExtra(MYBETS_betid, betId);
-                                                i.putExtra(WON, won);
-                                                startActivity(i);
-                                                getActivity().finish();
-                                            }
-
-                                        }
-                                    } else {
-                                        Utils.showCustomToastMsg(getActivity(), R.string.imvalid_entry);
-                                    }
-                                } else {
-                                    if (loser&&!actFlag) {
-                                        appPreference.savePref(BET_START_STATUS,"false");
-                                        actFlag=true;
-                                        stopLocationService(serviceIntent);
-                                        cancelTimer();
-                                        clearSavedBetItems();
-                                        loser = false;
-                                        counterHandler.removeCallbacks(counterRunnable);
-                                        appPreference.savePref(Contents.UPDATE_METER, "0");
-                                        if(getActivity()!=null) {
-                                            Intent i = new Intent(getActivity(), LoserActivity.class);
-                                            i.putExtra(MYBETS_betid, betId);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-
-                                    }
-                                }
-                            }
-                            new Handler().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    publishLiveDetails(bodyString);
-                                }
-                            });
-
-                        }
-                    }else{
-                        System.out.println("Null response");
-                    }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if(CustomProgress.getInstance().isShowing())
-                CustomProgress.getInstance().hideProgress();
-            }
-        });
-
-    }
 
     private void clearSavedBetItems() {
         appPreference.saveDistance("0.0");
@@ -1381,7 +1278,7 @@ PolylineOptions polylineOptions=null;
                 }
 
                 challengerId = jsonObject2.getString(MYBETS_challengerid);
-
+                appPreference.saveChallengerId(challengerId);
                 liveBetUserListAdapter = new LiveBetUserListAdapter(getActivity(), liveBetDetailsArrayList);
                 betMembersRecyclerView.setHasFixedSize(true);
                 betMembersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -1476,6 +1373,27 @@ Handler mHandler=new Handler();
 
         return (int)startLocation.distanceTo(positionLocation);
     }
+
+
+
+    private void parseData(String s){
+
+        try {
+            JSONObject mainJsonObject=new JSONObject(s);
+            if(mainJsonObject.getString("winner").equals("no winner")){
+
+            }else{
+
+            }
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

@@ -42,7 +42,6 @@ import com.androidapp.fitbet.service.LocService;
 import com.androidapp.fitbet.ui.ArchivesListActivity;
 import com.androidapp.fitbet.ui.BetCreationActivity;
 import com.androidapp.fitbet.ui.CreateGroupActivity;
-import com.androidapp.fitbet.ui.CreditPurchaseActivity;
 import com.androidapp.fitbet.ui.MessageListActivity;
 import com.androidapp.fitbet.ui.adapters.JoinBetsDetailsListAdapter;
 import com.androidapp.fitbet.ui.adapters.MyBetsDetailsListAdapter;
@@ -380,12 +379,8 @@ private LocationReceiveListener locationReceiveListener;
                     Log.e("fitbet","Gps not enabled");
                     createLocationRequest();
                 }else{
-                    if(usetr_credit.equals("0")){
-                        Utils.showCustomToastMsg(getActivity(), R.string.you_don_have_credit);
-                        Intent i = new Intent(getActivity(), CreditPurchaseActivity.class);
-                        startActivity(i);
-                    }else{
-                        searchView.setFocusable(false);
+
+                    searchView.setFocusable(false);
                         searchView.setClickable(false);
                         upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
                         my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
@@ -408,7 +403,7 @@ private LocationReceiveListener locationReceiveListener;
                         i.putExtra(Contents.START_Address, "0");
                         i.putExtra(Contents.END_Address, "0");
                         startActivity(i);
-                    }
+
                 }
 
             }
@@ -596,11 +591,7 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                 Log.e("fitbet mLocationM","Gps not enabled");
        createLocationRequest();
             }else{
-                if(usetr_credit.equals("0")){
-                    Utils.showCustomToastMsg(getActivity(), R.string.you_don_have_credit);
-                    Intent i = new Intent(getActivity(), CreditPurchaseActivity.class);
-                    startActivity(i);
-                }else{
+
                     searchView.setFocusable(false);
                     searchView.setClickable(false);
                     upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
@@ -623,7 +614,7 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                     i.putExtra(Contents.START_Address, "0");
                     i.putExtra(Contents.END_Address, "0");
                     startActivity(i);
-                }
+
             }
         } else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("4")){
             upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));

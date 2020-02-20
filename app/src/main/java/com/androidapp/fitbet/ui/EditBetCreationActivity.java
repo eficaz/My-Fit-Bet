@@ -26,7 +26,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.android.billingclient.api.BillingClient;
+
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
 import com.androidapp.fitbet.customview.MyDialog;
@@ -162,8 +162,6 @@ public class EditBetCreationActivity extends BaseActivity {
     boolean distanceKm=false;
 
     boolean distanceLocation=false;
-
-    private BillingClient billingClient;
 
     String credits="0";
 
@@ -651,9 +649,6 @@ private MyDialog noInternetDialog;
                     Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_enter_bet_name);
                 }else if(bet_credit.getText().toString().equals("")){
                     Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.enter_credit);
-                }else if((Integer.parseInt(credits)<Integer.parseInt(bet_credit.getText().toString()))){
-                    showMessage("Your credits are less than the bet score, so not possible to create bet!");
-
                 }else if(fromDate.equals("")||toDate.equals("")) {
                     Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.select_date);
                 } else if(bet_description.getText().toString().trim().equals("")){
