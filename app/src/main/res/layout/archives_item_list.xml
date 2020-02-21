@@ -48,12 +48,11 @@
                 android:orientation="vertical">
 
 
-
-
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
+
                     <TextView
                         android:id="@+id/tv_Name"
                         android:layout_width="match_parent"
@@ -63,9 +62,9 @@
                         android:text="azsfsfs"
                         android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -97,10 +96,12 @@
                         android:text="ghdsghlk" />
 
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
+
                     <TextView
                         android:id="@+id/users_count"
                         android:layout_width="wrap_content"
@@ -113,8 +114,8 @@
                         android:drawablePadding="7dp"
                         android:drawableStart="@drawable/coin_icon"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
+
                     <TextView
                         android:id="@+id/left_days"
                         android:layout_width="wrap_content"
@@ -127,8 +128,7 @@
                         android:visibility="gone"
                         android:textSize="10sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
                 </TableRow>
             </LinearLayout>
 

@@ -116,6 +116,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Set to AM or PM mode
+     *
      * @param amOrPm AM or PM id
      */
     public void setAmOrPm(int amOrPm) {
@@ -124,6 +125,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Set to AM or PM mode when pressed
+     *
      * @param amOrPmPressed AM or PM pressed
      */
     public void setAmOrPmPressed(int amOrPmPressed) {
@@ -238,6 +240,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Get circle background color
+     *
      * @return background color
      */
     public int getCircleColor() {
@@ -246,6 +249,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Assign circle background color
+     *
      * @param backgroundColor background color
      */
     public void setCircleColor(int backgroundColor) {
@@ -254,6 +258,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Get AP/PM text color
+     *
      * @return text color
      */
     public int getAmPmTextColor() {
@@ -262,6 +267,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Assign AP/PM text color
+     *
      * @param amPmTextColor text color
      */
     public void setAmPmTextColor(int amPmTextColor) {
@@ -270,6 +276,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Get select background color
+     *
      * @return text color
      */
     public int getSelectCircleColor() {
@@ -278,6 +285,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Set select background color
+     *
      * @param selectBackgroundColor background color
      */
     public void setSelectCircleColor(int selectBackgroundColor) {
@@ -286,6 +294,7 @@ public class TimeAmPmCirclesView extends View {
 
     /**
      * Determine if AM / PM selected and unselected colors must be inverted
+     *
      * @param inverseColors true to inverse color
      */
     public void setInverseSelectedColors(boolean inverseColors) {

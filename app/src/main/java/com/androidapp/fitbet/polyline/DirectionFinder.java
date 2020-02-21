@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.GeoPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,8 +68,8 @@ public class DirectionFinder {
             route.duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
             route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
-            route.pointString=overview_polylineJson.getString("points");
-            System.out.println("Point String = "+ route.pointString);
+            route.pointString = overview_polylineJson.getString("points");
+            System.out.println("Point String = " + route.pointString);
             route.points = decodePolyLine(overview_polylineJson.getString("points"));
 
 
@@ -120,10 +119,6 @@ public class DirectionFinder {
         }
         return decoded;
     }
-
-
-
-
 
 
     @SuppressLint("StaticFieldLeak")

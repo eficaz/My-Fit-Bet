@@ -13,7 +13,7 @@ import com.androidapp.fitbet.R;
 
 public class MyDialog {
     private Dialog dialog;
-    private TextView dialogButtonOk ,dialogButtonNo;
+    private TextView dialogButtonOk, dialogButtonNo;
     private TextView title_lbl, subtitle_lbl;
     private View separator;
     private MyDialogClickListener myDialogClickListener;
@@ -22,12 +22,12 @@ public class MyDialog {
     private String flag;
 
 
-    public MyDialog(Context context, MyDialogClickListener myDialogClickListener,String title, String subtitle,String positive,String negative,boolean cancelable,String flag) {
-   this.myDialogClickListener=myDialogClickListener;
-   this.flag=flag;
+    public MyDialog(Context context, MyDialogClickListener myDialogClickListener, String title, String subtitle, String positive, String negative, boolean cancelable, String flag) {
+        this.myDialogClickListener = myDialogClickListener;
+        this.flag = flag;
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.alert_two_buttons);
-        if(dialog.getWindow()!=null)
+        if (dialog.getWindow() != null)
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         initViews();
@@ -36,8 +36,8 @@ public class MyDialog {
 
         initEvents();
 
-        if(negative.equals(""))
-            negativeExist=false;
+        if (negative.equals(""))
+            negativeExist = false;
         setTitle(title);
         setSubtitle(subtitle);
         setNegativeLabel(negative);
@@ -46,42 +46,49 @@ public class MyDialog {
     }
 
 
-    public void show(){
-        if(!negativeExist){
+    public void show() {
+        if (!negativeExist) {
             dialogButtonNo.setVisibility(View.GONE);
             separator.setVisibility(View.GONE);
         }
         dialog.show();
     }
-    public boolean isShowing(){
-        if(dialog!=null)
-        return dialog.isShowing();
+
+    public boolean isShowing() {
+        if (dialog != null)
+            return dialog.isShowing();
         else return false;
     }
 
-    public void dismiss(){
+    public void dismiss() {
         dialog.dismiss();
     }
-    public void setTitle(String title){
+
+    public void setTitle(String title) {
         title_lbl.setText(title);
     }
-    public void setSubtitle(String subtitle){
+
+    public void setSubtitle(String subtitle) {
         subtitle_lbl.setText(subtitle);
     }
-    private void setPositiveLabel(String positive){
+
+    private void setPositiveLabel(String positive) {
         dialogButtonOk.setText(positive);
     }
-    private void setNegativeLabel(String negative){
+
+    private void setNegativeLabel(String negative) {
         dialogButtonNo.setText(negative);
     }
-    private void setBoldPositiveLabel(boolean bold){
-        if(bold)
+
+    private void setBoldPositiveLabel(boolean bold) {
+        if (bold)
             dialogButtonOk.setTypeface(null, Typeface.BOLD);
         else
             dialogButtonOk.setTypeface(null, Typeface.NORMAL);
     }
-    private void setTypefaces(Typeface appleFont){
-        if(appleFont!=null) {
+
+    private void setTypefaces(Typeface appleFont) {
+        if (appleFont != null) {
             title_lbl.setTypeface(appleFont);
             subtitle_lbl.setTypeface(appleFont);
             dialogButtonOk.setTypeface(appleFont);
@@ -92,19 +99,20 @@ public class MyDialog {
 
     private void initViews() {
         title_lbl = dialog.findViewById(R.id.title);
-        subtitle_lbl =  dialog.findViewById(R.id.subtitle);
-        dialogButtonOk =  dialog.findViewById(R.id.dialogButtonOK);
-        dialogButtonNo =  dialog.findViewById(R.id.dialogButtonNO);
-        separator =  dialog.findViewById(R.id.separator);
+        subtitle_lbl = dialog.findViewById(R.id.subtitle);
+        dialogButtonOk = dialog.findViewById(R.id.dialogButtonOK);
+        dialogButtonNo = dialog.findViewById(R.id.dialogButtonNO);
+        separator = dialog.findViewById(R.id.separator);
     }
 
-    private void initEvents(){
+    private void initEvents() {
         dialogButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (myDialogClickListener != null) {
-                    myDialogClickListener.onClick(MyDialog.this,1,flag);
-                }dismiss();
+                    myDialogClickListener.onClick(MyDialog.this, 1, flag);
+                }
+                dismiss();
 
             }
 
@@ -113,13 +121,14 @@ public class MyDialog {
             @Override
             public void onClick(View view) {
                 if (myDialogClickListener != null) {
-                    myDialogClickListener.onClick(MyDialog.this,0,flag);
-                } dismiss();
+                    myDialogClickListener.onClick(MyDialog.this, 0, flag);
+                }
+                dismiss();
             }
         });
     }
 
-    public interface MyDialogClickListener{
-        void onClick(MyDialog dialog,int type,String flag);
+    public interface MyDialogClickListener {
+        void onClick(MyDialog dialog, int type, String flag);
     }
 }

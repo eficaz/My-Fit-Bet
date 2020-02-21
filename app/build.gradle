@@ -30,8 +30,8 @@ android {
         applicationId "com.androidapp.fitbet"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 9
-        versionName "1.3"
+        versionCode 10
+        versionName "1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
     }
@@ -66,17 +66,17 @@ android {
             storePassword 'eficaz@2020'
         }
     }
-   /* productFlavors {
-        apiTest_debug {
-            dimension 'FitBet'
-            buildConfigField "Boolean", "isProduction", "true"
-        }
-        apiLive_Relese {
-            dimension 'FitBet'
-            buildConfigField "Boolean", "isProduction", "true"
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }*/
+    /* productFlavors {
+         apiTest_debug {
+             dimension 'FitBet'
+             buildConfigField "Boolean", "isProduction", "true"
+         }
+         apiLive_Relese {
+             dimension 'FitBet'
+             buildConfigField "Boolean", "isProduction", "true"
+             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+         }
+     }*/
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

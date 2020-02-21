@@ -32,12 +32,10 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -55,8 +53,6 @@ import com.google.firebase.iid.InstanceIdResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 
 import butterknife.Bind;
@@ -90,16 +86,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Bind(R.id.bt_google)
     Button bt_google;*/
 
-private GoogleSignInClient googleSignInClient;
+    private GoogleSignInClient googleSignInClient;
     TextView textView;
     private static final int RC_SIGN_IN = 1;
 
     private CallbackManager mCallbackManager;
     private static final String EMAIL = "email";
     private static final String AUTH_TYPE = "rerequest";
-    String deviceID="";
-    String CountryName="";
-    String CountryCode="";
+    String deviceID = "";
+    String CountryName = "";
+    String CountryCode = "";
 
     @Bind(R.id.login_button)
     LoginButton mLoginButton;
@@ -122,12 +118,13 @@ private GoogleSignInClient googleSignInClient;
     @Bind(R.id.main_lay)
     LinearLayout main_lay;
 
-    String token="";
+    String token = "";
 
    /* @Bind(R.id.space1)
     Space space1;*/
 
     private MyDialog noInternetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,8 +139,8 @@ private GoogleSignInClient googleSignInClient;
 
         AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "0");
         AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
-        noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
-        mLoginButton.setReadPermissions(Arrays.asList("public_profile,email,user_birthday"));
+        noInternetDialog = new MyDialog(this, null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
+        mLoginButton.setPermissions(Arrays.asList("public_profile,email,user_birthday"));
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -152,16 +149,16 @@ private GoogleSignInClient googleSignInClient;
                     Log.w("FCM TOKEN Failed", task.getException());
                 } else {
                     token = task.getResult().getToken();
-                    deviceID=token;
+                    deviceID = token;
                 }
             }
         });
 
         CountryName = getResources().getConfiguration().locale.getDisplayCountry();
-        CountryCode= getResources().getConfiguration().locale.getCountry();
+        CountryCode = getResources().getConfiguration().locale.getCountry();
 
 
-        GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -169,15 +166,15 @@ private GoogleSignInClient googleSignInClient;
             @Override
             public void onClick(View v) {
                 AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
-                if (Utils.isConnectedToInternet(LoginActivity.this)){
+                if (Utils.isConnectedToInternet(LoginActivity.this)) {
                     Intent signInIntent = googleSignInClient.getSignInIntent();
-                    startActivityForResult(signInIntent,RC_SIGN_IN);
-                } else{
-                  noInternetDialog.show();
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                } else {
+                    noInternetDialog.show();
                 }
             }
         });
-        main_lay.getViewTreeObserver().addOnGlobalLayoutListener(new             ViewTreeObserver.OnGlobalLayoutListener() {
+        main_lay.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 Rect r = new Rect();
@@ -197,12 +194,12 @@ private GoogleSignInClient googleSignInClient;
             @Override
             public void onClick(View v) {
                 AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
-                if (Utils.isConnectedToInternet(LoginActivity.this)){
+                if (Utils.isConnectedToInternet(LoginActivity.this)) {
                     mLoginButton.performClick();
-                } else{
-             noInternetDialog.show();
+                } else {
+                    noInternetDialog.show();
                 }
-               // CustomProgress.getInstance().showProgress(LoginActivity.this, "", false);
+                // CustomProgress.getInstance().showProgress(LoginActivity.this, "", false);
             }
         });
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -210,17 +207,17 @@ private GoogleSignInClient googleSignInClient;
             public void onClick(View view) {
                 CustomProgress.getInstance().showProgress(LoginActivity.this, "", false);
                 Intent intent = googleSignInClient.getSignInIntent();
-                startActivityForResult(intent,RC_SIGN_IN);
+                startActivityForResult(intent, RC_SIGN_IN);
             }
         });
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "false");
-                if (Utils.isConnectedToInternet(LoginActivity.this)){
+                if (Utils.isConnectedToInternet(LoginActivity.this)) {
                     reg();
-                } else{
-           noInternetDialog.show();
+                } else {
+                    noInternetDialog.show();
                 }
             }
         });
@@ -228,9 +225,9 @@ private GoogleSignInClient googleSignInClient;
             @Override
             public void onClick(View v) {
                 AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "false");
-                if (Utils.isConnectedToInternet(LoginActivity.this)){
+                if (Utils.isConnectedToInternet(LoginActivity.this)) {
                     login();
-                } else{
+                } else {
                     noInternetDialog.show();
                 }
 
@@ -240,20 +237,22 @@ private GoogleSignInClient googleSignInClient;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 1) {
                     if (!et_password.getText().toString().trim().equals("")) {
-                       //space.setVisibility(View.VISIBLE);
+                        //space.setVisibility(View.VISIBLE);
                         //space1.setVisibility(View.VISIBLE);
                     } else {
                         Utils.showCustomToastMsg(LoginActivity.this, R.string.incorrect_credentials);
                     }
-                }else{
+                } else {
                     //space.setVisibility(View.GONE);
                     //space1.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -266,11 +265,13 @@ private GoogleSignInClient googleSignInClient;
 
                 getUserProfile(loginResult.getAccessToken());
             }
+
             @Override
             public void onCancel() {
                 System.out.println("onCancel");
                 CustomProgress.getInstance().hideProgress();
             }
+
             @Override
             public void onError(FacebookException exception) {
                 System.out.println("onError");
@@ -282,32 +283,34 @@ private GoogleSignInClient googleSignInClient;
 
 
     private void login() {
-        if(et_username.getText().toString().trim().equals("")){
+        if (et_username.getText().toString().trim().equals("")) {
             Utils.showCustomToastMsg(LoginActivity.this, R.string.incorrect_credentials);
-        }else if(et_password.getText().toString().trim().equals("")) {
+        } else if (et_password.getText().toString().trim().equals("")) {
             Utils.showCustomToastMsg(LoginActivity.this, R.string.incorrect_credentials);
-        }else if(!Utils.isValidEmail(et_username.getText().toString().trim())){
+        } else if (!Utils.isValidEmail(et_username.getText().toString().trim())) {
             Utils.showCustomToastMsg(LoginActivity.this, R.string.enter_valid_email);
         } else {
-            if (Utils.isConnectedToInternet(LoginActivity.this)){
-                callloginApi(et_username.getText().toString().trim(),et_password.getText().toString().trim());
+            if (Utils.isConnectedToInternet(LoginActivity.this)) {
+                callloginApi(et_username.getText().toString().trim(), et_password.getText().toString().trim());
                 CustomProgress.getInstance().showProgress(this, "", false);
-            } else{
-   noInternetDialog.show();
+            } else {
+                noInternetDialog.show();
             }
 
         }
     }
-    String msg="Error";
+
+    String msg = "Error";
+
     private void callloginApi(String username, String password) {
 
 
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrack(username,password,deviceID,"android");
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrack(username, password, deviceID, "android");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-              msg=msg+response.code();
+                msg = msg + response.code();
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     loginSuccess(bodyString);
@@ -315,71 +318,76 @@ private GoogleSignInClient googleSignInClient;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 CustomProgress.getInstance().hideProgress();
-                msg=msg+"Call failed:"+t.getLocalizedMessage();
+                msg = msg + "Call failed:" + t.getLocalizedMessage();
 
 
             }
         });
 
-       // showError(msg);
+        // showError(msg);
     }
 
-    private void showError(String message){
+    private void showError(String message) {
 
 
-        MyDialog eDialog=new MyDialog(this,null,"",message,"OK","",false,"error");
+        MyDialog eDialog = new MyDialog(this, null, "", message, "OK", "", false, "error");
         eDialog.show();
     }
 
-           private void loginSuccess(String bodyString) {
+    private void loginSuccess(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");
             String msg = jsonObject.getString("Msg");
-            if(status.trim().equals("Ok")){
+            if (status.trim().equals("Ok")) {
                 AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
                 CustomProgress.getInstance().hideProgress();
                 startActivity(new Intent(LoginActivity.this, DashBoardActivity.class));
                 finish();
 
-                JSONObject jsonObject1 = new JSONObject( jsonObject.getString("userdetails"));
+                JSONObject jsonObject1 = new JSONObject(jsonObject.getString("userdetails"));
                 String reg_key = jsonObject1.getString("reg_key");
-                System.out.println("REG KEY=== "+reg_key);
+                System.out.println("REG KEY=== " + reg_key);
                 AppPreference.getPrefsHelper().savePref(Contents.REG_KEY, reg_key);
                 //JSONArray jsonArray = new JSONArray(reg_key);
 
 
-            }else{
+            } else {
                 CustomProgress.getInstance().hideProgress();
                 Utils.showCustomToastMsg(LoginActivity.this, msg);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void reg() {
-    startActivity(new Intent(this,SignUpActivity.class));
-    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(new Intent(this, SignUpActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
+
     @Override
     public void onBackPressed() {
         finish();
         CustomProgress.getInstance().hideProgress();
         super.onBackPressed();
     }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -402,31 +410,32 @@ private GoogleSignInClient googleSignInClient;
 
 
     private void updateUI(@Nullable GoogleSignInAccount account) {
-        String name="";
+        String name = "";
         if (account != null) {
-            CountryName=getResources().getConfiguration().locale.getDisplayCountry();
+            CountryName = getResources().getConfiguration().locale.getDisplayCountry();
 
-                name= account.getDisplayName();
+            name = account.getDisplayName();
 
             Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrackWithGoogle(
                     name,
                     account.getEmail(),
                     deviceID,
-                   account.getId(),
+                    account.getId(),
                     String.valueOf(account.getPhotoUrl()),
-                    DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
+                    DEFAULT_COUNTRY, DEFAULT_COUNTRY_SHORT_NAME, "android");
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
-                        System.out.println("Google login resp "+bodyString);
+                        System.out.println("Google login resp " + bodyString);
                         AppPreference.getPrefsHelper().savePref(Contents.REG_WITH_F_OR_G, "true");
                         loginSuccess(bodyString);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
 
@@ -438,15 +447,15 @@ private GoogleSignInClient googleSignInClient;
         }
     }
 
-    private void gotoProfile(GoogleSignInResult result){
+    private void gotoProfile(GoogleSignInResult result) {
 
-        String name="";
-        System.out.println("Google sign in result "+result.toString());
+        String name = "";
+        System.out.println("Google sign in result " + result.toString());
         CountryName = getResources().getConfiguration().locale.getDisplayCountry();
-        if(result.getSignInAccount().getDisplayName().equals(null)){
-            name= result.getSignInAccount().getEmail();
-        }else{
-            name= result.getSignInAccount().getDisplayName();
+        if (result.getSignInAccount().getDisplayName().equals(null)) {
+            name = result.getSignInAccount().getEmail();
+        } else {
+            name = result.getSignInAccount().getDisplayName();
         }
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoginTrackWithGoogle(
                 name,
@@ -454,7 +463,7 @@ private GoogleSignInClient googleSignInClient;
                 deviceID,
                 result.getSignInAccount().getId(),
                 String.valueOf(result.getSignInAccount().getPhotoUrl()),
-                DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
+                DEFAULT_COUNTRY, DEFAULT_COUNTRY_SHORT_NAME, "android");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -466,6 +475,7 @@ private GoogleSignInClient googleSignInClient;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
@@ -477,8 +487,8 @@ private GoogleSignInClient googleSignInClient;
 
 
     private void getUserProfile(AccessToken currentAccessToken) {
-        if(!CustomProgress.getInstance().isShowing())
-        CustomProgress.getInstance().showProgress(this, "", false);
+        if (!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(this, "", false);
         GraphRequest request = GraphRequest.newMeRequest(
                 currentAccessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -490,8 +500,8 @@ private GoogleSignInClient googleSignInClient;
                             String email = object.getString("email");
                             String id = object.getString("id");
                             String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
-                            System.out.println("Graph request "+first_name+" , "+last_name+" , "+email+" , "+id+" , "+image_url);
-                            gotoFbProfile(first_name+" "+last_name,email,deviceID,id,image_url);
+                            System.out.println("Graph request " + first_name + " , " + last_name + " , " + email + " , " + id + " , " + image_url);
+                            gotoFbProfile(first_name + " " + last_name, email, deviceID, id, image_url);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -513,32 +523,30 @@ private GoogleSignInClient googleSignInClient;
                 deviceID,
                 f_facebookID,
                 profile_pic,
-                DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
+                DEFAULT_COUNTRY, DEFAULT_COUNTRY_SHORT_NAME, "android");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    if(response.body()!=null){
+                    if (response.body() != null) {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
 
                         loginSuccess(bodyString);
-                    }else{
-                        Utils.showCustomToastMsg(LoginActivity.this, ""+response.body());
+                    } else {
+                        Utils.showCustomToastMsg(LoginActivity.this, "" + response.body());
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
-
-
-
 
 
 }

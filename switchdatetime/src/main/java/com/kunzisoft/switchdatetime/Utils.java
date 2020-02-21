@@ -39,6 +39,7 @@ public class Utils {
 
     /**
      * Try to speak the specified text, for accessibility. Only available on JB or later.
+     *
      * @param text Text to announce.
      */
     @SuppressLint("NewApi")

@@ -1,8 +1,10 @@
 package com.androidapp.fitbet.ui.fragments;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -26,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +68,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,12 +80,10 @@ import retrofit2.Response;
 import static android.content.Context.LOCATION_SERVICE;
 import static com.androidapp.fitbet.utils.Contents.BET_PAGE_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.BET_START_STATUS;
-import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_CREDIT_SCORE;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
-import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_USERS;
 import static com.androidapp.fitbet.utils.Contents.MYBETS;
 
-public class BetFragment extends Fragment implements LocationReceiveListener {
+public class BetFragment extends Fragment implements LocationReceiveListener,OnSuccessListener<LocationSettingsResponse> {
 
     @Bind(R.id.bt_createGroup)
     LinearLayout bt_createGroup;
@@ -147,42 +149,68 @@ public class BetFragment extends Fragment implements LocationReceiveListener {
     @Bind(R.id.bt_createGroup_imageView)
     ImageView bt_createGroup_imageView;
 
-    ArrayList<MyBets> MyBetesDetails=null;
+    ArrayList<MyBets> MyBetesDetails = null;
     ArrayList<JoinBets> joinDetails;
 
-    MyBetsDetailsListAdapter  myBetsListAdapter;
+    MyBetsDetailsListAdapter myBetsListAdapter;
     UpcommingBetsDetailsListAdapter upcommingBetsDetailsListAdapter;
     JoinBetsDetailsListAdapter joinBetsDetailsListAdapter;
     public static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
-    int tab_selection=0;
-    String usetr_credit="0";
+    int tab_selection = 0;
+
 
     private LocationManager mLocationManager;
 
-    private int REQUEST_CHECK_SETTINGS=111;
+    private int REQUEST_CHECK_SETTINGS = 111;
     private AppPreference appPreference;
-private LocationReceiveListener locationReceiveListener;
+    private LocationReceiveListener locationReceiveListener;
+private boolean isGpsOn;
+
+    private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("GPS receiver ");
+            if (Objects.requireNonNull(intent.getAction()).matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                //Do your stuff on GPS status change
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Objects.requireNonNull(getActivity()))) {
+                    Log.e("fitbet ds", "Gps not enabled");
+                    isGpsOn=false;
+                    createLocationRequest();
+                }else {
+                   isGpsOn=true;
+                }
+            }
+        }
+    };
+
     @Override
     public void onDestroy() {
-        if(!AppPreference.getPrefsHelper().getPref(BET_START_STATUS,"").equals("true")&&SLApplication.isServiceRunning)
+        if (! appPreference.getPref(BET_START_STATUS, "").equals("true") && SLApplication.isServiceRunning)
             stopLocationService();
-
+        try {
+            Objects.requireNonNull(getContext()).unregisterReceiver(gpsReceiver);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
-
 
 
     @Override
     public void onStop() {
         System.out.println("Bet inside onStop ");
-        if(!AppPreference.getPrefsHelper().getPref(BET_START_STATUS,"").equals("true")&&SLApplication.isServiceRunning) {
+        if (! appPreference.getPref(BET_START_STATUS, "").equals("true") && SLApplication.isServiceRunning) {
             System.out.println("Bet stopping service ");
             stopLocationService();
         }
-        if(locationReceiveListener!=null)
-        LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
-
+        if (locationReceiveListener != null)
+            LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
+try {
+    Objects.requireNonNull(getContext()).unregisterReceiver(gpsReceiver);
+}catch (IllegalArgumentException e){
+    e.printStackTrace();
+}
         super.onStop();
     }
 
@@ -205,7 +233,7 @@ private LocationReceiveListener locationReceiveListener;
     }
 
     private void stopLocationService() {
-        if(SLApplication.isServiceRunning) {
+        if (SLApplication.isServiceRunning) {
             Intent intent = new Intent(getActivity(), LocService.class);
             getActivity().stopService(intent);
             new LocService().stopSelf();
@@ -216,10 +244,11 @@ private LocationReceiveListener locationReceiveListener;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated BetFragment");
-        appPreference=      AppPreference.getPrefsHelper(getActivity());
-       appPreference.savePref(DASH_BOARD_POSICTION,"1");
-        locationReceiveListener=this;
-    LocReceiver.registerLocationReceiveListener(locationReceiveListener);
+        appPreference = AppPreference.getPrefsHelper(getActivity());
+        appPreference.savePref(DASH_BOARD_POSICTION, "1");
+        locationReceiveListener = this;
+        LocReceiver.registerLocationReceiveListener(locationReceiveListener);
+        Objects.requireNonNull(getContext()).registerReceiver(gpsReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         if (checkPermissions()) { //Yes permissions are granted by the user. Go to the next step.
             if (!SLApplication.isServiceRunning) {
                 //name.setText(R.string.msg_location_service_started);
@@ -231,10 +260,11 @@ private LocationReceiveListener locationReceiveListener;
         } else {  //No user has not granted the permissions yet. Request now.
             requestPermissions();
         }
-;
+        ;
 
-        intintView();
+        initialiseView();
     }
+
     private void requestPermissions() {
         boolean shouldProvideRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
@@ -264,6 +294,7 @@ private LocationReceiveListener locationReceiveListener;
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
+
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -271,6 +302,7 @@ private LocationReceiveListener locationReceiveListener;
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(actionStringId), listener).show();
     }
+
     private boolean checkPermissions() {
         int permissionState1 = ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -283,7 +315,7 @@ private LocationReceiveListener locationReceiveListener;
     }
 
     private void startLocationService() {
-        if(!SLApplication.isServiceRunning) {
+        if (!SLApplication.isServiceRunning) {
             Intent intent = new Intent(getActivity(), LocService.class);
             getActivity().startService(intent);
 
@@ -299,6 +331,7 @@ private LocationReceiveListener locationReceiveListener;
             return false;
         return providers.contains(LocationManager.GPS_PROVIDER);
     }
+
     private void createLocationRequest() {
 
 
@@ -312,11 +345,12 @@ private LocationReceiveListener locationReceiveListener;
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
 
-                Log.d("Location","High accuracy location enabled");
+                Log.d("Location", "High accuracy location enabled");
                 // Toast.makeText(DashBoardActivity.this, "addOnSuccessListener", Toast.LENGTH_SHORT).show();
                 // All location settings are satisfied. The client can initialize
                 // location requests here.
                 // ...
+
             }
         });
 
@@ -340,10 +374,9 @@ private LocationReceiveListener locationReceiveListener;
             }
         });
     }
-    private void intintView() {
-        callDashboardDetailsApi();
-    /*    upcomming_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_active_icon));
-        my_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_inactive_icon));*/
+
+    private void initialiseView() {
+
         tv_my_bets.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.gray_1));
         tv_upcomming_bets.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.light_blue));
         upcomming_bets_view_line.setBackgroundResource(R.color.light_blue);
@@ -351,17 +384,17 @@ private LocationReceiveListener locationReceiveListener;
         //callUpcommingBetsAPi();
         upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon_active));
         my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-        bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
+        bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
         bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
         bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
-        tab_selection=0;
+        tab_selection = 0;
         bt_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"4");
+                 appPreference.savePref(BET_PAGE_POSICTION, "4");
                 upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
                 my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-                bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
+                bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
                 bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
                 bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon_active));
 
@@ -375,34 +408,35 @@ private LocationReceiveListener locationReceiveListener;
         bt_createBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                appPreference.savePref(BET_PAGE_POSICTION, "3");
                 if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getActivity())) {
-                    Log.e("fitbet","Gps not enabled");
+                    Log.e("fitbet", "Gps not enabled");
                     createLocationRequest();
-                }else{
-
+                } else {
+                    isGpsOn=false;
                     searchView.setFocusable(false);
-                        searchView.setClickable(false);
-                        upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
-                        my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-                        bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
-                        bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
-                        bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
+                    searchView.setClickable(false);
+                    upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
+                    my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
+                    bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
+                    bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
+                    bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
 
-                        //startActivity(new Intent(getActivity(), BetCreationActivity.class));
-                       appPreference.savePref(Contents.MYBETS_betname, "");
-                       appPreference.savePref(Contents.CREDIT_SCORE, "");
-                       appPreference.savePref(Contents.START_DATE, "");
-                       appPreference.savePref(Contents.MYBETS_enddate, "");
-                       appPreference.savePref(Contents.MYBETS_description,  "");
-                        Intent i = new Intent(getActivity(), BetCreationActivity.class);
-                        i.putExtra(Contents.pass_startlatitude,"0");
-                        i.putExtra(Contents.pass_startlongitude,"0");
-                        i.putExtra(Contents.pass_endlatitude,"0");
-                        i.putExtra(Contents.pass_endlongitude,"0");
-                        i.putExtra(Contents.MYBETS_distance,"0");
-                        i.putExtra(Contents.START_Address, "0");
-                        i.putExtra(Contents.END_Address, "0");
-                        startActivity(i);
+                    //startActivity(new Intent(getActivity(), BetCreationActivity.class));
+                    appPreference.savePref(Contents.MYBETS_betname, "");
+                    appPreference.savePref(Contents.CREDIT_SCORE, "");
+                    appPreference.savePref(Contents.START_DATE, "");
+                    appPreference.savePref(Contents.MYBETS_enddate, "");
+                    appPreference.savePref(Contents.MYBETS_description, "");
+                    Intent i = new Intent(getActivity(), BetCreationActivity.class);
+                    i.putExtra(Contents.pass_startlatitude, "0");
+                    i.putExtra(Contents.pass_startlongitude, "0");
+                    i.putExtra(Contents.pass_endlatitude, "0");
+                    i.putExtra(Contents.pass_endlongitude, "0");
+                    i.putExtra(Contents.MYBETS_distance, "0");
+                    i.putExtra(Contents.START_Address, "0");
+                    i.putExtra(Contents.END_Address, "0");
+                    startActivity(i);
 
                 }
 
@@ -415,7 +449,7 @@ private LocationReceiveListener locationReceiveListener;
                 searchView.setClickable(false);
                 upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon_active));
                 my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-                bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
+                bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
                 bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
                 bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
 
@@ -427,19 +461,19 @@ private LocationReceiveListener locationReceiveListener;
                 my_bet_view.setBackgroundResource(R.color.gray_1);
                 searchView.setText("");
                 callUpcommingBetsAPi();
-                tab_selection=0;
+                tab_selection = 0;
 
             }
         });
         my_bets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
+                 appPreference.savePref(BET_PAGE_POSICTION, "1");
                 searchView.setFocusable(false);
                 searchView.setClickable(false);
                 upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
                 my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon_active));
-                bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
+                bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
                 bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
                 bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
 /*
@@ -451,7 +485,7 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                 my_bet_view.setBackgroundResource(R.color.light_blue);
                 searchView.setText("");
                 callmyBetsApi();
-                tab_selection=1;
+                tab_selection = 1;
 
             }
         });
@@ -479,13 +513,11 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
             @Override
             public void afterTextChanged(Editable editable) {
                 //after the change calling the method and passing the search input
-                try{
-                    if(editable.toString().equals("")){
-                        filter(" ");
-                    }else{
+                try {
+                    if (!editable.toString().trim().equals("")) {
                         filter(editable.toString());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -496,16 +528,16 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
             @Override
             public void onClick(View v) {
                 if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getActivity())) {
-                    Log.e("fitbet bt_joinbet","Gps not enabled");
-             createLocationRequest();
-                }else{
-                   appPreference.savePref(BET_PAGE_POSICTION,"2");
+                    Log.e("fitbet bt_joinbet", "Gps not enabled");
+                    createLocationRequest();
+                } else {
+                    appPreference.savePref(BET_PAGE_POSICTION, "2");
                     searchView.setFocusable(false);
                     searchView.setClickable(false);
                     searchView.setText("");
                     upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
                     my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-                    bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon_active));
+                    bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon_active));
                     bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
                     bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
                     callJoinBetsAPi();
@@ -525,153 +557,21 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), MessageListActivity.class);
-                i.putExtra(Contents.MYBETS_betid,"");
+                i.putExtra(Contents.MYBETS_betid, "");
                 startActivity(i);
             }
         });
 
-        if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("0")){
-            searchView.setFocusable(false);
-            searchView.setClickable(false);
-            upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon_active));
-            my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-            bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
-            bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
-            bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
 
-        /*    upcomming_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_active_icon));
-            my_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_inactive_icon));*/
-            tv_my_bets.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.gray_1));
-            tv_upcomming_bets.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.light_blue));
-            upcomming_bets_view_line.setBackgroundResource(R.color.light_blue);
-            my_bet_view.setBackgroundResource(R.color.gray_1);
-            searchView.setText("");
-            callUpcommingBetsAPi();
-            tab_selection=0;
-            //CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        }
-        else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("1")){
-            searchView.setFocusable(false);
-            searchView.setClickable(false);
-            upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
-            my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon_active));
-            bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
-            bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
-            bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
-          /*  upcomming_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_inactive_icon));
-            my_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_active_icon));*/
-            tv_my_bets.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.light_blue));
-            tv_upcomming_bets.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.gray_1));
-            upcomming_bets_view_line.setBackgroundResource(R.color.gray_1);
-            my_bet_view.setBackgroundResource(R.color.light_blue);
-            searchView.setText("");
-            callmyBetsApi();
-            tab_selection=1;
-            //CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        }
-        else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("2")){
-            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getActivity())) {
-                Log.e("fitbet mLocationManager","Gps not enabled");
-              createLocationRequest();
-            }else{
-                searchView.setFocusable(false);
-                searchView.setClickable(false);
-                searchView.setText("");
-                upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
-                my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-                bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon_active));
-                bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
-                bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
-                callJoinBetsAPi();
-               // CustomProgress.getInstance().showProgress(getActivity(), "", false);
-            }
-        }
-        else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("3")){
-            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getActivity())) {
-                Log.e("fitbet mLocationM","Gps not enabled");
-       createLocationRequest();
-            }else{
-
-                    searchView.setFocusable(false);
-                    searchView.setClickable(false);
-                    upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
-                    my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-                    bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
-                    bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
-                    bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
-                    //startActivity(new Intent(getActivity(), BetCreationActivity.class));
-                   appPreference.savePref(Contents.MYBETS_betname, "");
-                   appPreference.savePref(Contents.CREDIT_SCORE, "");
-                   appPreference.savePref(Contents.START_DATE, "");
-                   appPreference.savePref(Contents.MYBETS_enddate, "");
-                   appPreference.savePref(Contents.MYBETS_description,  "");
-                    Intent i = new Intent(getActivity(), BetCreationActivity.class);
-                    i.putExtra(Contents.pass_startlatitude,"0");
-                    i.putExtra(Contents.pass_startlongitude,"0");
-                    i.putExtra(Contents.pass_endlatitude,"0");
-                    i.putExtra(Contents.pass_endlongitude,"0");
-                    i.putExtra(Contents.MYBETS_distance,"0");
-                    i.putExtra(Contents.START_Address, "0");
-                    i.putExtra(Contents.END_Address, "0");
-                    startActivity(i);
-
-            }
-        } else if(AppPreference.getPrefsHelper().getPref(Contents.BET_PAGE_POSICTION,"").equals("4")){
-            upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
-            my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon));
-            bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon_active));
-            bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
-            bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
-            startActivity(new Intent(getActivity(), CreateGroupActivity.class));
-            getActivity().finish();
-            searchView.setFocusable(false);
-            searchView.setClickable(false);
-        }
     }
-    private void callDashboardDetailsApi() {
-        if(!CustomProgress.getInstance().isShowing())
-            CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("callDashboardDetailsApi "+bodyString);
-                    DashboardDetailReportapiresult(bodyString);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                CustomProgress.getInstance().hideProgress();
-            }
-        });
-    }
-    private void DashboardDetailReportapiresult(String bodyString) {
-
-        /*if(CustomProgress.getInstance().isShowing())
-            CustomProgress.getInstance().hideProgress();*/
-
-        try {
-            JSONObject jsonObject = new JSONObject(bodyString);
-            String status = jsonObject.getString("Status");
-            if (status.trim().equals("Ok")) {
-                String data1 = jsonObject.getString(DASH_BOARD_USERS);
-                JSONObject jsonObject1 = new JSONObject(data1);
-                usetr_credit=jsonObject1.getString(DASH_BOARD_CREDIT_SCORE);
 
 
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
+
     private void callJoinBetsAPi() {
-        if(!CustomProgress.getInstance().isShowing())
+        if (!CustomProgress.getInstance().isShowing())
             CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBetList(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBetList( appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -683,27 +583,29 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     @Override
     public void onResume() {
         super.onResume();
-
-        if(locationReceiveListener!=null)
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).registerReceiver(gpsReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        if (locationReceiveListener != null)
             LocReceiver.registerLocationReceiveListener(locationReceiveListener);
 
 
         if (!SLApplication.isServiceRunning)
             startLocationService();
 
-        if(AppPreference.getPrefsHelper().getPref(Contents.CREATE_BET_STATUS,"").equals("true")) {
+        if ( appPreference.getPref(Contents.CREATE_BET_STATUS, "").equals("true")) {
             upcomming_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.join_bet_icon));
             my_bets_imageView.setImageDrawable(getResources().getDrawable(R.drawable.my_bet_icon_active));
-            bt_joinbet_imageView .setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
+            bt_joinbet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.up_coming_bet_icon));
             bt_createBet_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_bet));
             bt_createGroup_imageView.setImageDrawable(getResources().getDrawable(R.drawable.create_group_icon));
 /*            upcomming_bets_img.setBackground(getResources().getDrawable(R.drawable.bet_inactive_icon));
@@ -714,26 +616,29 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
             my_bet_view.setBackgroundResource(R.color.light_blue);
             searchView.setText("");
             callmyBetsApi();
-            tab_selection=1;
+            tab_selection = 1;
             //CustomProgress.getInstance().showProgress(getActivity(), "", false);
-           appPreference.savePref(Contents.CREATE_BET_STATUS, "false");
-        }else{
+            appPreference.savePref(Contents.CREATE_BET_STATUS, "false");
+        } else {
 
-            switch (AppPreference.getPrefsHelper().getPref(BET_PAGE_POSICTION,"")){
+            switch ( appPreference.getPref(BET_PAGE_POSICTION, "")) {
 
                 case "0":
 
                     upcomming_bets.performClick();
                     break;
                 case "1":
-                    if(SLApplication.isBetCreatedOrEdited)
-                    my_bets.performClick();
+                    if (SLApplication.isBetCreatedOrEdited)
+                        my_bets.performClick();
                     break;
                 case "3":
-                    bt_joinbet.performClick();
+                    if(isGpsOn)
+                        bt_createBet.performClick();
+                    else
+                        upcomming_bets.performClick();
                     break;
                 case "4":
-                    bt_joinbet.performClick();
+                    upcomming_bets.performClick();
                     break;
 
             }
@@ -741,39 +646,37 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
         }
 
 
-
     }
 
     private void filter(String text) {
-        if(tab_selection==0){
+        if (tab_selection == 0) {
 
-           if(MyBetesDetails!=null)
-           if(!text.equals("")){
-               upcommingBetsDetailsListAdapter.filterList(text);
-           }else{
-               upcommingBetsDetailsListAdapter.filterList(" ");
-           }
+                if (!text.equals("")) {
+                    upcommingBetsDetailsListAdapter.filterList(text);
+                }
 
 
-        }else if(tab_selection==1){
-            if(!TextUtils.isEmpty(text))
-            myBetsListAdapter.filterList(text);
-        }else{
-            if(!TextUtils.isEmpty(text))
-            joinBetsDetailsListAdapter.filterList(text);
+        } else if (tab_selection == 1) {
+            if (!TextUtils.isEmpty(text))
+                myBetsListAdapter.filterList(text);
+        } else {
+            if (!TextUtils.isEmpty(text))
+                joinBetsDetailsListAdapter.filterList(text);
         }
+        if(CustomProgress.getInstance().isShowing())
         CustomProgress.getInstance().hideProgress();
     }
+
     private void callmyBetsApi() {
-        if(!CustomProgress.getInstance().isShowing())
+        if (!CustomProgress.getInstance().isShowing())
             CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).MyBets(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"");
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).MyBets( appPreference.getPref(Contents.REG_KEY, ""), "");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("callmyBetsApi === "+bodyString);
+                    System.out.println("callmyBetsApi === " + bodyString);
                     createMybets(bodyString);
 
                 } catch (Exception e) {
@@ -781,17 +684,19 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void createMybets(String bodyString) {
-        try{
+        try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")) {
+            if (data.equals("Ok")) {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
@@ -838,17 +743,17 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                     list.setAdapter(myBetsListAdapter);
                 }
             }
-            if(CustomProgress.getInstance().isShowing())
+            if (CustomProgress.getInstance().isShowing())
                 CustomProgress.getInstance().hideProgress();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void callUpcommingBetsAPi() {
-        if(!CustomProgress.getInstance().isShowing())
+        if (!CustomProgress.getInstance().isShowing())
             CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpcommingBet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"");
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpcommingBet( appPreference.getPref(Contents.REG_KEY, ""), "");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -860,6 +765,7 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -869,16 +775,16 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
 
 
     private void ResultJoinBets(String bodyString) {
-        try{
+        try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 MyBetesDetails = new ArrayList<>();
@@ -919,7 +825,7 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                 list.setAdapter(joinBetsDetailsListAdapter);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -927,20 +833,20 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
 
 
     private void ResultUpcommingBets(String bodyString) {
-        try{
-            System.out.println("Upcoming bets == "+bodyString);
+        try {
+            System.out.println("Upcoming bets == " + bodyString);
             JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")){
-                if(CustomProgress.getInstance().isShowing())
+            if (data.equals("Ok")) {
+                if (CustomProgress.getInstance().isShowing())
                     CustomProgress.getInstance().hideProgress();
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
 
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 MyBetesDetails = new ArrayList<>();
@@ -979,33 +885,40 @@ AppPreference.getPrefsHelper().savePref(BET_PAGE_POSICTION,"1");
                 list.setHasFixedSize(true);
                 list.setLayoutManager(new LinearLayoutManager(getActivity()));
                 list.setAdapter(upcommingBetsDetailsListAdapter);
-            }else{
+            } else {
                 String msg = jsonObject.getString("Msg");
                 Utils.showCustomToastMsg(getActivity(), msg);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View view=inflater.inflate(R.layout.bet_fragment_layout,container,false);
+        View view = inflater.inflate(R.layout.bet_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onLocationReceived(Double lat, Double lon) {
-        System.out.println("onLocationReceived bet "+lat+","+lon);
+        System.out.println("onLocationReceived bet " + lat + "," + lon);
 
-       appPreference.savePref(Contents.FOR_START_BET_LAT,""+lat);
+        appPreference.savePref(Contents.FOR_START_BET_LAT, "" + lat);
 
-       appPreference.savePref(Contents.FOR_START_BET_LOG,""+lon);
+        appPreference.savePref(Contents.FOR_START_BET_LOG, "" + lon);
+
+    }
+
+    @Override
+    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
 
     }
 }

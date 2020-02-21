@@ -25,12 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LiveBetUserListAdapter extends RecyclerView.Adapter  {
+public class LiveBetUserListAdapter extends RecyclerView.Adapter {
     Context constant;
     public ArrayList<LiveBetDetails> groupListModels;
-   // public List<Archives> selected_usersList=new ArrayList<>();
+    // public List<Archives> selected_usersList=new ArrayList<>();
     private List<LiveBetDetails> contactListFiltered;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+
     public LiveBetUserListAdapter(Context context, ArrayList<LiveBetDetails> myDataset) {
         this.constant = context;
         this.groupListModels = myDataset;
@@ -38,6 +39,7 @@ public class LiveBetUserListAdapter extends RecyclerView.Adapter  {
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -45,6 +47,7 @@ public class LiveBetUserListAdapter extends RecyclerView.Adapter  {
         LiveBetUserListAdapter.ViewHolder vh = new LiveBetUserListAdapter.ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         final LiveBetDetails m = groupListModels.get(position);
@@ -53,20 +56,20 @@ public class LiveBetUserListAdapter extends RecyclerView.Adapter  {
         viewholder.tv_Description.setText(m.getCountry());
        /* final DecimalFormat f = new DecimalFormat("##.00");
         viewholder.km.setText(""+f.format(Double.valueOf(m.getDistance())/1000)+" km");*/
-       System.out.println("Setting distance "+Double.valueOf(m.getDistance())/1000);
+        System.out.println("Setting distance " + Double.valueOf(m.getDistance()) / 1000);
 
-       viewholder.km.setText(String.format(Locale.getDefault(), "%.2f", Double.valueOf(m.getDistance())/1000));
+        viewholder.km.setText(String.format(Locale.getDefault(), "%.2f", Double.valueOf(m.getDistance()) / 1000));
         viewholder.userPostion.setText(m.getPosition());
-        final Context mContext = constant ;
+        final Context mContext = constant;
         if (!m.getProfile_pic().equals("NA")) {
-            if (m.getRegType().equals("normal")&&m.getImage_status().equals("0")){
+            if (m.getRegType().equals("normal") && m.getImage_status().equals("0")) {
 
                 Picasso.get().
-                        load(Constant.BASE_APP_IMAGE__PATH+m.getProfile_pic())
+                        load(Constant.BASE_APP_IMAGE__PATH + m.getProfile_pic())
                         .placeholder(R.drawable.image_loader)
                         .into(viewholder.img_user);
 
-            }else{
+            } else {
                 Picasso.get().
                         load(m.getProfile_pic())
                         .placeholder(R.drawable.image_loader)
@@ -87,21 +90,24 @@ public class LiveBetUserListAdapter extends RecyclerView.Adapter  {
             }
         });
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, userPostion,tv_Description,km;
+        TextView tv_Name, userPostion, tv_Description, km;
         LinearLayout rowView;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
+            rowView = convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
-            userPostion= convertView.findViewById(R.id.userPostion);
+            userPostion = convertView.findViewById(R.id.userPostion);
             tv_Description = convertView.findViewById(R.id.tv_Description);
             km = convertView.findViewById(R.id.km);
             itemView.setTag(itemView);
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

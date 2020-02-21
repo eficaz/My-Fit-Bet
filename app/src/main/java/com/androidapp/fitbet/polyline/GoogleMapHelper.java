@@ -36,12 +36,14 @@ public class GoogleMapHelper {
         for (LatLng point : points) polylineOptions.add(point);
         return polylineOptions;
     }
-    public static PolylineOptions getDefaultPolyLines(List<LatLng> points,int color) {
+
+    public static PolylineOptions getDefaultPolyLines(List<LatLng> points, int color) {
         PolylineOptions polylineOptions = new PolylineOptions()
                 .color(color).width(15);
         for (LatLng point : points) polylineOptions.add(point);
         return polylineOptions;
     }
+
     public static PolylineOptions getDottedPolylines(List<LatLng> points) {
         PolylineOptions polylineOptions = getDefaultPolyLines(points);
         polylineOptions.pattern(PATTERN_DOTTED);

@@ -27,6 +27,7 @@
                 android:gravity="center"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <com.androidapp.fitbet.utils.CircleImageView
                     android:id="@+id/img_user"
                     android:layout_width="40dp"
@@ -46,12 +47,11 @@
                 android:orientation="vertical">
 
 
-
-
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
+
                     <TextView
                         android:id="@+id/tv_Name"
                         android:layout_width="match_parent"
@@ -61,13 +61,14 @@
                         android:text=""
                         android:textSize="14sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
+
                     <TextView
                         android:id="@+id/tv_Description"
                         android:layout_width="match_parent"
@@ -77,13 +78,14 @@
                         android:textSize="10sp"
                         android:fontFamily="@font/lato_regular"
                         android:text=""
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
+
                     <TextView
                         android:id="@+id/users_count"
                         android:layout_width="wrap_content"
@@ -94,8 +96,8 @@
                         android:drawableStart="@drawable/coin_icon"
                         android:textSize="12sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
+
                     <TextView
                         android:id="@+id/left_days"
                         android:layout_width="wrap_content"
@@ -105,10 +107,10 @@
                         android:text="0"
                         android:textSize="12sp"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        />
+                        android:gravity="center|start" />
                 </TableRow>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -123,8 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_height="wrap_content" >
-
+                    android:layout_height="wrap_content">
 
 
                     <Button
@@ -141,6 +142,7 @@
                 </TableRow>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -155,8 +157,7 @@
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_height="wrap_content" >
-
+                    android:layout_height="wrap_content">
 
 
                     <Button

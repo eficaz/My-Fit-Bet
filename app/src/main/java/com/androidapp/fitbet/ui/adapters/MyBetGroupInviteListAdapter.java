@@ -32,20 +32,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
+public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter {
     Context constant;
     public ArrayList<BetGroupList> groupListModels;
-    public List<BetGroupList> selected_usersList=new ArrayList<>();
+    public List<BetGroupList> selected_usersList = new ArrayList<>();
     private List<BetGroupList> contactListFiltered;
     String betid;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
-    public MyBetGroupInviteListAdapter(Context context, ArrayList<BetGroupList> myDataset,String betid) {
+
+    public MyBetGroupInviteListAdapter(Context context, ArrayList<BetGroupList> myDataset, String betid) {
         this.constant = context;
         this.groupListModels = myDataset;
         //this.selected_usersList = selectedList;
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
-        this.betid=betid;
+        this.betid = betid;
     }
 
     @Override
@@ -55,6 +56,7 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
         MyBetGroupInviteListAdapter.ViewHolder vh = new MyBetGroupInviteListAdapter.ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         final BetGroupList m = groupListModels.get(position);
@@ -71,7 +73,7 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
         viewholder.invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callincviteApi(m.getReg_key(),betid,groupListModels.get(position).getGroupid(),position);
+                callincviteApi(m.getReg_key(), betid, groupListModels.get(position).getGroupid(), position);
                 CustomProgress.getInstance().showProgress(constant, "", false);
             }
         });
@@ -79,20 +81,21 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
     }
 
 
-    private void callincviteApi(String regKey, String betid,String groupid, final int position) {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Addbetgroup(betid,groupid);
+    private void callincviteApi(String regKey, String betid, String groupid, final int position) {
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Addbetgroup(betid, groupid);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    groupDetailsList(bodyString,position);
+                    groupDetailsList(bodyString, position);
                     CustomProgress.getInstance().hideProgress();
                     //listOrderGroup(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -105,7 +108,7 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
         try {
             jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 groupListModels.remove(position);
                 notifyDataSetChanged();
             }
@@ -113,12 +116,13 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
             e.printStackTrace();
         }
     }
+
     public void filterList(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         groupListModels.clear();
         if (charText.length() == 0) {
             groupListModels.addAll(contactListFiltered);
-        }else {
+        } else {
             for (BetGroupList wp : contactListFiltered) {
                 if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
                     groupListModels.add(wp);
@@ -135,15 +139,16 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, tv_Designation,tv_groupCount;
+        TextView tv_Name, tv_Designation, tv_groupCount;
         ConstraintLayout rowView;
         Button invite;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
+            rowView = convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
-            invite= convertView.findViewById(R.id.invite);
+            invite = convertView.findViewById(R.id.invite);
             tv_groupCount = convertView.findViewById(R.id.tv_groupCount);
             tv_Designation = convertView.findViewById(R.id.tv_Designation);
             itemView.setTag(itemView);
@@ -154,6 +159,7 @@ public class MyBetGroupInviteListAdapter extends RecyclerView.Adapter  {
             itemView.setTag(itemView);*/
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

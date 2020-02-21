@@ -4,7 +4,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -18,44 +17,44 @@ public interface RetroInterface {
     Call<ResponseBody> LoginTrack(@Body JsonObject main);*/
 
     @GET("login")
-    Call<ResponseBody> LoginTrack( @Query("Email") String username,
-                                   @Query("Password") String password,
-                                   @Query("DeviceID") String deviceID,
-                                   @Query("DeviceName") String DeviceName);
+    Call<ResponseBody> LoginTrack(@Query("Email") String username,
+                                  @Query("Password") String password,
+                                  @Query("DeviceID") String deviceID,
+                                  @Query("DeviceName") String DeviceName);
 
     @GET("signup/google")
-    Call<ResponseBody> LoginTrackWithGoogle( @Query("Firstname") String Firstname,
-                                             @Query("Email") String Email,
-                                             @Query("DeviceID") String DeviceID,
-                                             @Query("googleID") String googleID,
-                                             @Query("Picture") String Picture,
-                                             @Query("Country") String Country,
-                                             @Query("Countrycode") String CountryCode,
-                                             @Query("DeviceName") String DeviceName);
+    Call<ResponseBody> LoginTrackWithGoogle(@Query("Firstname") String Firstname,
+                                            @Query("Email") String Email,
+                                            @Query("DeviceID") String DeviceID,
+                                            @Query("googleID") String googleID,
+                                            @Query("Picture") String Picture,
+                                            @Query("Country") String Country,
+                                            @Query("Countrycode") String CountryCode,
+                                            @Query("DeviceName") String DeviceName);
 
     @GET("signup/fb")
-    Call<ResponseBody> LoginTrackWithfb( @Query("Firstname") String Firstname,
-                                             @Query("Email") String Email,
-                                             @Query("DeviceID") String DeviceID,
-                                             @Query("FacebookID") String fbID,
-                                             @Query("Picture") String Picture,
-                                             @Query("Country") String Country,
-                                             @Query("Countrycode") String CountryCode,
-                                             @Query("DeviceName") String DeviceName);
+    Call<ResponseBody> LoginTrackWithfb(@Query("Firstname") String Firstname,
+                                        @Query("Email") String Email,
+                                        @Query("DeviceID") String DeviceID,
+                                        @Query("FacebookID") String fbID,
+                                        @Query("Picture") String Picture,
+                                        @Query("Country") String Country,
+                                        @Query("Countrycode") String CountryCode,
+                                        @Query("DeviceName") String DeviceName);
 
     @GET("signup")
-    Call<ResponseBody> SignUpTrack( @Query("Firstname") String username,
-                                    @Query("Email") String email,
-                                    @Query("DeviceID") String deviceID,
-                                    @Query("Password") String password,
-                                    @Query("Country") String CountryName,
-                                    @Query("Countrycode") String CountryCode,
-                                    @Query("DeviceName") String DeviceName);
+    Call<ResponseBody> SignUpTrack(@Query("Firstname") String username,
+                                   @Query("Email") String email,
+                                   @Query("DeviceID") String deviceID,
+                                   @Query("Password") String password,
+                                   @Query("Country") String CountryName,
+                                   @Query("Countrycode") String CountryCode,
+                                   @Query("DeviceName") String DeviceName);
 
     @GET("group/addgroup?")
     Call<ResponseBody> AddGroup(@Query("name") String username,
-                                   @Query("description") String password,
-                                   @Query("reg_key") String deviceID);
+                                @Query("description") String password,
+                                @Query("reg_key") String deviceID);
 
     @GET("group/edit?")
     Call<ResponseBody> UpdateGroup(@Query("groupid") String groupid,
@@ -67,21 +66,19 @@ public interface RetroInterface {
     Call<ResponseBody> DeleteGroup(@Query("SelectedGroups") String array);
 
 
-
     @Multipart
     @POST("group/image_upload?")
-    Call<ResponseBody> updateProfile(@Part MultipartBody.Part file,@Part("groupid") RequestBody  groupid,@Part("reg_key") RequestBody  regkey);
+    Call<ResponseBody> updateProfile(@Part MultipartBody.Part file, @Part("groupid") RequestBody groupid, @Part("reg_key") RequestBody regkey);
 
 
     @GET("group?")
     Call<ResponseBody> GroupList(@Query("reg_key") String regkey,
-                                @Query("search") String search);
-
+                                 @Query("search") String search);
 
 
     @GET("group/invitemembers?")
     Call<ResponseBody> InviteGroupList(@Query("groupid") String g_id,
-                                 @Query("search") String search);
+                                       @Query("search") String search);
 
 
     @GET("group/groupdetail?")
@@ -89,88 +86,87 @@ public interface RetroInterface {
 
 
     @GET("group/addinvitemember?")
-    Call<ResponseBody> AddInviteMember(@Query("groupid") String g_id,@Query("reg_key") String reg_key);
+    Call<ResponseBody> AddInviteMember(@Query("groupid") String g_id, @Query("reg_key") String reg_key);
 
 
     @GET("group/deletegroupusers?")
-    Call<ResponseBody> DeleteInviteMember(@Query("SelectedUsers") String array,@Query("groupid") String g_id);
+    Call<ResponseBody> DeleteInviteMember(@Query("SelectedUsers") String array, @Query("groupid") String g_id);
 
 
     @GET("bet/add?")
-    Call<ResponseBody> AddBet(  @Query("betname") String betname,
-                                @Query("description") String description,
-                                @Query("date") String date,
-                                @Query("enddate") String enddate,
-                                @Query("distance") String distance,
-                                @Query("startlocation") String startlocation,
-                                @Query("endlocation") String endlocation,
-                                @Query("startlongitude") String startlongitude,
-                                @Query("endlongitude") String endlongitude,
-                                @Query("startlatitude") String startlatitude,
-                                @Query("endlatitude") String endlatitude,
-                                @Query("route") String route,
-                                @Query("credit") String credit,
-                                @Query("reg_key") String reg_key,
-                                @Query("bettype") String bettype);
+    Call<ResponseBody> AddBet(@Query("betname") String betname,
+                              @Query("description") String description,
+                              @Query("date") String date,
+                              @Query("enddate") String enddate,
+                              @Query("distance") String distance,
+                              @Query("startlocation") String startlocation,
+                              @Query("endlocation") String endlocation,
+                              @Query("startlongitude") String startlongitude,
+                              @Query("endlongitude") String endlongitude,
+                              @Query("startlatitude") String startlatitude,
+                              @Query("endlatitude") String endlatitude,
+                              @Query("route") String route,
+                              @Query("credit") String credit,
+                              @Query("reg_key") String reg_key,
+                              @Query("bettype") String bettype);
 
     @GET("bet/confirmadd?")
-    Call<ResponseBody> confirmAddBet(  @Query("betname") String betname,
-                                @Query("description") String description,
-                                @Query("date") String date,
-                                @Query("enddate") String enddate,
-                                @Query("distance") String distance,
-                                @Query("startlocation") String startlocation,
-                                @Query("endlocation") String endlocation,
-                                @Query("startlongitude") String startlongitude,
-                                @Query("endlongitude") String endlongitude,
-                                @Query("startlatitude") String startlatitude,
-                                @Query("endlatitude") String endlatitude,
-                                @Query("route") String route,
-                                @Query("credit") String credit,
-                                @Query("reg_key") String reg_key,
-                                @Query("bettype") String bettype);
+    Call<ResponseBody> confirmAddBet(@Query("betname") String betname,
+                                     @Query("description") String description,
+                                     @Query("date") String date,
+                                     @Query("enddate") String enddate,
+                                     @Query("distance") String distance,
+                                     @Query("startlocation") String startlocation,
+                                     @Query("endlocation") String endlocation,
+                                     @Query("startlongitude") String startlongitude,
+                                     @Query("endlongitude") String endlongitude,
+                                     @Query("startlatitude") String startlatitude,
+                                     @Query("endlatitude") String endlatitude,
+                                     @Query("route") String route,
+                                     @Query("credit") String credit,
+                                     @Query("reg_key") String reg_key,
+                                     @Query("bettype") String bettype);
 
 
-  @GET("bet/edit?")
-    Call<ResponseBody> UpdateBet(  @Query("betname") String betname,
-                                @Query("description") String description,
-                                @Query("date") String date,
-                                @Query("enddate") String enddate,
-                                @Query("distance") String distance,
-                                @Query("startlocation") String startlocation,
-                                @Query("endlocation") String endlocation,
-                                @Query("startlongitude") String startlongitude,
-                                @Query("endlongitude") String endlongitude,
-                                @Query("startlatitude") String startlatitude,
-                                @Query("endlatitude") String endlatitude,
-                                @Query("route") String route,
-                                @Query("credit") String credit,
-                                @Query("reg_key") String reg_key,
-                                @Query("bettype") String bettype,
-                                @Query("betid") String betid);
+    @GET("bet/edit?")
+    Call<ResponseBody> UpdateBet(@Query("betname") String betname,
+                                 @Query("description") String description,
+                                 @Query("date") String date,
+                                 @Query("enddate") String enddate,
+                                 @Query("distance") String distance,
+                                 @Query("startlocation") String startlocation,
+                                 @Query("endlocation") String endlocation,
+                                 @Query("startlongitude") String startlongitude,
+                                 @Query("endlongitude") String endlongitude,
+                                 @Query("startlatitude") String startlatitude,
+                                 @Query("endlatitude") String endlatitude,
+                                 @Query("route") String route,
+                                 @Query("credit") String credit,
+                                 @Query("reg_key") String reg_key,
+                                 @Query("bettype") String bettype,
+                                 @Query("betid") String betid);
 
     @GET("bet/confirmedit?")
-    Call<ResponseBody> confirmUpdateBet(  @Query("betname") String betname,
-                                   @Query("description") String description,
-                                   @Query("date") String date,
-                                   @Query("enddate") String enddate,
-                                   @Query("distance") String distance,
-                                   @Query("startlocation") String startlocation,
-                                   @Query("endlocation") String endlocation,
-                                   @Query("startlongitude") String startlongitude,
-                                   @Query("endlongitude") String endlongitude,
-                                   @Query("startlatitude") String startlatitude,
-                                   @Query("endlatitude") String endlatitude,
-                                   @Query("route") String route,
-                                   @Query("credit") String credit,
-                                   @Query("reg_key") String reg_key,
-                                   @Query("bettype") String bettype,
-                                   @Query("betid") String betid);
+    Call<ResponseBody> confirmUpdateBet(@Query("betname") String betname,
+                                        @Query("description") String description,
+                                        @Query("date") String date,
+                                        @Query("enddate") String enddate,
+                                        @Query("distance") String distance,
+                                        @Query("startlocation") String startlocation,
+                                        @Query("endlocation") String endlocation,
+                                        @Query("startlongitude") String startlongitude,
+                                        @Query("endlongitude") String endlongitude,
+                                        @Query("startlatitude") String startlatitude,
+                                        @Query("endlatitude") String endlatitude,
+                                        @Query("route") String route,
+                                        @Query("credit") String credit,
+                                        @Query("reg_key") String reg_key,
+                                        @Query("bettype") String bettype,
+                                        @Query("betid") String betid);
 
 
     @GET("user/dashboardyear?")
     Call<ResponseBody> DashboardYear(@Query("reg_key") String regkey);
-
 
 
     @GET("user/dashboardmonth?")
@@ -183,10 +179,8 @@ public interface RetroInterface {
                                    @Query("message") String date);
 
 
-
     @GET("user/dashboardweek?")
     Call<ResponseBody> DashboardWeek(@Query("reg_key") String regkey);
-
 
 
     @GET("user/dashboard6month?")
@@ -197,7 +191,7 @@ public interface RetroInterface {
     Call<ResponseBody> DashboardDetails(@Query("reg_key") String regkey);
 
     @GET("bet/skipwinner?")
-    Call<ResponseBody>SkipWinner(@Query("reg_key") String regkey,@Query("betid") String betId,@Query("description") String description);
+    Call<ResponseBody> SkipWinner(@Query("reg_key") String regkey, @Query("betid") String betId, @Query("description") String description);
 
     @GET("Adminsettings/getcharge?")
     Call<ResponseBody> GetAdminCharge();
@@ -240,46 +234,45 @@ public interface RetroInterface {
 
 
     @GET("bet/joinbet?")
-    Call<ResponseBody> JoinBet(@Query("betid") String betId ,
-                               @Query("reg_key")String regkey);
+    Call<ResponseBody> JoinBet(@Query("betid") String betId,
+                               @Query("reg_key") String regkey);
 
     @GET("bet/confirmjoinbet?")
-    Call<ResponseBody> confirmJoinBet(@Query("betid") String betId ,
-                               @Query("reg_key")String regkey);
+    Call<ResponseBody> confirmJoinBet(@Query("betid") String betId,
+                                      @Query("reg_key") String regkey);
 
     @GET("bet/addbetgroup?")
-    Call<ResponseBody> Addbetgroup(@Query("betid")String regkey,
+    Call<ResponseBody> Addbetgroup(@Query("betid") String regkey,
                                    @Query("groupid") String betId);
 
 
     @GET("bet/startbet?")
-    Call<ResponseBody> StartBet(@Query("challengerid") String challengerid ,
-                                @Query("distance")String distance,
-                                @Query("positionlatitude")String positionlatitude,
-                                @Query("positionlongitude")String positionlongitude,
-                                @Query("reg_key")String reg_key);
-
+    Call<ResponseBody> StartBet(@Query("challengerid") String challengerid,
+                                @Query("distance") String distance,
+                                @Query("positionlatitude") String positionlatitude,
+                                @Query("positionlongitude") String positionlongitude,
+                                @Query("reg_key") String reg_key);
 
 
     @GET("bet/betdetail?")
-    Call<ResponseBody> Betdetail(@Query("betid") String betId ,
-                               @Query("reg_key")String regkey);
+    Call<ResponseBody> Betdetail(@Query("betid") String betId,
+                                 @Query("reg_key") String regkey);
 
     @GET("bet/declineinvite?")
-    Call<ResponseBody> declineInvite(@Query("reg_key") String regKey ,
-                                 @Query("betid") String betId);
+    Call<ResponseBody> declineInvite(@Query("reg_key") String regKey,
+                                     @Query("betid") String betId);
 
     @GET("bet/betloserdetails?")
-    Call<ResponseBody> LoserDetail(@Query("betid") String betId ,
-                                 @Query("reg_key")String regkey);
+    Call<ResponseBody> LoserDetail(@Query("betid") String betId,
+                                   @Query("reg_key") String regkey);
 
     @GET("message?")
     Call<ResponseBody> MessageList(@Query("betid") String betId);
 
     @GET("message/send?")
-    Call<ResponseBody> SendMessage(@Query("betid") String betId ,
-                                   @Query("reg_key")String regkey,
-                                   @Query("message")String message);
+    Call<ResponseBody> SendMessage(@Query("betid") String betId,
+                                   @Query("reg_key") String regkey,
+                                   @Query("message") String message);
 
     @GET("bet/archivebet?")
     Call<ResponseBody> Archivebet(@Query("reg_key") String regkey);
@@ -291,16 +284,15 @@ public interface RetroInterface {
     Call<ResponseBody> Archivebetdetail(@Query("betid") String betId);
 
 
-
     @GET("user/updatepassword?")
     Call<ResponseBody> UpdatePassword(@Query("password") String betId,
-                                      @Query("reg_key")String regkey);
+                                      @Query("reg_key") String regkey);
 
 
     @Multipart
     @POST("profile/image_upload")
     Call<ResponseBody> UploadProfilePic(@Part MultipartBody.Part file,
-                                        @Part("reg_key") RequestBody  regKey);
+                                        @Part("reg_key") RequestBody regKey);
 //
 //    @Multipart
 //    @POST("bet/winner?")
@@ -308,8 +300,7 @@ public interface RetroInterface {
 
     @Multipart
     @POST("bet/winner")
-    Call<ResponseBody> UploadVideoOrImage(@Part MultipartBody.Part filePart/*("file") RequestBody file*/,@Part("reg_key") RequestBody regKey,@Part("betid") RequestBody betId,@Part("filetype") RequestBody fileType,@Part("description") RequestBody  description);
-
+    Call<ResponseBody> UploadVideoOrImage(@Part MultipartBody.Part filePart/*("file") RequestBody file*/, @Part("reg_key") RequestBody regKey, @Part("betid") RequestBody betId, @Part("filetype") RequestBody fileType, @Part("description") RequestBody description);
 
 
     @GET("stripeController/stripeTransfer?")
@@ -324,7 +315,6 @@ public interface RetroInterface {
                                       @Query("stripe_charge") String stripe_charge,
                                       @Query("admin_charge") String admin_charge,
                                       @Query("reg_key") String reg_key);
-
 
 
     @GET("bet/androidlivestartedbetdetail?")
@@ -348,13 +338,13 @@ public interface RetroInterface {
 
     @FormUrlEncoded
     @POST("bet/androidlivestartbet")
-    Call<ResponseBody> LiveDetailsUpdation(@Field("challengerid") String challengerid ,
-                                           @Field("distance")String distance,
-                                           @Field("positionlongitude")Double positionlongitude,
-                                           @Field("positionlatitude")Double positionlatitude,
-                                           @Field("reg_key")String reg_key,
-                                           @Field("bettype")String bettype,
-                                           @Field("route")String route);
+    Call<ResponseBody> LiveDetailsUpdation(@Field("challengerid") String challengerid,
+                                           @Field("distance") String distance,
+                                           @Field("positionlongitude") Double positionlongitude,
+                                           @Field("positionlatitude") Double positionlatitude,
+                                           @Field("reg_key") String reg_key,
+                                           @Field("bettype") String bettype,
+                                           @Field("route") String route);
 
     @GET("json?")
     Call<ResponseBody> MapDetails(@Query("origin") String origin,
@@ -365,19 +355,17 @@ public interface RetroInterface {
 
     @GET("json?")
     Call<ResponseBody> PlaceDetails(@Query("placeid") String placeid,
-                                  @Query("key") String key);
-
+                                    @Query("key") String key);
 
 
     @FormUrlEncoded
     @POST("user/androidpurchase")
-    Call<ResponseBody>purchaseCredit(@Field("reg_key")String reg_key,
-                                      @Field("productid") String productid ,
-                                      @Field("invoiceid")String invoiceid,
-                                      @Field("purchasedate")String purchasedate,
-                                      @Field("credit")String credit,
-                                      @Field("rate")String rate);
-
+    Call<ResponseBody> purchaseCredit(@Field("reg_key") String reg_key,
+                                      @Field("productid") String productid,
+                                      @Field("invoiceid") String invoiceid,
+                                      @Field("purchasedate") String purchasedate,
+                                      @Field("credit") String credit,
+                                      @Field("rate") String rate);
 
 
 }

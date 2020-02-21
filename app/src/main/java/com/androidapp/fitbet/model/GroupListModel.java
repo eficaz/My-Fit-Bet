@@ -2,24 +2,23 @@ package com.androidapp.fitbet.model;
 
 public class GroupListModel {
 
-    String groupid="";
+    String groupid = "";
 
-    String name="";
+    String name = "";
 
-    String description="";
+    String description = "";
 
-    String groupimage="";
+    String groupimage = "";
 
-    String reg_key ="";
+    String reg_key = "";
 
-    String createdate="";
+    String createdate = "";
 
-    String status="";
+    String status = "";
 
-    String users="";
+    String users = "";
 
-    private boolean isChecked  = false;
-
+    private boolean isChecked = false;
 
 
     public String getGroupid() {
@@ -87,14 +86,13 @@ public class GroupListModel {
     }
 
     public void setSelected(boolean selected) {
-        isChecked  = selected;
+        isChecked = selected;
     }
 
 
     public boolean isSelected() {
-        return isChecked ;
+        return isChecked;
     }
-
 
 
 }

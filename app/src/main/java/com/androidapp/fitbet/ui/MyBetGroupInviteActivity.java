@@ -69,12 +69,12 @@ public class MyBetGroupInviteActivity extends BaseActivity {
     Bundle bundle;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -82,8 +82,8 @@ public class MyBetGroupInviteActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -92,12 +92,11 @@ public class MyBetGroupInviteActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -107,7 +106,7 @@ public class MyBetGroupInviteActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        bundle =  getIntent().getExtras();
+        bundle = getIntent().getExtras();
         inviteGroupList();
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,44 +157,46 @@ public class MyBetGroupInviteActivity extends BaseActivity {
     private void filter(String text) {
         inviteListAdapter.filterList(text);
     }
+
     private void inviteGroupList() {
         final Bundle bundle = getIntent().getExtras();
-        if(bundle.getString(GROUP_ID)!= null ||bundle.getString(GROUP_ID)!= "")
-        {
-            String search="";
+        if (bundle.getString(GROUP_ID) != null || bundle.getString(GROUP_ID) != "") {
+            String search = "";
             Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).MybetbetGroup(bundle.getString(GROUP_ID));
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
-                        groupDetailsList(bodyString,bundle.getString(GROUP_ID));
+                        groupDetailsList(bodyString, bundle.getString(GROUP_ID));
                         //listOrderGroup(bodyString);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                 }
             });
-        }else{
+        } else {
 
         }
     }
-    private void groupDetailsList(String bodyString,String groupId) {
-        try{
+
+    private void groupDetailsList(String bodyString, String groupId) {
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
             String betid = jsonObject.getString(MYBETS_betid);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS_betgrops);
                 JSONArray jsonArray = new JSONArray(data1);
 
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 invitemembersDetails = new ArrayList<>();
@@ -223,13 +224,13 @@ public class MyBetGroupInviteActivity extends BaseActivity {
                     model.setDistance(jsonList.getString(DISTANCE));*/
                     invitemembersDetails.add(model);
                 }
-                inviteListAdapter = new MyBetGroupInviteListAdapter(this, invitemembersDetails,bundle.getString(GROUP_ID));
+                inviteListAdapter = new MyBetGroupInviteListAdapter(this, invitemembersDetails, bundle.getString(GROUP_ID));
                 invite_group_list.setHasFixedSize(true);
                 invite_group_list.setLayoutManager(new LinearLayoutManager(this));
                 invite_group_list.setAdapter(inviteListAdapter);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

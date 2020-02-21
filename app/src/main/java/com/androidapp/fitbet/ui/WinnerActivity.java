@@ -1,7 +1,6 @@
 package com.androidapp.fitbet.ui;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,7 +30,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.camera.CameraGalleryVideoPickerBottom;
 import com.androidapp.fitbet.customview.CustomProgress;
-import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
+import com.androidapp.fitbet.interfaces.CameraGalleryCapture;
 import com.androidapp.fitbet.model.CommonUsage;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
@@ -73,18 +72,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static com.androidapp.fitbet.utils.Contents.CAMERA_REQUEST_CODE;
 import static com.androidapp.fitbet.utils.Contents.CAMERA_VIDEO_REQUEST_CODE;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
-import static com.androidapp.fitbet.utils.Contents.FIRST_NAME;
 import static com.androidapp.fitbet.utils.Contents.MYBETS_betid;
-import static com.androidapp.fitbet.utils.Contents.REG_KEY;
 import static com.androidapp.fitbet.utils.Contents.WON;
 
 public class WinnerActivity extends BaseActivity implements CommonUsage {
     Bundle bundle;
-    String regNo="";
-    String betId="";
-    String winName="";
-    String won="";
-    String file_Type="";
+
+    String betId = "";
+
+    String won = "";
+    String file_Type = "";
 
     @Bind(R.id.name)
     TextView name;
@@ -108,18 +105,18 @@ public class WinnerActivity extends BaseActivity implements CommonUsage {
     Button bt_login;
 
     File mFileFetched;
-    boolean imageupload =false;
-    public static int VIDEO_CAPTURED = 1;
-    CameraGalaryCaputer cameraGalaryCaputer;
-private AppPreference appPreference;
+    boolean imageupload = false;
+
+    CameraGalleryCapture cameraGalaryCaputer;
+    private AppPreference appPreference;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -127,8 +124,8 @@ private AppPreference appPreference;
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -137,12 +134,11 @@ private AppPreference appPreference;
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -151,24 +147,25 @@ private AppPreference appPreference;
         setContentView(R.layout.activity_winner);
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        appPreference=AppPreference.getPrefsHelper(this);
+        appPreference = AppPreference.getPrefsHelper(this);
         clearSavedBetItems();
-        (WinnerActivity.this).passVal(new CameraGalaryCaputer() {
+        (WinnerActivity.this).passVal(new CameraGalleryCapture() {
             @Override
             public <T> void requestFailure(int requestCode, T data) {
             }
+
             @Override
             public <T> File requestSuccess(File imageFile) {
-                if(!imageFile.toString().equals("")){
-                    imageupload=true;
+                if (!imageFile.toString().equals("")) {
+                    imageupload = true;
                 }
-                try{
+                try {
                     mFileFetched = new Compressor(WinnerActivity.this).compressToFile(imageFile);
-                    System.out.println("filepath inside requestSuccess  "+ mFileFetched.getName());
-                }catch (Exception e){
+                    System.out.println("filepath inside requestSuccess  " + mFileFetched.getName());
+                } catch (Exception e) {
 
                 }
-                mFileType="image";
+                mFileType = "image";
                 updateProfilePic();
                 CustomProgress.getInstance().showProgress(WinnerActivity.this, "", false);
                 if (!imageFile.equals("")) {
@@ -178,29 +175,27 @@ private AppPreference appPreference;
             }
         });
         bundle = getIntent().getExtras();
-        regNo=bundle.getString(REG_KEY);
-        betId=bundle.getString(MYBETS_betid);
-        winName=bundle.getString(FIRST_NAME);
-        won=bundle.getString(WON);
-        name.setText(winName);
+        betId = bundle.getString(MYBETS_betid);
+        won = bundle.getString(WON);
+        name.setText(appPreference.getSavedProfileName());
         price_amount.setText(won);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!ed_discreption.getText().toString().equals("")){
-                callDiscreptionUpdateionAPI();
-                CustomProgress.getInstance().showProgress(WinnerActivity.this, "", false);
-                }else{
+                if (!ed_discreption.getText().toString().equals("")) {
+                    callDiscreptionUpdateionAPI();
+                    CustomProgress.getInstance().showProgress(WinnerActivity.this, "", false);
+                } else {
                     CustomProgress.getInstance().hideProgress();
-                    AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"0");
-                    startActivity(new Intent(WinnerActivity.this,DashBoardActivity.class));
+                    appPreference.savePref(DASH_BOARD_POSICTION, "0");
+                    startActivity(new Intent(WinnerActivity.this, DashBoardActivity.class));
                     finish();
                 }
             }
         });
 
 
-        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.M){
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.M) {
             main_lay.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -216,7 +211,7 @@ private AppPreference appPreference;
                 }
             });
             // Do something for lollipop and above versions
-        } else{
+        } else {
             main_lay.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -263,7 +258,7 @@ private AppPreference appPreference;
     }
 
     private void callDiscreptionUpdateionAPI() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SkipWinner(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),betId,ed_discreption.getText().toString());
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SkipWinner(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""), betId, ed_discreption.getText().toString());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -273,19 +268,20 @@ private AppPreference appPreference;
                         JSONObject jsonObject = new JSONObject(bodyString);
                         String status = jsonObject.getString("Status");
                         String Msg = jsonObject.getString("Msg");
-                        if (status.trim().equals("Ok")){
+                        if (status.trim().equals("Ok")) {
                             ed_discreption.setText("");
                             CustomProgress.getInstance().hideProgress();
                             finish();
                         }
                         Utils.showCustomToastMsg(WinnerActivity.this, Msg);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -311,47 +307,49 @@ private AppPreference appPreference;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-                        if(resultCode == RESULT_OK)
-                        {
-                            if (requestCode == CAMERA_VIDEO_REQUEST_CODE) {
-                                if (!data.getData().equals("")) {
-                                    Uri uri = data.getData();
-                                    String selectedImagePath = getPath(uri);
-                                    CustomProgress.getInstance().hideProgress();
-                                    if(!uri.toString().equals("")){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_VIDEO_REQUEST_CODE) {
+                if (!data.getData().equals("")) {
+                    Uri uri = data.getData();
+                    String selectedImagePath = getPath(uri);
+                    CustomProgress.getInstance().hideProgress();
+                    if (!uri.toString().equals("")) {
 
-                                    mFileType="video";
-                                        CustomProgress.getInstance().showProgress(this, "", false);
-                                        compressVideo(getPath(uri));
+                        mFileType = "video";
+                        CustomProgress.getInstance().showProgress(this, "", false);
+                        compressVideo(getPath(uri));
 
 
-                                        }
+                    }
 
-                                }
-                            } else {
-                                    EasyImage.handleActivityResult(requestCode, resultCode, data, this,new EasyImage.Callbacks() {
-                                        @Override
-                                        public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                }
+            } else {
+                EasyImage.handleActivityResult(requestCode, resultCode, data, this, new EasyImage.Callbacks() {
+                    @Override
+                    public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
 
-                                        }
-                                        @Override
-                                        public void onImagesPicked(@NonNull List<File> imageFile, EasyImage.ImageSource source, int type) {
-                                            cameraGalaryCaputer.requestSuccess(new File(imageFile.toString().replaceAll("[\\[\\]]","")));
-                                            //updateProfilePic();
-                                        }
-                                        @Override
-                                        public void onCanceled(EasyImage.ImageSource source, int type) {
+                    }
 
-                                        }
-                                    });
-                                }
-                        }else {
-                            Utils.showCustomToastMsg(WinnerActivity.this, R.string.file_upload_failed);
-                        }
+                    @Override
+                    public void onImagesPicked(@NonNull List<File> imageFile, EasyImage.ImageSource source, int type) {
+                        cameraGalaryCaputer.requestSuccess(new File(imageFile.toString().replaceAll("[\\[\\]]", "")));
+                        //updateProfilePic();
+                    }
 
-           }
+                    @Override
+                    public void onCanceled(EasyImage.ImageSource source, int type) {
+
+                    }
+                });
+            }
+        } else {
+            Utils.showCustomToastMsg(WinnerActivity.this, R.string.file_upload_failed);
+        }
+
+    }
+
     public String getPath1(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
             int column_index = cursor
@@ -361,8 +359,9 @@ private AppPreference appPreference;
         } else
             return null;
     }
+
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Video.Media.DATA };
+        String[] projection = {MediaStore.Video.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
@@ -371,45 +370,47 @@ private AppPreference appPreference;
         } else
             return null;
     }
-    private String mDescription ="";
+
+    private String mDescription = "";
     private String mFileType;
+
     private void updateProfilePic() {
 
 
-if(!ed_discreption.getText().toString().equals(""))
-    mDescription =ed_discreption.getText().toString();
+        if (!ed_discreption.getText().toString().equals(""))
+            mDescription = ed_discreption.getText().toString();
 
-        RequestBody regKey = RequestBody.create(MediaType.parse("text/plain"), AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-        RequestBody betID = RequestBody.create(MediaType.parse("text/plain"),betId);
-        RequestBody fileType = RequestBody.create(MediaType.parse("text/plain"),mFileType);
-        RequestBody description = RequestBody.create(MediaType.parse("text/plain"),mDescription);
+        RequestBody regKey = RequestBody.create(MediaType.parse("text/plain"), appPreference.getPref(Contents.REG_KEY, ""));
+        RequestBody betID = RequestBody.create(MediaType.parse("text/plain"), betId);
+        RequestBody fileType = RequestBody.create(MediaType.parse("text/plain"), mFileType);
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), mDescription);
 
-        RequestBody fBody=null;
-        if(mFileType.equals("image"))
+        RequestBody fBody = null;
+        if (mFileType.equals("image"))
             fBody = RequestBody.create(MediaType.parse("image/*"), mFileFetched);
         else
             fBody = RequestBody.create(MediaType.parse("video/mp4"), mFileFetched);
 
 
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", mFileFetched.getName(),fBody);
-        System.out.println("Filepath "+ mFileFetched+" size "+String.valueOf(mFileFetched.length()/1024));
-        System.out.println("mFileFetched.getName() "+ mFileFetched.getName());
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", mFileFetched.getName(), fBody);
+        System.out.println("Filepath " + mFileFetched + " size " + String.valueOf(mFileFetched.length() / 1024));
+        System.out.println("mFileFetched.getName() " + mFileFetched.getName());
 
 
-        Call<ResponseBody> call = getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadVideoOrImage(filePart,regKey,betID,fileType,description);
+        Call<ResponseBody> call = getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadVideoOrImage(filePart, regKey, betID, fileType, description);
         call.enqueue(new Callback<ResponseBody>() {
 
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                System.out.println("Response code update video "+response.code());
+                System.out.println("Response code update video " + response.code());
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("updateProfilePic "+bodyString);
+                    System.out.println("updateProfilePic " + bodyString);
                     try {
                         JSONObject jsonObject = new JSONObject(bodyString);
                         String status = jsonObject.getString("Status");
                         String Msg = jsonObject.getString("Msg");
-                        if(status.trim().equals("Ok")){
+                        if (status.trim().equals("Ok")) {
                             ed_discreption.setText("");
                             CustomProgress.getInstance().hideProgress();
                             Utils.showCustomToastMsg(WinnerActivity.this, Msg);
@@ -423,25 +424,27 @@ if(!ed_discreption.getText().toString().equals(""))
                             }
 
                             clearSavedBetItems();
-                         startActivity(new Intent(WinnerActivity.this,DashBoardActivity.class));
+                            startActivity(new Intent(WinnerActivity.this, DashBoardActivity.class));
                             finish();
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         clearSavedBetItems();
-                        System.out.println("upload exception "+e.getLocalizedMessage());
+                        System.out.println("upload exception " + e.getLocalizedMessage());
                     }
-                    CustomProgress.getInstance().hideProgress();;
+                    CustomProgress.getInstance().hideProgress();
+                    ;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
 
-    public void passVal(CameraGalaryCaputer cameraGalaryCaputer) {
+    public void passVal(CameraGalleryCapture cameraGalaryCaputer) {
         this.cameraGalaryCaputer = cameraGalaryCaputer;
 
     }
@@ -454,29 +457,28 @@ if(!ed_discreption.getText().toString().equals(""))
         }
         if (CACHEDKEY.CAMERA.ordinal() == type) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                EasyImage.openCamera(WinnerActivity.this,CAMERA_REQUEST_CODE);
+                EasyImage.openCamera(WinnerActivity.this, CAMERA_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 111);
             }
-            file_Type="image";
+            file_Type = "image";
         }
         if (CACHEDKEY.ACTION_VIDEO_CAPTURE.ordinal() == type) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Intent captureVideoIntent =new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+                Intent captureVideoIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
                 captureVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
                 captureVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-        /* captureVideoIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 2491520L);*/
+                /* captureVideoIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 2491520L);*/
        /*         captureVideoIntent.putExtra(MediaStore.Video.Thumbnails.HEIGHT, 360);
                 captureVideoIntent.putExtra(MediaStore.Video.Thumbnails.WIDTH, 480);*/
-                startActivityForResult(captureVideoIntent,CAMERA_VIDEO_REQUEST_CODE);
+                startActivityForResult(captureVideoIntent, CAMERA_VIDEO_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
             }
-            file_Type="video";
+            file_Type = "video";
         }
 
     }
-
 
 
     @Override
@@ -485,10 +487,10 @@ if(!ed_discreption.getText().toString().equals(""))
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         CustomProgress.getInstance().hideProgress();
-                       clearSavedBetItems();
+                        clearSavedBetItems();
                         Intent intent = new Intent(WinnerActivity.this, DashBoardActivity.class);
                         startActivity(intent);
                         finish();
@@ -512,10 +514,12 @@ if(!ed_discreption.getText().toString().equals(""))
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
         appPreference.setLatLongList(null);
+        appPreference.savePositionLatitude("0.0");
+        appPreference.savePositionLongitude("0.0");
     }
 
 
-  private Retrofit getClient(String URL) {
+    private Retrofit getClient(String URL) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
@@ -525,7 +529,7 @@ if(!ed_discreption.getText().toString().equals(""))
         return retrofit;
     }
 
-    private  OkHttpClient getOkHttpClient() {
+    private OkHttpClient getOkHttpClient() {
         OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
         okHttpBuilder.callTimeout(3, TimeUnit.MINUTES);
         okHttpBuilder.connectTimeout(240, TimeUnit.SECONDS);
@@ -539,7 +543,8 @@ if(!ed_discreption.getText().toString().equals(""))
         }
         return okHttpBuilder.build();
     }
-    private  Interceptor getInterceptor() {
+
+    private Interceptor getInterceptor() {
         return new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {

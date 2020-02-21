@@ -13,32 +13,32 @@ public class CountDownDialog {
 
     private Dialog dialog;
 
-private int counter;
-   private  TextView txtCountDown;
+    private int counter;
+    private TextView txtCountDown;
 
-    public CountDownDialog(Context context,CountDownStopListener countDownStopListener,int count) {
-this.counter=count;
+    public CountDownDialog(Context context, CountDownStopListener countDownStopListener, int count) {
+        this.counter = count;
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.count_down_layout);
 
-        if(dialog.getWindow()!=null)
+        if (dialog.getWindow() != null)
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
-
         dialog.setCancelable(false);
-        txtCountDown=dialog.findViewById(R.id.txt_count_down);
-        if(CustomProgress.getInstance().isShowing())
+        txtCountDown = dialog.findViewById(R.id.txt_count_down);
+        if (CustomProgress.getInstance().isShowing())
             CustomProgress.getInstance().hideProgress();
         dialog.show();
 
-        new CountDownTimer(counter*1000, 1000){
-            public void onTick(long millisUntilFinished){
+        new CountDownTimer(counter * 1000, 1000) {
+            public void onTick(long millisUntilFinished) {
 
                 txtCountDown.setText(String.valueOf(counter));
                 counter--;
             }
-            public  void onFinish(){
+
+            public void onFinish() {
 
                 txtCountDown.setText("0");
                 countDownStopListener.onCountDownStopped(dialog);
@@ -49,8 +49,8 @@ this.counter=count;
 
     }
 
-    public interface CountDownStopListener{
+    public interface CountDownStopListener {
 
-         void onCountDownStopped(Dialog dialog);
+        void onCountDownStopped(Dialog dialog);
     }
 }

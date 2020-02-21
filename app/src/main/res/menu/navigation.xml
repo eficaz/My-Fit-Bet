@@ -7,30 +7,30 @@
         android:icon="@drawable/me"
         android:title="@string/tab_me"
         android:enabled="true"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/navigation_bet"
         android:icon="@drawable/bet"
         android:title="@string/tab_bet"
         android:enabled="true"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:title=""
         android:visible="true"
         android:enabled="false"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/navigation_archive"
         android:icon="@drawable/folder_archive_icon"
         android:title="@string/archives"
         android:enabled="true"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/settings"
         android:title="@string/tab_settings"
         android:enabled="true"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

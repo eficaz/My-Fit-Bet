@@ -5,6 +5,7 @@
 
     android:layout_height="match_parent"
     tools:context=".ui.CreateGroupActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,6 +15,7 @@
         android:gravity="center"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -25,6 +27,7 @@
                 android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
@@ -36,6 +39,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:background="@drawable/back_black" />
             </TableRow>
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -45,6 +49,7 @@
                 android:textColor="@color/white"
                 android:text="@string/invite_group_" />
         </TableRow>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -68,8 +73,7 @@
                         android:layout_marginStart="@dimen/margin_10"
                         android:layout_gravity="center|start"
                         android:gravity="center|start"
-                        android:layout_marginEnd="@dimen/margin_10"
-                        >
+                        android:layout_marginEnd="@dimen/margin_10">
 
                         <EditText
                             android:id="@+id/searchview"
@@ -86,14 +90,14 @@
                             android:singleLine="true"
                             android:text=""
                             android:textColor="@color/main_text_color"
-                            android:textSize="12sp"
-                            />
+                            android:textSize="12sp" />
                     </TableRow>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/no_data"
                             android:layout_width="match_parent"
@@ -103,6 +107,7 @@
                             android:visibility="gone"
                             android:gravity="center"
                             android:text="@string/no_group" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/invite_group_list"
 

@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
-    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical"></LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -57,8 +58,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:fontFamily="@font/lato_regular"
-                    android:text="ahagsfbnsdf"
-                    />
+                    android:text="ahagsfbnsdf" />
             </TableRow>
         </LinearLayout>
 
@@ -72,14 +72,13 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/imageView11"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/user_profile_avatar"
-                    />
+                    android:src="@drawable/user_profile_avatar" />
             </TableRow>
         </LinearLayout>
 
@@ -121,13 +120,15 @@
                     android:fontFamily="@font/lato_regular"
                     android:layout_height="wrap_content"
                     android:text="0" />
+
                 <TextView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/coins"/>
+                    android:background="@drawable/coins" />
             </TableRow>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -144,10 +145,10 @@
                 android:maxLines="1"
                 android:backgroundTint="@color/light_green"
                 android:hint="@string/short_descreption"
-                android:textColorHint="@color/hint_text_color"
-                />
+                android:textColorHint="@color/hint_text_color" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -168,22 +169,24 @@
                 android:textColor="@color/white" />
 
         </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_weight=".5"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/skip"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/done" />
-    </LinearLayout>
+            android:layout_weight=".5"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/skip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/done" />
+        </LinearLayout>
+
         <Space
             android:id="@+id/space"
             android:visibility="gone"

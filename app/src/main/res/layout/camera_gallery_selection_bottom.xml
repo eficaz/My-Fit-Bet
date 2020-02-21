@@ -38,6 +38,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold" />
+
         <Button
             android:id="@+id/bt_cancel"
             android:layout_width="match_parent"

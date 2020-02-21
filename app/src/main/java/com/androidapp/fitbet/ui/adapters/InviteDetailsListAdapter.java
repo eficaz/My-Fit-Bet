@@ -33,23 +33,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
+public class InviteDetailsListAdapter extends RecyclerView.Adapter {
     Context constant;
     public static ArrayList<Invitemembers> groupListModels;
-    public static List<Invitemembers> selected_usersList=new ArrayList<>();
+    public static List<Invitemembers> selected_usersList = new ArrayList<>();
     private static List<Invitemembers> contactListFiltered;
     String groupId;
     String basepath;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+
     public InviteDetailsListAdapter(Context context, ArrayList<Invitemembers> myDataset, ArrayList<Invitemembers> selectedList, String groupId, String basepath) {
         this.constant = context;
         this.groupListModels = myDataset;
         this.selected_usersList = selectedList;
-        this.basepath=basepath;
+        this.basepath = basepath;
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
-        this.groupId=groupId;
+        this.groupId = groupId;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -57,22 +59,23 @@ public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
         InviteDetailsListAdapter.ViewHolder vh = new InviteDetailsListAdapter.ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         final Invitemembers m = groupListModels.get(position);
         final InviteDetailsListAdapter.ViewHolder viewholder = (InviteDetailsListAdapter.ViewHolder) holder;
         viewholder.tv_Name.setText(m.getFirstname());
         viewholder.tv_Country.setText(m.getCountry());
-        if(m.getDistance().equals("null") || m.getDistance().equals("")){
-            double i2= Double.parseDouble("0");
-            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2)+" Km");
-        }else{
-            double i2= Double.parseDouble(m.getDistance())/1000;
-            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2)+" Km");
+        if (m.getDistance().equals("null") || m.getDistance().equals("")) {
+            double i2 = Double.parseDouble("0");
+            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2) + " Km");
+        } else {
+            double i2 = Double.parseDouble(m.getDistance()) / 1000;
+            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2) + " Km");
         }
         if (!m.getProfile_pic().equals("NA")) {
             Picasso.get().
-                    load(basepath+m.getProfile_pic())
+                    load(basepath + m.getProfile_pic())
                     .placeholder(R.drawable.image_loader)
                     .into(viewholder.img_user);
 
@@ -107,26 +110,28 @@ public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
             viewholder.rowView.setBackgroundColor(ContextCompat.getColor(constant, R.color.gray_1));
         else
             viewholder.rowView.setBackgroundColor(ContextCompat.getColor(constant, R.color.white));*/
-        if(selected_usersList.contains(groupListModels.get(position))){
-            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_gray_border));}
-        else{
-            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_whight_border));}
+        if (selected_usersList.contains(groupListModels.get(position))) {
+            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_gray_border));
+        } else {
+            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_whight_border));
+        }
     }
 
     private void callincviteApi(String regKey, String groupId, final int position) {
 
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddInviteMember(groupId,regKey);
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddInviteMember(groupId, regKey);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    groupDetailsList(bodyString,position);
+                    groupDetailsList(bodyString, position);
                     //listOrderGroup(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -139,7 +144,7 @@ public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
         try {
             jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 groupListModels.remove(position);
                 notifyDataSetChanged();
             }
@@ -155,7 +160,7 @@ public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
         groupListModels.clear();
         if (charText.length() == 0) {
             groupListModels.addAll(contactListFiltered);
-        }else {
+        } else {
             for (Invitemembers wp : contactListFiltered) {
                 if (wp.getFirstname().toLowerCase(Locale.getDefault()).contains(charText)) {
                     groupListModels.add(wp);
@@ -167,11 +172,12 @@ public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, tv_Country,tv_km;
+        TextView tv_Name, tv_Country, tv_km;
         ConstraintLayout rowView;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
+            rowView = convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
             tv_km = convertView.findViewById(R.id.tv_km);
@@ -179,6 +185,7 @@ public class InviteDetailsListAdapter extends RecyclerView.Adapter  {
             itemView.setTag(itemView);
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

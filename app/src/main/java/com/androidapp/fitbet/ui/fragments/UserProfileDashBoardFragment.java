@@ -43,7 +43,6 @@ import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_COUNTRY;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_FIRSTNAME;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_LOST;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_MONTH;
-import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_SIX_MONTH;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_USERS;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_WEEK;
@@ -102,17 +101,17 @@ public class UserProfileDashBoardFragment extends Fragment {
     CircleImageView img_user;
 
 
-
-
     ArrayList<String> dateDes = new ArrayList<>();
     ArrayList<String> speed = new ArrayList<>();
-private AppPreference appPreference;
+    private AppPreference appPreference;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        appPreference=AppPreference.getPrefsHelper(getActivity());
+        appPreference = AppPreference.getPrefsHelper(getActivity());
         intintView();
     }
+
     private void intintView() {
         intintChart();
         callDashboardDetailsApi();
@@ -194,6 +193,7 @@ private AppPreference appPreference;
             }
         });
     }
+
     private void intintChart() {
         week.setBackgroundResource(R.drawable.shape_button_roud_corner1);
         week.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
@@ -209,8 +209,9 @@ private AppPreference appPreference;
         speed.clear();
         CustomProgress.getInstance().showProgress(getActivity(), "", false);
     }
+
     private void callDashboardDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -222,14 +223,16 @@ private AppPreference appPreference;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void DashboardDetailReportapiresult(String bodyString) {
-        System.out.println("dashboard "+bodyString);
+        System.out.println("dashboard " + bodyString);
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String status = jsonObject.getString("Status");
@@ -243,36 +246,35 @@ private AppPreference appPreference;
                 lost.setText(jsonObject1.getString(DASH_BOARD_LOST));
 
 
-                final Context mContext = getActivity() ;
+                final Context mContext = getActivity();
                 if (!jsonObject1.getString(PROFILE_PIC).equals("NA")) {
-                    if (jsonObject1.getString(REG_TYPE).equals("normal")&&jsonObject1.getString(IMAGE_STATUS).equals("0")){
+                    if (jsonObject1.getString(REG_TYPE).equals("normal") && jsonObject1.getString(IMAGE_STATUS).equals("0")) {
                         //Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC)).into(img_user);
-                        Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
+                        Picasso.get().load(Constant.BASE_APP_IMAGE__PATH + jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
-                  appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC));
+                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH + jsonObject1.getString(PROFILE_PIC));
 
-                    }else{
+                    } else {
                         Picasso.get().load(jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
                         appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
 
                     }
-                }
-                else{
+                } else {
                     appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                     img_user.setImageDrawable(mContext.getResources().getDrawable(R.drawable.user_profile_avatar));
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
     private void callweekApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardWeek(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardWeek(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -284,15 +286,17 @@ private AppPreference appPreference;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
-        
+
     }
+
     private void callmonthApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardMonth(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardMonth(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -304,6 +308,7 @@ private AppPreference appPreference;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -322,12 +327,12 @@ private AppPreference appPreference;
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
                 average_speed.setText(jsonObject.getString(AVERAGESPEED));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     //StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
-                }else {
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
@@ -336,13 +341,13 @@ private AppPreference appPreference;
                     StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void callsex_monthApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Dashboard6Month(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Dashboard6Month(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -354,6 +359,7 @@ private AppPreference appPreference;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -373,13 +379,13 @@ private AppPreference appPreference;
                 JSONArray jsonArray = new JSONArray(data1);
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
-                average_speed.setText(jsonObject.getString(AVERAGESPEED ));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_speed.setText(jsonObject.getString(AVERAGESPEED));
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     //StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
-                }else {
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
@@ -388,7 +394,7 @@ private AppPreference appPreference;
                     StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 1);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -396,7 +402,7 @@ private AppPreference appPreference;
     }
 
     private void callyear_Api() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardYear(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardYear(AppPreference.getPrefsHelper().getPref(Contents.USER_PROFILE_REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -409,6 +415,7 @@ private AppPreference appPreference;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -427,13 +434,13 @@ private AppPreference appPreference;
                 JSONArray jsonArray = new JSONArray(data1);
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
-                average_speed.setText(jsonObject.getString(AVERAGESPEED ));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_speed.setText(jsonObject.getString(AVERAGESPEED));
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     //StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
-                }else {
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
@@ -442,7 +449,7 @@ private AppPreference appPreference;
                     StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 1);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -458,34 +465,35 @@ private AppPreference appPreference;
                 JSONArray jsonArray = new JSONArray(data1);
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
-                average_speed.setText(jsonObject.getString(AVERAGESPEED ));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_speed.setText(jsonObject.getString(AVERAGESPEED));
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     //StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
-                }else{
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(DAY));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                 }
 
             }
 
 
-
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

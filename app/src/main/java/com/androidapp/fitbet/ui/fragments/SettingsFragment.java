@@ -27,13 +27,12 @@ import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.camera.CameraGalleryPickerBottom;
 import com.androidapp.fitbet.customview.CustomProgress;
 import com.androidapp.fitbet.customview.MyDialog;
-import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
+import com.androidapp.fitbet.interfaces.CameraGalleryCapture;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
 import com.androidapp.fitbet.service.LocService;
 import com.androidapp.fitbet.ui.ChangePasswordActivity;
-
 import com.androidapp.fitbet.ui.DashBoardActivity;
 import com.androidapp.fitbet.ui.PrivacyPolicyActivity;
 import com.androidapp.fitbet.ui.TermsAndServiceActivity;
@@ -74,7 +73,7 @@ import static com.androidapp.fitbet.utils.Contents.IMAGE_STATUS;
 import static com.androidapp.fitbet.utils.Contents.PROFILE_PIC;
 import static com.androidapp.fitbet.utils.Contents.REG_TYPE;
 
-public class SettingsFragment extends Fragment  {
+public class SettingsFragment extends Fragment {
 
 
     @Bind(R.id.name)
@@ -90,8 +89,6 @@ public class SettingsFragment extends Fragment  {
     TableRow change_password;
 
 
-
-
     @Bind(R.id.row_privacy_policy)
     TableRow row_privacy_policy;
 
@@ -105,33 +102,34 @@ public class SettingsFragment extends Fragment  {
     @Bind(R.id.rowlogOut)
     TableRow rowlogOut;
     @Bind(R.id.rules_regulations)
-TableRow rulesRegulations;
+    TableRow rulesRegulations;
     @Bind(R.id.change_pic)
     RelativeLayout change_pic;
 
     File filePath;
 
 
-
     private boolean imageupload;
-   private  boolean first_time;
-private AppPreference appPreference;
-private MyDialog noInternetDialog;
+    private boolean first_time;
+    private AppPreference appPreference;
+    private MyDialog noInternetDialog;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated SettingsFragment");
-        appPreference=AppPreference.getPrefsHelper(getActivity());
-        appPreference.savePref(DASH_BOARD_POSICTION,"4");
-        noInternetDialog=new MyDialog(getActivity(),null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
+        appPreference = AppPreference.getPrefsHelper(getActivity());
+        appPreference.savePref(DASH_BOARD_POSICTION, "4");
+        noInternetDialog = new MyDialog(getActivity(), null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
         initView();
     }
+
     private void initView() {
         bt_submit.setVisibility(View.GONE);
-        first_time=true;
-        if(appPreference.getPref(Contents.REG_WITH_F_OR_G,"").equals("true")){
+        first_time = true;
+        if (appPreference.getPref(Contents.REG_WITH_F_OR_G, "").equals("true")) {
             change_password.setVisibility(View.GONE);
-        }else{
+        } else {
             change_password.setVisibility(View.VISIBLE);
         }
 
@@ -140,14 +138,13 @@ private MyDialog noInternetDialog;
 
         if (!appPreference.getSavedProfileImage().equals("NA")) {
 
-                Picasso.get().load(appPreference.getSavedProfileImage())
-                        .placeholder(R.drawable.image_loader)
-                        .into(img_user);
+            Picasso.get().load(appPreference.getSavedProfileImage())
+                    .placeholder(R.drawable.image_loader)
+                    .into(img_user);
 
         } else {
             img_user.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.user_profile_avatar));
         }
-
 
 
         change_password.setOnClickListener(new View.OnClickListener() {
@@ -171,17 +168,19 @@ private MyDialog noInternetDialog;
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if(first_time){
+                if (first_time) {
 
                     bt_submit.setVisibility(View.GONE);
-                    first_time=false;
-                }else if(!first_time){
+                    first_time = false;
+                } else if (!first_time) {
 
                     bt_submit.setVisibility(View.VISIBLE);
                 }
@@ -200,7 +199,7 @@ private MyDialog noInternetDialog;
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), PrivacyPolicyActivity.class);
-                i.putExtra("name","privacy");
+                i.putExtra("name", "privacy");
                 startActivity(i);
             }
         });
@@ -208,15 +207,15 @@ private MyDialog noInternetDialog;
             @Override
             public void onClick(View v) {
 
-                if(!name.getText().toString().equals("")){
+                if (!name.getText().toString().equals("")) {
                     submitSettingsDetailsApi();
                     CustomProgress.getInstance().showProgress(getActivity(), "", false);
-                    if(imageupload) {
+                    if (imageupload) {
                         updateProfilePic();
 
                     }//CustomProgress.getInstance().showProgress(getActivity(), "", false);
 
-                }else{
+                } else {
                     Utils.showCustomToastMsg(getActivity(), R.string.please_enter_name);
                 }
 
@@ -248,15 +247,15 @@ private MyDialog noInternetDialog;
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), PrivacyPolicyActivity.class);
-                i.putExtra("name","rules");
+                i.putExtra("name", "rules");
                 startActivity(i);
             }
         });
         rowlogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Utils.isConnectedToInternet(getActivity()))
-                LogOutApi();
+                if (Utils.isConnectedToInternet(getActivity()))
+                    LogOutApi();
                 else
                     noInternetDialog.show();
 
@@ -271,7 +270,10 @@ private MyDialog noInternetDialog;
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
         appPreference.setLatLongList(null);
+        appPreference.savePositionLatitude("0.0");
+        appPreference.savePositionLongitude("0.0");
     }
+
     public void showKeyboard(EditText editText) {
         editText.requestFocus();
         InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -282,7 +284,7 @@ private MyDialog noInternetDialog;
     public void logoutFromFacebook() {
 
         if (AccessToken.getCurrentAccessToken() == null) {
-        System.out.println("fb already logged out");
+            System.out.println("fb already logged out");
 
             return;
         }
@@ -300,77 +302,79 @@ private MyDialog noInternetDialog;
 
     private void LogOutApi() {
         CustomProgress.getInstance().showProgress(getActivity(), "", false);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LogOutApi(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LogOutApi(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                System.out.println("logout == "+bodyString);
-                CustomProgress.getInstance().hideProgress();
-                JSONObject jsonObject=new JSONObject(bodyString);
+                    System.out.println("logout == " + bodyString);
+                    CustomProgress.getInstance().hideProgress();
+                    JSONObject jsonObject = new JSONObject(bodyString);
 
-                if(jsonObject.getString("Status").equals("Ok")){
+                    if (jsonObject.getString("Status").equals("Ok")) {
 
-                    appPreference.savePref(Contents.REG_KEY, "");
-                    clearSavedBetItems();
+                        appPreference.savePref(Contents.REG_KEY, "");
+                        clearSavedBetItems();
 
-                   new Handler().postDelayed(new Runnable() {
-                       @Override
-                       public void run() {
-                           logoutFromFacebook();
-                       }
-                   },500);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                logoutFromFacebook();
+                            }
+                        }, 500);
 
 
-                    Intent i = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(i);
-                    SLApplication.removeLocationUpdates();
-                    if(SLApplication.isServiceRunning)
-                        new LocService().stopSelf();
-                    if(getActivity()!=null)
-                        getActivity().finish();
-                }else{
-                    Utils.showCustomToastMsg(getActivity(),jsonObject.getString("Msg"));
-                }
+                        Intent i = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(i);
+                        SLApplication.removeLocationUpdates();
+                        if (SLApplication.isServiceRunning)
+                            new LocService().stopSelf();
+                        if (getActivity() != null)
+                            getActivity().finish();
+                    } else {
+                        Utils.showCustomToastMsg(getActivity(), jsonObject.getString("Msg"));
+                    }
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void updateProfilePic() {
 
-        RequestBody reg_key = RequestBody.create(MediaType.parse("text/plain"),appPreference.getPref(Contents.REG_KEY,""));
+        RequestBody reg_key = RequestBody.create(MediaType.parse("text/plain"), appPreference.getPref(Contents.REG_KEY, ""));
 
         RequestBody fBody = RequestBody.create(MediaType.parse("image/jpg"), filePath);
 
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", filePath.getName(),fBody);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", filePath.getName(), fBody);
 
 
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadProfilePic(filePart,reg_key);
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UploadProfilePic(filePart, reg_key);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("settings update pic = "+bodyString);
+                    System.out.println("settings update pic = " + bodyString);
 
                     try {
                         JSONObject jsonObject = new JSONObject(bodyString);
                         String status = jsonObject.getString("Status");
                         CustomProgress.getInstance().hideProgress();
-                        if(status.trim().equals("Ok")){
+                        if (status.trim().equals("Ok")) {
                             callDashboardDetailsApi();
                             Utils.showCustomToastMsg(getActivity(), jsonObject.getString("Msg"));
                             bt_submit.setVisibility(View.GONE);
-                            first_time=true;
+                            first_time = true;
 
                             File fdelete = new File(filePath.getPath());
                             if (fdelete.exists()) {
@@ -382,7 +386,7 @@ private MyDialog noInternetDialog;
                             }
 
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         //CustomProgress.getInstance().hideProgress();
                     }
                     //CustomProgress.getInstance().hideProgress();;
@@ -391,14 +395,16 @@ private MyDialog noInternetDialog;
                     //CustomProgress.getInstance().hideProgress();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void submitSettingsDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpdateSettingsDetails(name.getText().toString(),DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpdateSettingsDetails(name.getText().toString(), DEFAULT_COUNTRY, DEFAULT_COUNTRY_SHORT_NAME, appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -407,27 +413,28 @@ private MyDialog noInternetDialog;
                     try {
                         JSONObject jsonObject = new JSONObject(bodyString);
                         String status = jsonObject.getString("Status");
-                        System.out.println("submit settings = "+bodyString);
-                        if(status.trim().equals("Ok")){
+                        System.out.println("submit settings = " + bodyString);
+                        if (status.trim().equals("Ok")) {
 
                             //Utils.showCustomToastMsg(getActivity(), R.string.updated_successfully);
                             bt_submit.setVisibility(View.GONE);
-                            first_time=true;
-                            if(!imageupload){
+                            first_time = true;
+                            if (!imageupload) {
                                 Utils.showCustomToastMsg(getActivity(), jsonObject.getString("Msg"));
                                 CustomProgress.getInstance().hideProgress();
                             }
                             callDashboardDetailsApi();
                             //CustomProgress.getInstance().hideProgress();
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
-                   // CustomProgress.getInstance().hideProgress();
+                    // CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -439,6 +446,7 @@ private MyDialog noInternetDialog;
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -446,20 +454,19 @@ private MyDialog noInternetDialog;
         ButterKnife.bind(this, view);
 
 
-
-
-        ((DashBoardActivity) getActivity()).passVal(new CameraGalaryCaputer() {
+        ((DashBoardActivity) getActivity()).passVal(new CameraGalleryCapture() {
             @Override
             public <T> void requestFailure(int requestCode, T data) {
             }
+
             @Override
             public <T> File requestSuccess(File imageFile) {
-                if(!imageFile.toString().equals("")){
-                    imageupload=true;
+                if (!imageFile.toString().equals("")) {
+                    imageupload = true;
                 }
-                try{
-                    filePath= new Compressor(getActivity()).compressToFile(imageFile);
-                }catch (Exception e){
+                try {
+                    filePath = new Compressor(getActivity()).compressToFile(imageFile);
+                } catch (Exception e) {
 
                 }
 
@@ -482,8 +489,9 @@ private MyDialog noInternetDialog;
         });
         return view;
     }
+
     private void callDashboardDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -495,12 +503,14 @@ private MyDialog noInternetDialog;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void DashboardDetailReportapiresult(String bodyString) {
 
         try {
@@ -513,14 +523,14 @@ private MyDialog noInternetDialog;
                 name.setText(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
                 appPreference.saveProfileName(jsonObject1.getString(DASH_BOARD_FIRSTNAME));
 
-                final Context mContext = getActivity() ;
+                final Context mContext = getActivity();
                 if (!jsonObject1.getString(PROFILE_PIC).equals("NA")) {
-                    if (jsonObject1.getString(REG_TYPE).equals("normal")&&jsonObject1.getString(IMAGE_STATUS).equals("0")){
-                        Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
+                    if (jsonObject1.getString(REG_TYPE).equals("normal") && jsonObject1.getString(IMAGE_STATUS).equals("0")) {
+                        Picasso.get().load(Constant.BASE_APP_IMAGE__PATH + jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
-                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC));
-                    }else{
+                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH + jsonObject1.getString(PROFILE_PIC));
+                    } else {
                         Picasso.get().load(jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
@@ -532,7 +542,7 @@ private MyDialog noInternetDialog;
                 }
                 CustomProgress.getInstance().hideProgress();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

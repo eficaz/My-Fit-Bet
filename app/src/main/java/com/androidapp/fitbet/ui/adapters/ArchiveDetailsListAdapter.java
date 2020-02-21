@@ -29,12 +29,13 @@ import java.util.List;
 import static com.androidapp.fitbet.utils.Contents.MYBETS_startlatitude;
 import static com.androidapp.fitbet.utils.Contents.MYBETS_startlongitude;
 
-public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
+public class ArchiveDetailsListAdapter extends RecyclerView.Adapter {
     Context constant;
     public ArrayList<ArchivesDetails> groupListModels;
-   // public List<Archives> selected_usersList=new ArrayList<>();
+    // public List<Archives> selected_usersList=new ArrayList<>();
     private List<ArchivesDetails> contactListFiltered;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+
     public ArchiveDetailsListAdapter(Context context, ArrayList<ArchivesDetails> myDataset) {
         this.constant = context;
         this.groupListModels = myDataset;
@@ -42,6 +43,7 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -49,6 +51,7 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
         ArchiveDetailsListAdapter.ViewHolder vh = new ArchiveDetailsListAdapter.ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         final ArchivesDetails m = groupListModels.get(position);
@@ -56,12 +59,12 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
         viewholder.tv_Name.setText(m.getFirstname());
         viewholder.tv_Description.setText(m.getCountry());
         DecimalFormat newFormat = new DecimalFormat("0.00");
-        viewholder.km.setText(""+Double.valueOf(newFormat.format(Double.valueOf(m.getDistance())/1000))+" KM");
+        viewholder.km.setText("" + Double.valueOf(newFormat.format(Double.valueOf(m.getDistance()) / 1000)) + " KM");
         viewholder.userPostion.setText(m.getPosition());
         if (!m.getProfile_pic().equals("NA")) {
-            if (m.getRegType().equals("normal")&&m.getImage_status().equals("0")){
+            if (m.getRegType().equals("normal") && m.getImage_status().equals("0")) {
                 Picasso.get().
-                        load(Constant.BASE_APP_IMAGE__PATH+m.getProfile_pic())
+                        load(Constant.BASE_APP_IMAGE__PATH + m.getProfile_pic())
                         .placeholder(R.drawable.image_loader)
                         .into(viewholder.img_user);
                 /*Glide.with(constant)
@@ -90,7 +93,7 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
                         .into(viewholder.img_user);*/
 
 
-            }else{
+            } else {
                 Picasso.get().
                         load(m.getProfile_pic())
                         .placeholder(R.drawable.image_loader)
@@ -128,20 +131,20 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(constant, ArchiveListMapDetailedActivity.class);
-                i.putExtra(Contents.MYBETS_startlongitude,m.getStartlongitude());
-                i.putExtra(Contents.MYBETS_endlongitude,m.getPositionlongitude());
-                i.putExtra(Contents.MYBETS_startlatitude,m.getStartlatitude());
-                i.putExtra(Contents.MYBETS_endlatitude,m.getPositionlatitude());
-                i.putExtra(Contents.POSITION_LATITUDE,"");
-                i.putExtra(Contents.POSITION_LONGITUDE,"");
-                i.putExtra(Contents.ROUTE,m.getRoute());
-           Bundle b=new Bundle();
+                i.putExtra(Contents.MYBETS_startlongitude, m.getStartlongitude());
+                i.putExtra(Contents.MYBETS_endlongitude, m.getPositionlongitude());
+                i.putExtra(Contents.MYBETS_startlatitude, m.getStartlatitude());
+                i.putExtra(Contents.MYBETS_endlatitude, m.getPositionlatitude());
+                i.putExtra(Contents.POSITION_LATITUDE, "");
+                i.putExtra(Contents.POSITION_LONGITUDE, "");
+                i.putExtra(Contents.ROUTE, m.getRoute());
+                Bundle b = new Bundle();
                 b.putString(Contents.POSITION_LATITUDE, m.getPositionlatitude());
                 b.putString(Contents.POSITION_LONGITUDE, m.getPositionlongitude());
-                b.putString(MYBETS_startlatitude,m.getStartlatitude());
-                b.putString(MYBETS_startlongitude,m.getStartlongitude());
-                b.putString("winner route",m.getRoute());
-                b.putString("distance",m.getDistance());
+                b.putString(MYBETS_startlatitude, m.getStartlatitude());
+                b.putString(MYBETS_startlongitude, m.getStartlongitude());
+                b.putString("winner route", m.getRoute());
+                b.putString("distance", m.getDistance());
                 i.putExtras(b);
 
 
@@ -149,23 +152,26 @@ public class ArchiveDetailsListAdapter extends RecyclerView.Adapter  {
             }
         });
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, userPostion,tv_Description,km;
+        TextView tv_Name, userPostion, tv_Description, km;
         LinearLayout rowView;
         LinearLayout map_view;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
-            map_view=  convertView.findViewById(R.id.map_view);
+            rowView = convertView.findViewById(R.id.row);
+            map_view = convertView.findViewById(R.id.map_view);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
-            userPostion= convertView.findViewById(R.id.userPostion);
+            userPostion = convertView.findViewById(R.id.userPostion);
             tv_Description = convertView.findViewById(R.id.tv_Description);
             km = convertView.findViewById(R.id.km);
             itemView.setTag(itemView);
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

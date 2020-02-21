@@ -17,25 +17,24 @@ public class AppPreference {
 
     private static AppPreference appPreference;
     private SharedPreferences sharedPreferences;
-    private  SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor;
     private Context context;
 
-private static final String TAG_DISTANCE="distance_in_double";
+    private static final String TAG_DISTANCE = "distance_in_double";
 
-    private static final String TAG_ROUTE="tag_user_route";
-    private static final String TAG_ORIGIN="tag_origin";
-    private static final String TAG_SAVED_STATUS="saved_status";
-    private static final String TAG_SAVED_LAT_LONG_LIST="savedlist";
-    private static final String TAG_PROFILE_NAME="profile_name";
-    private static final String TAG_PROFILE_IMAGE="profile_image";
-    private static final String TAG_BET_ID="bet_id";
-    private static final String TAG_BET_DATE="bet_date";
-    private static final String TAG_CHALLENGER_ID="challenger_id";
-    private static final String TAG_COUNTDOWN_TIME="countdown_time";
-    private  static final String TAG_BET_TYPE="bet_type";
-    private static  final String TAG_POSITION_LATITUDE="position_latitude";
-    private static  final String TAG_POSITION_LONGITUDE="position_longitude";
-
+    private static final String TAG_ROUTE = "tag_user_route";
+    private static final String TAG_ORIGIN = "tag_origin";
+    private static final String TAG_SAVED_STATUS = "saved_status";
+    private static final String TAG_SAVED_LAT_LONG_LIST = "savedlist";
+    private static final String TAG_PROFILE_NAME = "profile_name";
+    private static final String TAG_PROFILE_IMAGE = "profile_image";
+    private static final String TAG_BET_ID = "bet_id";
+    private static final String TAG_BET_DATE = "bet_date";
+    private static final String TAG_CHALLENGER_ID = "challenger_id";
+    private static final String TAG_COUNTDOWN_TIME = "countdown_time";
+    private static final String TAG_BET_TYPE = "bet_type";
+    private static final String TAG_POSITION_LATITUDE = "position_latitude";
+    private static final String TAG_POSITION_LONGITUDE = "position_longitude";
 
 
     public AppPreference() {
@@ -83,6 +82,7 @@ private static final String TAG_DISTANCE="distance_in_double";
         }
         editor.commit();
     }
+
     public <T> T getPref(String key, T defValue) {
         getPrefsHelper();
         T returnValue = (T) sharedPreferences.getAll().get(key);
@@ -95,47 +95,48 @@ private static final String TAG_DISTANCE="distance_in_double";
             editor.remove(key).commit();
     }
 
-    public void saveDistance(String distance){
-editor.putString(TAG_DISTANCE,distance);
-editor.commit();
-
-    }
-    public String getSavedDistance(){
-
-        return  sharedPreferences.getString(TAG_DISTANCE,"0.0");
-    }
-
-    public void saveUserRoute(String route){
-        editor.putString(TAG_ROUTE,route);
+    public void saveDistance(String distance) {
+        editor.putString(TAG_DISTANCE, distance);
         editor.commit();
 
     }
 
-    public String getSavedUserRoute(){
+    public String getSavedDistance() {
 
-        return sharedPreferences.getString(TAG_ROUTE,"");
+        return sharedPreferences.getString(TAG_DISTANCE, "0.0");
     }
 
-
-    public void saveOrigin(String origin){
-        editor.putString(TAG_ORIGIN,origin);
+    public void saveUserRoute(String route) {
+        editor.putString(TAG_ROUTE, route);
         editor.commit();
 
     }
 
-    public String getSavedOrigin(){
+    public String getSavedUserRoute() {
 
-        return sharedPreferences.getString(TAG_ORIGIN,"");
+        return sharedPreferences.getString(TAG_ROUTE, "");
     }
 
-    public void savedStatusFlag(boolean status ){
-        editor.putBoolean(TAG_SAVED_STATUS,status);
+
+    public void saveOrigin(String origin) {
+        editor.putString(TAG_ORIGIN, origin);
         editor.commit();
 
     }
 
-    public boolean getSavedStatusFlag(){
-        return sharedPreferences.getBoolean(TAG_SAVED_STATUS,false);
+    public String getSavedOrigin() {
+
+        return sharedPreferences.getString(TAG_ORIGIN, "");
+    }
+
+    public void savedStatusFlag(boolean status) {
+        editor.putBoolean(TAG_SAVED_STATUS, status);
+        editor.commit();
+
+    }
+
+    public boolean getSavedStatusFlag() {
+        return sharedPreferences.getBoolean(TAG_SAVED_STATUS, false);
 
     }
 
@@ -158,8 +159,9 @@ editor.commit();
 
             Gson gson = new Gson();
             List<Route> routeList;
-String json=sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST,"");
-            Type type = new TypeToken<List<Route>>() {}.getType();
+            String json = sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST, "");
+            Type type = new TypeToken<List<Route>>() {
+            }.getType();
             routeList = gson.fromJson(json, type);
             return routeList;
         }
@@ -167,110 +169,107 @@ String json=sharedPreferences.getString(TAG_SAVED_LAT_LONG_LIST,"");
     }
 
 
-    public void saveProfileImage(String imageUrl){
-        editor.putString(TAG_PROFILE_IMAGE,imageUrl);
+    public void saveProfileImage(String imageUrl) {
+        editor.putString(TAG_PROFILE_IMAGE, imageUrl);
         editor.commit();
 
     }
 
-    public String getSavedProfileImage(){
+    public String getSavedProfileImage() {
 
-        return sharedPreferences.getString(TAG_PROFILE_IMAGE,"");
+        return sharedPreferences.getString(TAG_PROFILE_IMAGE, "");
     }
 
-    public void saveProfileName(String name){
-        editor.putString(TAG_PROFILE_NAME,name);
+    public void saveProfileName(String name) {
+        editor.putString(TAG_PROFILE_NAME, name);
         editor.commit();
 
     }
 
-    public String getSavedProfileName(){
+    public String getSavedProfileName() {
 
-        return sharedPreferences.getString(TAG_PROFILE_NAME,"");
+        return sharedPreferences.getString(TAG_PROFILE_NAME, "");
     }
 
 
-
-
-    public void saveBetId(String betid){
-        editor.putString(TAG_BET_ID,betid);
+    public void saveBetId(String betid) {
+        editor.putString(TAG_BET_ID, betid);
         editor.commit();
 
     }
 
-    public String getSavedBetId(){
+    public String getSavedBetId() {
 
-        return sharedPreferences.getString(TAG_BET_ID,"");
+        return sharedPreferences.getString(TAG_BET_ID, "");
     }
 
 
-
-    public void saveBetDate(String date){
-        editor.putString(TAG_BET_DATE,date);
+    public void saveBetDate(String date) {
+        editor.putString(TAG_BET_DATE, date);
         editor.commit();
 
     }
 
-    public String getSavedBetDate(){
+    public String getSavedBetDate() {
 
-        return sharedPreferences.getString(TAG_BET_DATE,"");
+        return sharedPreferences.getString(TAG_BET_DATE, "");
     }
 
 
-
-    public void saveChallengerId(String challengerId){
-        editor.putString(TAG_CHALLENGER_ID,challengerId);
+    public void saveChallengerId(String challengerId) {
+        editor.putString(TAG_CHALLENGER_ID, challengerId);
         editor.commit();
 
     }
 
-    public String getSavedChallengerId(){
+    public String getSavedChallengerId() {
 
-        return sharedPreferences.getString(TAG_CHALLENGER_ID,"");
+        return sharedPreferences.getString(TAG_CHALLENGER_ID, "");
     }
 
 
-    public void saveCountDownTime(int count){
-        editor.putInt(TAG_COUNTDOWN_TIME,count);
+    public void saveCountDownTime(int count) {
+        editor.putInt(TAG_COUNTDOWN_TIME, count);
         editor.commit();
 
     }
 
-    public int getSavedCountdownTime(){
+    public int getSavedCountdownTime() {
 
-        return sharedPreferences.getInt(TAG_COUNTDOWN_TIME,0);
+        return sharedPreferences.getInt(TAG_COUNTDOWN_TIME, 0);
     }
-    public void saveBetType(String betType){
-        editor.putString(TAG_BET_TYPE,betType);
+
+    public void saveBetType(String betType) {
+        editor.putString(TAG_BET_TYPE, betType);
         editor.commit();
 
     }
 
-    public String getSavedBetType(){
+    public String getSavedBetType() {
 
-        return sharedPreferences.getString(TAG_BET_TYPE,"");
+        return sharedPreferences.getString(TAG_BET_TYPE, "");
     }
 
-    public void savePositionLatitude(String positionLatitude){
-        editor.putString(TAG_POSITION_LATITUDE,positionLatitude);
+    public void savePositionLatitude(String positionLatitude) {
+        editor.putString(TAG_POSITION_LATITUDE, positionLatitude);
         editor.commit();
 
     }
 
-    public String getPositionLatitude(){
+    public String getPositionLatitude() {
 
-        return sharedPreferences.getString(TAG_POSITION_LATITUDE,"0.0");
+        return sharedPreferences.getString(TAG_POSITION_LATITUDE, "0.0");
     }
 
-    public void savePositionLongitude(String positionLongitude){
-        editor.putString(TAG_POSITION_LONGITUDE,positionLongitude);
+    public void savePositionLongitude(String positionLongitude) {
+        editor.putString(TAG_POSITION_LONGITUDE, positionLongitude);
         editor.commit();
 
     }
 
-    public String getSavedPositionLongitude(){
+    public String getSavedPositionLongitude() {
 
-        return sharedPreferences.getString(TAG_POSITION_LONGITUDE,"0.0");
+        return sharedPreferences.getString(TAG_POSITION_LONGITUDE, "0.0");
     }
 
 }

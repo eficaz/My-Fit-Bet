@@ -14,51 +14,44 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.androidapp.fitbet.customview.CountDownDialog;
 import com.androidapp.fitbet.service.GPSTracker;
-
 import com.androidapp.fitbet.utils.SLApplication;
 
 public abstract class BaseActivity extends AppCompatActivity implements DialogInterface.OnCancelListener {
 
-    private static boolean firstConnect=true;
+    private static boolean firstConnect = true;
 
-private IntentFilter filter=new IntentFilter("count_down");
+    private IntentFilter filter = new IntentFilter("count_down");
 
-private  BroadcastReceiver  mBroadcastReceiver=new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if(intent!=null) {
-            if (firstConnect) {
-                firstConnect = false;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                if (firstConnect) {
+                    firstConnect = false;
 
-                String message = intent.getStringExtra("message");
-                onMessageReceived(message);
+                    String message = intent.getStringExtra("message");
+                    onMessageReceived(message);
 
+                }
+            } else {
+                firstConnect = true;
             }
-        }else{
-            firstConnect=true;
+
         }
+    };
 
-    }
-};
-protected abstract void onMessageReceived(String message);
-
+    protected abstract void onMessageReceived(String message);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-System.out.println("Base OnCreate");
-
-
-
+        System.out.println("Base OnCreate");
 
 
     }
-
 
 
     @Override
@@ -67,10 +60,11 @@ System.out.println("Base OnCreate");
 
         super.onStop();
     }
+
     @Override
     protected void onDestroy() {
         System.out.println("Base onDestroy");
-  ;
+        ;
         super.onDestroy();
     }
 
@@ -86,6 +80,7 @@ System.out.println("Base OnCreate");
     public void onCancel(DialogInterface dialog) {
 
     }
+
     public void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -93,6 +88,7 @@ System.out.println("Base OnCreate");
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
     public void showKeyboard(EditText editText) {
         editText.requestFocus();
         InputMethodManager manager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);

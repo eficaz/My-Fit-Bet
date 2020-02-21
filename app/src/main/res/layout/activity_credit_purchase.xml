@@ -21,13 +21,15 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center|start"
                 android:gravity="center|start"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
+
                 <TableRow
                     android:id="@+id/btn_back"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_height="wrap_content">
+
                     <ImageView
                         android:id="@+id/imageView2"
                         android:layout_width="wrap_content"
@@ -38,6 +40,7 @@
                         android:layout_marginTop="@dimen/margin_10"
                         android:background="@drawable/back_white" />
                 </TableRow>
+
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
@@ -95,6 +98,7 @@
                     android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:layout_weight="1.5">
+
                     <TableRow
                         android:id="@+id/cer1"
                         android:layout_width="0dp"
@@ -105,6 +109,7 @@
                         android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:layout_weight="1">
+
                         <TextView
                             android:id="@+id/textView41"
                             android:layout_width="wrap_content"
@@ -114,13 +119,14 @@
                             android:fontFamily="@font/lato_bold"
                             android:padding="10dp"
                             android:text="10" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_gravity="center"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/coin_icon"
-                           />
+                            android:src="@drawable/coin_icon" />
                     </TableRow>
+
                     <TableRow
                         android:id="@+id/cer2"
                         android:layout_width="0dp"
@@ -131,6 +137,7 @@
                         android:gravity="center"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1">
+
                         <TextView
                             android:id="@+id/textView40"
                             android:layout_width="wrap_content"
@@ -140,13 +147,14 @@
                             android:fontFamily="@font/lato_bold"
                             android:layout_height="wrap_content"
                             android:text="20" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_gravity="center"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/coin_icon"
-                            />
+                            android:src="@drawable/coin_icon" />
                     </TableRow>
+
                     <TableRow
                         android:id="@+id/cer3"
                         android:layout_width="0dp"
@@ -157,6 +165,7 @@
                         android:gravity="center"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1">
+
                         <TextView
                             android:id="@+id/textView39"
                             android:layout_width="wrap_content"
@@ -166,13 +175,14 @@
                             android:textStyle="bold"
                             android:layout_height="wrap_content"
                             android:text="30" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_gravity="center"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/coin_icon"
-                            />
+                            android:src="@drawable/coin_icon" />
                     </TableRow>
+
                     <TableRow
                         android:id="@+id/cer4"
                         android:layout_width="0dp"
@@ -182,6 +192,7 @@
                         android:backgroundTint="@color/light_blue"
                         android:gravity="center"
                         android:layout_weight="1">
+
                         <TextView
                             android:id="@+id/textView38"
                             android:layout_width="wrap_content"
@@ -191,12 +202,12 @@
                             android:textStyle="bold"
                             android:layout_height="wrap_content"
                             android:text="50" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_gravity="center"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/coin_icon"
-                            />
+                            android:src="@drawable/coin_icon" />
                     </TableRow>
                 </TableRow>
             </LinearLayout>
@@ -235,8 +246,7 @@
                         android:layout_gravity="center"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:src="@drawable/coin_icon"
-                        />
+                        android:src="@drawable/coin_icon" />
                 </TableRow>
 
                 <TableRow
@@ -267,7 +277,7 @@
                         android:layout_width="200dp"
                         android:background="@drawable/btn_plus_min_bg"
                         android:padding="10dp"
-                        android:layout_height="50dp" >
+                        android:layout_height="50dp">
 
                         <TableRow
                             android:id="@+id/zero"
@@ -275,7 +285,7 @@
                             android:layout_weight="1"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
                                 android:id="@+id/textView46"
@@ -286,6 +296,7 @@
 
 
                         </TableRow>
+
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
@@ -293,13 +304,14 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:background="@color/white" />
+
                         <TableRow
                             android:id="@+id/subtration"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
                                 android:id="@+id/textView45"
@@ -311,6 +323,7 @@
 
 
                         </TableRow>
+
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
@@ -318,13 +331,14 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:background="@color/white" />
+
                         <TableRow
                             android:id="@+id/add"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
                                 android:id="@+id/textView44"
@@ -343,7 +357,8 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
+
                     <TextView
                         android:id="@+id/total_sub"
                         android:layout_width="wrap_content"
@@ -361,9 +376,9 @@
                         android:layout_marginStart="5dp"
                         android:textColor="@color/golden_color"
                         android:textSize="8dp"
-                        android:text="A$"
-                        />
+                        android:text="A$" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -393,8 +408,7 @@
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_height="50dp"
-                    >
+                    android:layout_height="50dp">
 
                     <CheckBox
                         android:id="@+id/checkBox"
@@ -420,6 +434,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <Button
                     android:id="@+id/bt_purchass"
                     android:layout_width="match_parent"
@@ -434,12 +449,12 @@
                     android:text="@string/buy_now"
                     android:textColor="@color/white" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

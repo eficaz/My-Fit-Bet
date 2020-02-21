@@ -1,7 +1,6 @@
 package com.androidapp.fitbet.model;
 
-public class Products
-{
+public class Products {
     private String rate;
 
     private String product_id;
@@ -16,73 +15,59 @@ public class Products
 
     private String status;
 
-    public String getRate ()
-    {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate (String rate)
-    {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
-    public String getProductId ()
-    {
+    public String getProductId() {
         return product_id;
     }
 
-    public void setProductId(String product_id)
-    {
+    public void setProductId(String product_id) {
         this.product_id = product_id;
     }
 
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getId ()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId (String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getType ()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType (String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getCredit ()
-    {
+    public String getCredit() {
         return credit;
     }
 
-    public void setCredit (String credit)
-    {
+    public void setCredit(String credit) {
         this.credit = credit;
     }
 
-    public String getStatus ()
-    {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus (String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 

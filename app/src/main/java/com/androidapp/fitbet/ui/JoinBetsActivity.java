@@ -79,12 +79,12 @@ public class JoinBetsActivity extends BaseActivity {
     ArchivesListAdapter archivesListAdapter;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -92,21 +92,21 @@ public class JoinBetsActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -174,7 +174,8 @@ public class JoinBetsActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver)
-;    }
+        ;
+    }
 
     @Override
     protected void onResume() {
@@ -199,17 +200,19 @@ public class JoinBetsActivity extends BaseActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                   // groupDetailsList(bodyString);
+                    // groupDetailsList(bodyString);
                     CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void groupDetailsList(String bodyString) {
         try {
             final JSONObject jsonObject = new JSONObject(bodyString);

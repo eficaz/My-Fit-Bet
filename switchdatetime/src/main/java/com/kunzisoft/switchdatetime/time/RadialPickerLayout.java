@@ -576,14 +576,14 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
 
         if (animate && (index != lastIndex)) {
             List<Animator> animators = new ArrayList<>();
-            switch(index) {
-                case MINUTE_INDEX :
+            switch (index) {
+                case MINUTE_INDEX:
                     animators.add(mHourTimeRadialNumbersView.getDisappearAnimator());
                     animators.add(mHourTimeRadialSelectorView.getDisappearAnimator());
                     animators.add(mMinuteTimeRadialNumbersView.getReappearAnimator());
                     animators.add(mMinuteTimeRadialSelectorView.getReappearAnimator());
                     break;
-                case HOUR_INDEX :
+                case HOUR_INDEX:
                     animators.add(mHourTimeRadialNumbersView.getReappearAnimator());
                     animators.add(mHourTimeRadialSelectorView.getReappearAnimator());
                     animators.add(mMinuteTimeRadialNumbersView.getDisappearAnimator());
@@ -810,7 +810,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
             super.onInitializeAccessibilityNodeInfo(info);
             info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD);
             info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_BACKWARD);
-        } else if(Build.VERSION.SDK_INT >= 16) {
+        } else if (Build.VERSION.SDK_INT >= 16) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.addAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
             info.addAction(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD);

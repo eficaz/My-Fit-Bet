@@ -30,12 +30,13 @@
                 android:gravity="center"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <RelativeLayout
                     android:id="@+id/change_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    >
+                    android:layout_gravity="center">
+
                     <com.androidapp.fitbet.utils.CircleImageView
                         android:id="@+id/img_user"
                         android:layout_width="60dp"
@@ -43,6 +44,7 @@
                         android:layout_centerInParent="true"
 
                         android:src="@drawable/user_profile_avatar" />
+
                     <ImageView
                         android:id="@+id/camera_img"
                         android:layout_width="30dp"
@@ -50,8 +52,7 @@
                         android:layout_marginTop="@dimen/margin_30"
                         android:layout_marginBottom="10dp"
                         android:layout_toEndOf="@+id/img_user"
-                        android:src="@drawable/photo_camera"
-                         />
+                        android:src="@drawable/photo_camera" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -65,6 +66,7 @@
                 android:layout_marginStart="@dimen/margin_20"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
@@ -79,13 +81,13 @@
                     android:padding="@dimen/margin_5"
                     android:text=""
                     android:maxLines="1"
-                    android:singleLine="true"
-                    />
+                    android:singleLine="true" />
 
                 <View
                     android:layout_width="match_parent"
                     android:background="@color/md_grey_100"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp" />
+
                 <TextView
                     android:id="@+id/country_selection"
                     android:layout_width="match_parent"
@@ -101,13 +103,14 @@
                 <View
                     android:layout_width="match_parent"
                     android:background="@color/md_grey_100"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp" />
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_gravity="center|end"
                     android:layout_marginTop="5dp"
                     android:gravity="end|center"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/bt_submit"
@@ -145,114 +148,128 @@
             android:layout_marginStart="@dimen/margin_30"
             android:layout_marginEnd="@dimen/margin_30"
             android:orientation="vertical">
-        <TableRow
-            android:id="@+id/change_password"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center|start"
-            android:layout_gravity="center|start"
-            android:layout_height="0dp" >
 
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/change_password" />
+            <TableRow
+                android:id="@+id/change_password"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center|start"
+                android:layout_gravity="center|start"
+                android:layout_height="0dp">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/tabTextColor"
-                android:text="@string/change_password" />
-        </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/md_grey_100"
-            android:layout_height="1dp"/>
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/change_password" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/tabTextColor"
+                    android:text="@string/change_password" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/md_grey_100"
+                android:layout_height="1dp" />
 
 
-        <TableRow
-            android:id="@+id/share"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center|start"
-            android:layout_gravity="center|start"
-            android:layout_height="0dp" >
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/share_icon" />
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/tabTextColor"
-                android:text="@string/share" />
-        </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/md_grey_100"
-            android:layout_height="1dp"/>
-        <TableRow
-            android:id="@+id/row_privacy_policy"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center|start"
-            android:layout_gravity="center|start"
-            android:layout_height="0dp" >
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/privacy_policy" />
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/tabTextColor"
-                android:text="@string/privacy_policy" />
-        </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/md_grey_100"
-            android:layout_height="1dp"/>
-        <TableRow
-            android:id="@+id/terms_and_service"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center|start"
-            android:layout_gravity="center|start"
-            android:layout_height="0dp" >
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/terms_condition" />
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/tabTextColor"
-                android:text="@string/terms_conditions" />
-        </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/md_grey_100"
-            android:layout_height="1dp"/>
+            <TableRow
+                android:id="@+id/share"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center|start"
+                android:layout_gravity="center|start"
+                android:layout_height="0dp">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/share_icon" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/tabTextColor"
+                    android:text="@string/share" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/md_grey_100"
+                android:layout_height="1dp" />
+
+            <TableRow
+                android:id="@+id/row_privacy_policy"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center|start"
+                android:layout_gravity="center|start"
+                android:layout_height="0dp">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/privacy_policy" />
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/tabTextColor"
+                    android:text="@string/privacy_policy" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/md_grey_100"
+                android:layout_height="1dp" />
+
+            <TableRow
+                android:id="@+id/terms_and_service"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center|start"
+                android:layout_gravity="center|start"
+                android:layout_height="0dp">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/terms_condition" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/tabTextColor"
+                    android:text="@string/terms_conditions" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/md_grey_100"
+                android:layout_height="1dp" />
+
             <TableRow
                 android:id="@+id/rules_regulations"
                 android:layout_width="match_parent"
@@ -261,11 +278,13 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
                 android:layout_gravity="center|start"
-                android:layout_height="0dp" >
+                android:layout_height="0dp">
+
                 <ImageView
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:src="@drawable/rulesnregu" />
+
                 <TextView
 
                     android:layout_width="wrap_content"
@@ -276,41 +295,46 @@
 
                     android:text="@string/rules_regulations" />
             </TableRow>
+
             <View
                 android:layout_width="match_parent"
                 android:background="@color/md_grey_100"
-                android:layout_height="1dp"/>
-        <TableRow
-            android:id="@+id/rowlogOut"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center|start"
-            android:layout_gravity="center|start"
-            android:layout_height="0dp" >
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/logout" />
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/tabTextColor"
-                android:text="@string/logout" />
-        </TableRow>
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/md_grey_100"
-            android:layout_height="1dp"/>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_weight=".5"
-            android:layout_height="0dp" >
-        </TableRow>
-    </LinearLayout>
+                android:layout_height="1dp" />
+
+            <TableRow
+                android:id="@+id/rowlogOut"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center|start"
+                android:layout_gravity="center|start"
+                android:layout_height="0dp">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/logout" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/tabTextColor"
+                    android:text="@string/logout" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/md_grey_100"
+                android:layout_height="1dp" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_weight=".5"
+                android:layout_height="0dp"></TableRow>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

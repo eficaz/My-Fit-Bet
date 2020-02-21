@@ -1,6 +1,7 @@
 // from: https://android.googlesource.com/platform/cts/+/lollipop-release/tests/tests/media/src/android/media/cts/InputSurface.java
 // blob: 157ed88d143229e4edb6889daf18fb73aa2fc5a5
 package com.nagihong.videocompressor.system;
+
 import android.opengl.EGL14;
 import android.opengl.EGLConfig;
 import android.opengl.EGLContext;
@@ -24,6 +25,7 @@ public class InputSurface {
     private EGLContext mEGLContext = EGL14.EGL_NO_CONTEXT;
     private EGLSurface mEGLSurface = EGL14.EGL_NO_SURFACE;
     private Surface mSurface;
+
     /**
      * Creates an InputSurface from a Surface.
      */
@@ -34,6 +36,7 @@ public class InputSurface {
         mSurface = surface;
         eglSetup();
     }
+
     /**
      * Prepares EGL.  We want a GLES 2.0 context and a surface that supports recording.
      */
@@ -85,6 +88,7 @@ public class InputSurface {
             throw new RuntimeException("surface was null");
         }
     }
+
     /**
      * Discard all resources held by this class, notably the EGL context.  Also releases the
      * Surface that was passed to our constructor.
@@ -102,6 +106,7 @@ public class InputSurface {
         mEGLSurface = EGL14.EGL_NO_SURFACE;
         mSurface = null;
     }
+
     /**
      * Makes our EGL context and surface current.
      */
@@ -110,24 +115,28 @@ public class InputSurface {
             throw new RuntimeException("eglMakeCurrent failed");
         }
     }
+
     public void makeUnCurrent() {
         if (!EGL14.eglMakeCurrent(mEGLDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE,
                 EGL14.EGL_NO_CONTEXT)) {
             throw new RuntimeException("eglMakeCurrent failed");
         }
     }
+
     /**
      * Calls eglSwapBuffers.  Use this to "publish" the current frame.
      */
     public boolean swapBuffers() {
         return EGL14.eglSwapBuffers(mEGLDisplay, mEGLSurface);
     }
+
     /**
      * Returns the Surface that the MediaCodec receives buffers from.
      */
     public Surface getSurface() {
         return mSurface;
     }
+
     /**
      * Queries the surface's width.
      */
@@ -136,6 +145,7 @@ public class InputSurface {
         EGL14.eglQuerySurface(mEGLDisplay, mEGLSurface, EGL14.EGL_WIDTH, value, 0);
         return value[0];
     }
+
     /**
      * Queries the surface's height.
      */
@@ -144,12 +154,14 @@ public class InputSurface {
         EGL14.eglQuerySurface(mEGLDisplay, mEGLSurface, EGL14.EGL_HEIGHT, value, 0);
         return value[0];
     }
+
     /**
      * Sends the presentation time stamp to EGL.  Time is expressed in nanoseconds.
      */
     public void setPresentationTime(long nsecs) {
         EGLExt.eglPresentationTimeANDROID(mEGLDisplay, mEGLSurface, nsecs);
     }
+
     /**
      * Checks for EGL errors.
      */

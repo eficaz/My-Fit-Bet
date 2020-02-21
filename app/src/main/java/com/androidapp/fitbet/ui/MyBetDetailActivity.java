@@ -117,34 +117,34 @@ public class MyBetDetailActivity extends BaseActivity {
     @Bind(R.id.btn_back)
     ImageView btn_back;
 
-    ArrayList<BetDetails>betDetails;
+    ArrayList<BetDetails> betDetails;
 
     MyBetDetailsAdapter betDetailsAdapter;
 
-    String betId="";
+    String betId = "";
 
-    Double lat,log;
+    Double lat, log;
 
-    String challengerid="";
+    String challengerid = "";
 
-    String distance="";
+    String distance = "";
 
-    String bettype="";
+    String bettype = "";
 
-    String route="";
+    String route = "";
 
     Bundle bundle;
 
-    String startlongitude,endlongitude,startlatitude,endlatitude;
-    String winerLat="",winerLog="";
+    String startlongitude, endlongitude, startlatitude, endlatitude;
+    String winerLat = "", winerLog = "";
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -152,8 +152,8 @@ public class MyBetDetailActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -162,12 +162,11 @@ public class MyBetDetailActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -192,10 +191,10 @@ public class MyBetDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 String latitudeLongitude = Utils.getLocationFromNetwork();
                 String[] Lat = latitudeLongitude.split(",");
-                lat= Double.valueOf(Lat[0]);
-                log= Double.valueOf(Lat[1]);
-                Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(challengerid,distance,log.toString(),lat.toString(),
-                        AppPreference.getPrefsHelper().getPref(REG_KEY,""));
+                lat = Double.valueOf(Lat[0]);
+                log = Double.valueOf(Lat[1]);
+                Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(challengerid, distance, log.toString(), lat.toString(),
+                        AppPreference.getPrefsHelper().getPref(REG_KEY, ""));
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -205,7 +204,7 @@ public class MyBetDetailActivity extends BaseActivity {
                             try {
                                 jsonObject = new JSONObject(bodyString);
                                 String data = jsonObject.getString("Status");
-                                if(data.equals("Ok")){
+                                if (data.equals("Ok")) {
                                     CustomProgress.getInstance().hideProgress();
                                     invite.setVisibility(View.GONE);
                                     start.setVisibility(View.GONE);
@@ -217,6 +216,7 @@ public class MyBetDetailActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         CustomProgress.getInstance().hideProgress();
@@ -234,14 +234,14 @@ public class MyBetDetailActivity extends BaseActivity {
         map_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!startlongitude.equals("") && !endlongitude.equals("")&& !startlatitude.equals("")&& !endlatitude.equals("")){
+                if (!startlongitude.equals("") && !endlongitude.equals("") && !startlatitude.equals("") && !endlatitude.equals("")) {
                     Intent i = new Intent(MyBetDetailActivity.this, MapRedirectDetailedActivity.class);
-                    i.putExtra(Contents.MYBETS_startlongitude,startlongitude);
-                    i.putExtra(Contents.MYBETS_endlongitude,endlongitude);
-                    i.putExtra(Contents.MYBETS_startlatitude,startlatitude);
-                    i.putExtra(Contents.MYBETS_endlatitude,endlatitude);
-                    i.putExtra(Contents.POSITION_LATITUDE,winerLat);
-                    i.putExtra(Contents.POSITION_LONGITUDE,winerLog);
+                    i.putExtra(Contents.MYBETS_startlongitude, startlongitude);
+                    i.putExtra(Contents.MYBETS_endlongitude, endlongitude);
+                    i.putExtra(Contents.MYBETS_startlatitude, startlatitude);
+                    i.putExtra(Contents.MYBETS_endlatitude, endlatitude);
+                    i.putExtra(Contents.POSITION_LATITUDE, winerLat);
+                    i.putExtra(Contents.POSITION_LONGITUDE, winerLog);
                     startActivity(i);
                 }
             }
@@ -267,7 +267,7 @@ public class MyBetDetailActivity extends BaseActivity {
     }
 
     private void callJoinApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(AppPreference.getPrefsHelper().getPref(REG_KEY,""),betId);
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(AppPreference.getPrefsHelper().getPref(REG_KEY, ""), betId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -280,14 +280,16 @@ public class MyBetDetailActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void callMybetDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(bundle.getString(MYBETS_betid),AppPreference.getPrefsHelper().getPref(REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(bundle.getString(MYBETS_betid), AppPreference.getPrefsHelper().getPref(REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -300,24 +302,26 @@ public class MyBetDetailActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void BetDetailsList(String bodyString) {
-        try{
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 name.setText(jsonObject.getString(MYBETS_betname));
                 discreption.setText(jsonObject.getString(DESCRIPTION));
                 participants.setText(jsonObject.getString(TOTAL_PARTICIPANTS));
                 messages.setText(jsonObject.getString(TOTAL_MESSAGE));
                 credits.setText(jsonObject.getString(MYBETS_credit));
-                betId= jsonObject.getString(MYBETS_betid);
+                betId = jsonObject.getString(MYBETS_betid);
 
-                try{
+                try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     df.setTimeZone(TimeZone.getTimeZone("UTC"));
                     Date date = df.parse(jsonObject.getString(MYBETS_date));
@@ -329,7 +333,7 @@ public class MyBetDetailActivity extends BaseActivity {
                     output = outputformat.format(date);
                     calander.setText(outputformat.format(date));
                     clock.setText(outputformat1.format(date));
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -339,30 +343,30 @@ public class MyBetDetailActivity extends BaseActivity {
                     join_now.setVisibility(View.GONE);
                 }*/
 
-                challengerid=jsonObject.getString(MYBETS_challengerid);
+                challengerid = jsonObject.getString(MYBETS_challengerid);
 
-                distance=jsonObject.getString(DISTANCE);
+                distance = jsonObject.getString(DISTANCE);
 
-                bettype=jsonObject.getString(MYBETS_bettype);
+                bettype = jsonObject.getString(MYBETS_bettype);
 
-                route=jsonObject.getString(MYBETS_route);
+                route = jsonObject.getString(MYBETS_route);
 
 
-                if(bettype.equals("distance")){
+                if (bettype.equals("distance")) {
                     map_row.setVisibility(View.GONE);
-                }else{
+                } else {
                     map_row.setVisibility(View.VISIBLE);
-                    startlongitude=jsonObject.getString(MYBETS_startlongitude);
-                    endlongitude=  jsonObject.getString(MYBETS_endlongitude);
-                    startlatitude=jsonObject.getString(MYBETS_startlatitude);
-                    endlatitude=jsonObject.getString(MYBETS_endlatitude);
+                    startlongitude = jsonObject.getString(MYBETS_startlongitude);
+                    endlongitude = jsonObject.getString(MYBETS_endlongitude);
+                    startlatitude = jsonObject.getString(MYBETS_startlatitude);
+                    endlatitude = jsonObject.getString(MYBETS_endlatitude);
                 }
-                if(jsonObject.getString(MYBETS_started).equals("no")){
-                   invite.setVisibility(View.GONE);
+                if (jsonObject.getString(MYBETS_started).equals("no")) {
+                    invite.setVisibility(View.GONE);
                     start.setVisibility(View.VISIBLE);
 
-                }else{
-                    if(bundle.getString(MYBETS_betid).equals("0")||bundle.getString(MYBETS_betid).equals("4")){
+                } else {
+                    if (bundle.getString(MYBETS_betid).equals("0") || bundle.getString(MYBETS_betid).equals("4")) {
                         invite.setVisibility(View.VISIBLE);
                         start.setVisibility(View.GONE);
                     }
@@ -370,9 +374,9 @@ public class MyBetDetailActivity extends BaseActivity {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(PARTICIPANTS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 betDetails = new ArrayList<>();
@@ -388,13 +392,13 @@ public class MyBetDetailActivity extends BaseActivity {
                     model.setReg_key(jsonList.getString(REG_KEY1));
                     betDetails.add(model);
                 }
-                betDetailsAdapter = new MyBetDetailsAdapter(this, betDetails,jsonObject.getString(MYBETS_betid));
+                betDetailsAdapter = new MyBetDetailsAdapter(this, betDetails, jsonObject.getString(MYBETS_betid));
                 bet_list.setHasFixedSize(true);
                 bet_list.setLayoutManager(new LinearLayoutManager(this));
                 bet_list.setAdapter(betDetailsAdapter);
                 CustomProgress.getInstance().hideProgress();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

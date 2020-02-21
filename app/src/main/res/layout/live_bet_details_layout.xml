@@ -37,6 +37,7 @@
                     android:layout_height="match_parent"
                     android:text="" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/map_row"
                 android:layout_width="match_parent"
@@ -50,9 +51,8 @@
                     android:layout_height="match_parent" />
 
 
-
-
             </LinearLayout>
+
             <TableRow
                 android:id="@+id/details_row_1"
                 android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                       android:layout_gravity="center"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -391,20 +391,22 @@
                 </TableRow>
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/list_row"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.2"
                 android:orientation="vertical">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/bet_members_list"
-                android:background="@color/transparent"
-                android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_height="match_parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bet_members_list"
+                    android:background="@color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

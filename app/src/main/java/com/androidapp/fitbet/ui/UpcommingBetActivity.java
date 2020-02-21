@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 public class UpcommingBetActivity extends BaseActivity {
 
 
-
     @Bind(R.id.searchview)
     EditText searchView;
 
@@ -31,12 +30,12 @@ public class UpcommingBetActivity extends BaseActivity {
 
     ArrayList<MyBets> groupDetails;
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -44,21 +43,21 @@ public class UpcommingBetActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -67,7 +66,6 @@ public class UpcommingBetActivity extends BaseActivity {
         setContentView(R.layout.activity_upcomming_bet);
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-
 
 
     }

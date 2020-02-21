@@ -63,7 +63,7 @@ public class InviteGroupListActivity extends BaseActivity {
     @Bind(R.id.searchview)
     EditText searchView;
 
-    ArrayList<Invitemembers>invitemembersDetails;
+    ArrayList<Invitemembers> invitemembersDetails;
 
     ArrayList<Invitemembers> multiselect_list = new ArrayList<>();
 
@@ -71,14 +71,14 @@ public class InviteGroupListActivity extends BaseActivity {
 
     Bundle bundle;
 
-    String group_id="";
+    String group_id = "";
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -86,8 +86,8 @@ public class InviteGroupListActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -96,12 +96,11 @@ public class InviteGroupListActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -111,20 +110,20 @@ public class InviteGroupListActivity extends BaseActivity {
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         bundle = getIntent().getExtras();
-        group_id=bundle.getString(Contents.GROUP_ID);
-        if (Utils.isConnectedToInternet(InviteGroupListActivity.this)){
+        group_id = bundle.getString(Contents.GROUP_ID);
+        if (Utils.isConnectedToInternet(InviteGroupListActivity.this)) {
             CustomProgress.getInstance().showProgress(InviteGroupListActivity.this, "", false);
             inviteGroupList();
-        } else{
+        } else {
             Utils.showCustomToastMsg(InviteGroupListActivity.this, R.string.no_internet);
         }
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(InviteGroupListActivity.this, InviteGroupActivity.class);
-                i.putExtra(Contents.GROUP_ID,group_id);
+                i.putExtra(Contents.GROUP_ID, group_id);
                 startActivity(i);
-               finish();
+                finish();
             }
         });
         searchView.addTextChangedListener(new TextWatcher() {
@@ -170,7 +169,7 @@ public class InviteGroupListActivity extends BaseActivity {
         super.onBackPressed();
 
         Intent i = new Intent(InviteGroupListActivity.this, InviteGroupActivity.class);
-        i.putExtra(Contents.GROUP_ID,group_id);
+        i.putExtra(Contents.GROUP_ID, group_id);
         startActivity(i);
         finish();
 
@@ -179,12 +178,12 @@ public class InviteGroupListActivity extends BaseActivity {
     private void filter(String text) {
         inviteListAdapter.filterList(text);
     }
+
     private void inviteGroupList() {
         final Bundle bundle = getIntent().getExtras();
-        if(bundle.getString(GROUP_ID)!= null ||bundle.getString(GROUP_ID)!= "")
-        {
-            String search="";
-            Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).InviteGroupList(bundle.getString(GROUP_ID),"");
+        if (bundle.getString(GROUP_ID) != null || bundle.getString(GROUP_ID) != "") {
+            String search = "";
+            Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).InviteGroupList(bundle.getString(GROUP_ID), "");
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -192,32 +191,34 @@ public class InviteGroupListActivity extends BaseActivity {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
                         CustomProgress.getInstance().hideProgress();
                         CustomProgress.getInstance().showProgress(InviteGroupListActivity.this, "", false);
-                        groupDetailsList(bodyString,bundle.getString(GROUP_ID));
+                        groupDetailsList(bodyString, bundle.getString(GROUP_ID));
                         //listOrderGroup(bodyString);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                 }
             });
-        }else{
+        } else {
 
         }
     }
-    private void groupDetailsList(String bodyString,String groupId) {
-        try{
+
+    private void groupDetailsList(String bodyString, String groupId) {
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             CustomProgress.getInstance().hideProgress();
             String data = jsonObject.getString("Status");
             //String msg = jsonObject.getString("Msg");
             //Utils.showCustomToastMsg(InviteGroupListActivity.this, msg);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 CustomProgress.getInstance().hideProgress();
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString("invitemembers");
-                String basepath=jsonObject1.getString(BASEPATH);
+                String basepath = jsonObject1.getString(BASEPATH);
                 JSONArray jsonArray = new JSONArray(data1);
                 invitemembersDetails = new ArrayList<>();
                 invitemembersDetails.clear();
@@ -237,16 +238,16 @@ public class InviteGroupListActivity extends BaseActivity {
                     model.setDistance(jsonList.getString(DISTANCE));
                     invitemembersDetails.add(model);
                 }
-                inviteListAdapter = new InviteListAdapter(this, invitemembersDetails,multiselect_list,groupId,basepath);
+                inviteListAdapter = new InviteListAdapter(this, invitemembersDetails, multiselect_list, groupId, basepath);
                 invite_group_list.setHasFixedSize(true);
                 invite_group_list.setLayoutManager(new LinearLayoutManager(this));
                 invite_group_list.setAdapter(inviteListAdapter);
                 //CustomProgress.getInstance().hideProgress();
-            }else{
+            } else {
                 CustomProgress.getInstance().hideProgress();
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -29,9 +29,9 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class Utils {
 
-public static boolean permissionStatus;
-public static boolean permissionDeclineStatus;
-public static String BetScreenName="Bet";
+    public static boolean permissionStatus;
+    public static boolean permissionDeclineStatus;
+    public static String BetScreenName = "Bet";
 
     public static void showCustomToastMsg(Context mContext, int msg) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -44,6 +44,7 @@ public static String BetScreenName="Bet";
         customtoast.setDuration(Toast.LENGTH_SHORT);
         customtoast.show();
     }
+
     public static void showCustomToastMsg(Context mContext, String msg) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View layout = inflater.inflate(R.layout.toast_layout, null);
@@ -57,13 +58,12 @@ public static String BetScreenName="Bet";
     }
 
 
-    public static double roundTwoDecimals(double d)
-    {
+    public static double roundTwoDecimals(double d) {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         return Double.parseDouble(twoDForm.format(d));
     }
 
-    public  static boolean isValidEmail(String target) {
+    public static boolean isValidEmail(String target) {
         if (target.equals("")) {
             return false;
         } else {
@@ -83,6 +83,7 @@ public static String BetScreenName="Bet";
     public static boolean isConnectedToInternet(Context _context) {
         return isReallyConnectedToInternet(_context);
     }
+
     public static boolean isReallyConnectedToInternet(Context _context) {
         if (_context != null) {
             ConnectivityManager connectivity = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -128,8 +129,6 @@ public static String BetScreenName="Bet";
     }
 
 
-
-
     @SuppressLint("MissingPermission")
     public static String getLocationFromNetwork() {
         GPSTracker gpsTracker = new GPSTracker(SLApplication.getContext());
@@ -154,13 +153,12 @@ public static String BetScreenName="Bet";
     }
 
 
-
-
     static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates";
 
 
     /**
      * Stores the location updates state in SharedPreferences.
+     *
      * @param requestingLocationUpdates The location updates state.
      */
     public static void setRequestingLocationUpdates(Context context, boolean requestingLocationUpdates) {
@@ -171,14 +169,13 @@ public static String BetScreenName="Bet";
     }
 
 
-
-public static LocationRequest getLocationRequest(){
-    LocationRequest mLocationRequest = LocationRequest.create();
-    mLocationRequest.setInterval(10000);
-    mLocationRequest.setFastestInterval(5000);
-    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    return mLocationRequest;
-}
+    public static LocationRequest getLocationRequest() {
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return mLocationRequest;
+    }
 
 
 }

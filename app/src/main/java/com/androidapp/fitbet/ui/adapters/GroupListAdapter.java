@@ -22,21 +22,23 @@ import java.util.Locale;
 
 import static com.androidapp.fitbet.network.Constant.BASE_APP_GROUP_IMAGE__PATH;
 
-public class GroupListAdapter extends RecyclerView.Adapter  {
+public class GroupListAdapter extends RecyclerView.Adapter {
     Context constant;
-    public ArrayList<GroupListModel>groupListModels;
-    public List<GroupListModel> selected_usersList=new ArrayList<>();
+    public ArrayList<GroupListModel> groupListModels;
+    public List<GroupListModel> selected_usersList = new ArrayList<>();
     private List<GroupListModel> contactListFiltered;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
-    String basePath="";
+    String basePath = "";
+
     public GroupListAdapter(Context context, ArrayList<GroupListModel> myDataset, ArrayList<GroupListModel> selectedList, String basePath) {
         this.constant = context;
         this.groupListModels = myDataset;
         this.selected_usersList = selectedList;
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
-        this.basePath=basePath;
+        this.basePath = basePath;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -44,6 +46,7 @@ public class GroupListAdapter extends RecyclerView.Adapter  {
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         final GroupListModel m = groupListModels.get(position);
@@ -51,14 +54,15 @@ public class GroupListAdapter extends RecyclerView.Adapter  {
         viewholder.tv_Name.setText(m.getName());
         viewholder.tv_Designation.setText(m.getDescription());
         viewholder.tv_groupCount.setText(m.getUsers());
-        if(selected_usersList.contains(groupListModels.get(position))){
-            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_gray_border));}
-        else{
-            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_whight_border));}
+        if (selected_usersList.contains(groupListModels.get(position))) {
+            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_gray_border));
+        } else {
+            viewholder.rowView.setBackground(constant.getDrawable(R.drawable.layout_whight_border));
+        }
 
         if (!m.getGroupimage().equals("NA")) {
             Picasso.get().
-                    load(BASE_APP_GROUP_IMAGE__PATH+m.getGroupimage())
+                    load(BASE_APP_GROUP_IMAGE__PATH + m.getGroupimage())
                     .placeholder(R.drawable.image_loader)
                     .into(viewholder.img_user);
 
@@ -66,13 +70,14 @@ public class GroupListAdapter extends RecyclerView.Adapter  {
             viewholder.img_user.setImageDrawable(constant.getResources().getDrawable(R.drawable.group_icons));
         }
     }
+
     public void filterList(String charText) {
 
         charText = charText.toLowerCase(Locale.getDefault());
         groupListModels.clear();
         if (charText.length() == 0) {
             groupListModels.addAll(contactListFiltered);
-        }else {
+        } else {
             for (GroupListModel wp : contactListFiltered) {
                 if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
                     groupListModels.add(wp);
@@ -83,20 +88,20 @@ public class GroupListAdapter extends RecyclerView.Adapter  {
         notifyDataSetChanged();
     }
 
-   /* public void filterList(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        groupListModels.clear();
-        if (charText.length() == 0) {
-            groupListModels.addAll(contactListFiltered);
-        }else {
-            for (GroupListModel wp : contactListFiltered) {
-                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    groupListModels.add(wp);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }*/
+    /* public void filterList(String charText) {
+         charText = charText.toLowerCase(Locale.getDefault());
+         groupListModels.clear();
+         if (charText.length() == 0) {
+             groupListModels.addAll(contactListFiltered);
+         }else {
+             for (GroupListModel wp : contactListFiltered) {
+                 if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                     groupListModels.add(wp);
+                 }
+             }
+         }
+         notifyDataSetChanged();
+     }*/
   /* public void filterList(String charText) {
        charText = charText.toLowerCase(Locale.getDefault());
        groupListModels.clear();
@@ -118,11 +123,12 @@ public class GroupListAdapter extends RecyclerView.Adapter  {
     }*/
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, tv_Designation,tv_groupCount;
+        TextView tv_Name, tv_Designation, tv_groupCount;
         ConstraintLayout rowView;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
+            rowView = convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
             tv_groupCount = convertView.findViewById(R.id.tv_groupCount);
@@ -135,6 +141,7 @@ public class GroupListAdapter extends RecyclerView.Adapter  {
             itemView.setTag(itemView);*/
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

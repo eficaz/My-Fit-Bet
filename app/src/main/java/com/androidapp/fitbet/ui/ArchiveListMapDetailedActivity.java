@@ -55,7 +55,7 @@ import static com.androidapp.fitbet.network.Constant.DRAW_MAP_BASE_URL;
 import static com.androidapp.fitbet.polyline.GoogleMapHelper.getDefaultPolyLines;
 
 
-public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnMapReadyCallback {
+public class ArchiveListMapDetailedActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -75,19 +75,19 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
     TextView distance;
 
     Bundle bundle;
-    String winnerPositionLat , winnerPositionLog ,winnerStartLat,winnerStartLog,winnerRoute,winnerDistance;
-    Double startLongitude=0.0, positionLongitude, startLatitude, positionLatitude,distanceInMeters;
+    String winnerPositionLat, winnerPositionLog, winnerStartLat, winnerStartLog, winnerRoute, winnerDistance;
+    Double startLongitude = 0.0, positionLongitude, startLatitude, positionLatitude, distanceInMeters;
     Polyline polyline;
-    private String origin,destination;
+    private String origin, destination;
     private MyDialog noInternetDialog;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -95,8 +95,8 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -105,12 +105,11 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -119,21 +118,21 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
         setContentView(R.layout.activity_map_redirect_detaiuld_by_loction);
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        bundle =  getIntent().getExtras();
-        winnerPositionLat =bundle.getString(Contents.POSITION_LATITUDE);
-        winnerPositionLog =bundle.getString(Contents.POSITION_LONGITUDE);
-        winnerStartLat =bundle.getString(Contents.MYBETS_startlatitude);
-        winnerStartLog =bundle.getString(Contents.MYBETS_startlongitude);
-        winnerRoute=bundle.getString("winner route");
-        winnerDistance=bundle.getString("distance");
-        startLatitude=Double.parseDouble(winnerStartLat);
-        startLongitude=Double.parseDouble(winnerStartLog);
-        positionLatitude=Double.parseDouble(winnerPositionLat);
-        positionLongitude=Double.parseDouble(winnerPositionLog);
-        distanceInMeters=Double.parseDouble(winnerDistance);
+        bundle = getIntent().getExtras();
+        winnerPositionLat = bundle.getString(Contents.POSITION_LATITUDE);
+        winnerPositionLog = bundle.getString(Contents.POSITION_LONGITUDE);
+        winnerStartLat = bundle.getString(Contents.MYBETS_startlatitude);
+        winnerStartLog = bundle.getString(Contents.MYBETS_startlongitude);
+        winnerRoute = bundle.getString("winner route");
+        winnerDistance = bundle.getString("distance");
+        startLatitude = Double.parseDouble(winnerStartLat);
+        startLongitude = Double.parseDouble(winnerStartLog);
+        positionLatitude = Double.parseDouble(winnerPositionLat);
+        positionLongitude = Double.parseDouble(winnerPositionLog);
+        distanceInMeters = Double.parseDouble(winnerDistance);
 
-        origin=winnerStartLat+","+winnerStartLog;
-        destination=winnerPositionLat+","+winnerPositionLog;
+        origin = winnerStartLat + "," + winnerStartLog;
+        destination = winnerPositionLat + "," + winnerPositionLog;
         noInternetDialog = new MyDialog(this, null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
         mMapView.onCreate(savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -147,9 +146,9 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
             }
         });
 
-        if(Utils.isConnectedToInternet(this)){
-            setLocationDetails(origin,destination);
-        }else noInternetDialog.show();
+        if (Utils.isConnectedToInternet(this)) {
+            setLocationDetails(origin, destination);
+        } else noInternetDialog.show();
 
     }
 
@@ -165,57 +164,59 @@ public class ArchiveListMapDetailedActivity extends BaseActivity  implements OnM
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
-    private void setLocationDetails(String origin, String dest){
+    private void setLocationDetails(String origin, String dest) {
 
-        CustomProgress.getInstance().showProgress(ArchiveListMapDetailedActivity.this,"",false);
+        CustomProgress.getInstance().showProgress(ArchiveListMapDetailedActivity.this, "", false);
 
-        Call<ResponseBody> call = RetroClient.getClient(DRAW_MAP_BASE_URL).create(RetroInterface.class).MapDetails(origin,dest,"driving",getString(R.string.google_maps_key));
+        Call<ResponseBody> call = RetroClient.getClient(DRAW_MAP_BASE_URL).create(RetroInterface.class).MapDetails(origin, dest, "driving", getString(R.string.google_maps_key));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     CustomProgress.getInstance().hideProgress();
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                   System.out.println("google driving == "+bodyString);
-                    JSONObject jsonObject=new JSONObject(bodyString);
+                    System.out.println("google driving == " + bodyString);
+                    JSONObject jsonObject = new JSONObject(bodyString);
                     JSONArray routeArray = jsonObject.getJSONArray("routes");
-                    JSONArray legsArray=routeArray.getJSONObject(0).getJSONArray("legs");
+                    JSONArray legsArray = routeArray.getJSONObject(0).getJSONArray("legs");
                     endpoint.setText(legsArray.getJSONObject(0).getString("end_address"));
                     startpoint.setText(legsArray.getJSONObject(0).getString("start_address"));
                     System.out.println(legsArray.getJSONObject(0).getString("start_address"));
 
-                    distance.setText(formatNumber2Decimals(distanceInMeters)+"KM");
+                    distance.setText(formatNumber2Decimals(distanceInMeters) + "KM");
                     onMapReady(mMap);
-new Handler().post(new Runnable() {
-    @Override
-    public void run() {
-        drawPolyLines(winnerRoute);
-    }
-});
-
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawPolyLines(winnerRoute);
+                        }
+                    });
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
-    PolylineOptions polylineOptions=null;
+
+    PolylineOptions polylineOptions = null;
+
     private void drawPolyLines(String userRoute) {
 
-        String r= StringEscapeUtils.escapeJava(userRoute);
+        String r = StringEscapeUtils.escapeJava(userRoute);
         List<LatLng> latLngList = new ArrayList<>();
        /* String[] splitRoutes = userRoute.split("fitbet");
         List<String> routeList = Arrays.asList(splitRoutes);*/
         ///////////////////////////////////////////////////////////////
         String[] splitRoutes = r.split("fitbet");
-        List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
+        List<String> routeList = new LinkedList<>(Arrays.asList(splitRoutes));
 
-        Set<String> routeSets=new LinkedHashSet<>(routeList);
+        Set<String> routeSets = new LinkedHashSet<>(routeList);
         routeList.clear();
         routeList.addAll(routeSets);
 //////////////////////////////////////////////////////////////////////
@@ -241,8 +242,7 @@ new Handler().post(new Runnable() {
         }*/
 
 
-
-System.out.println("replace route "+r);
+        System.out.println("replace route " + r);
 
         for (String route : routeList) {
             latLngList.clear();
@@ -250,7 +250,7 @@ System.out.println("replace route "+r);
 
 
             if (polyline == null) {
-                 polylineOptions = getDefaultPolyLines(latLngList);
+                polylineOptions = getDefaultPolyLines(latLngList);
             } else {
 
                 if (polylineOptions != null) {
@@ -273,9 +273,10 @@ System.out.println("replace route "+r);
 
         }
 
-       // zoomRoute(mMap, latLngList);
+        // zoomRoute(mMap, latLngList);
 
     }
+
     public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute) {
 
         if (googleMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
@@ -321,19 +322,19 @@ System.out.println("replace route "+r);
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(mMap!=null)
+        if (mMap != null)
             mMap.setMyLocationEnabled(true);
-        if(startLatitude!=0.0) {
+        if (startLatitude != 0.0) {
             googleMap.addMarker(new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)).position(new LatLng(startLatitude, startLongitude)));
             googleMap.addMarker(new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location)).position(new LatLng(positionLatitude, positionLongitude)));
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  startLatitude,   startLongitude), 18f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLatitude, startLongitude), 18f));
     }
 
-    private String formatNumber2Decimals(double number ){
-        number=number/1000;
+    private String formatNumber2Decimals(double number) {
+        number = number / 1000;
 
 
-        return String.format(Locale.getDefault(), "%.2f", number) ;
+        return String.format(Locale.getDefault(), "%.2f", number);
     }
 }

@@ -9,21 +9,16 @@ import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,7 +54,6 @@ import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -85,8 +79,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,7 +93,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -137,14 +128,13 @@ import static com.androidapp.fitbet.utils.Contents.STATUS_A;
 import static com.androidapp.fitbet.utils.Contents.TOTAL_DISTANCE;
 import static com.androidapp.fitbet.utils.Contents.USER_start_latitude;
 import static com.androidapp.fitbet.utils.Contents.USER_start_longitude;
-import static com.androidapp.fitbet.utils.Contents.WINNER_PARTICIPANT;
 import static com.androidapp.fitbet.utils.Contents.WON;
 import static java.lang.Math.asin;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
-public class LiveBetFragment extends Fragment implements OnMapReadyCallback , DirectionFinderListener, LocationReceiveListener, CountDownDialog.CountDownStopListener {
+public class LiveBetFragment extends Fragment implements OnMapReadyCallback, DirectionFinderListener, LocationReceiveListener, CountDownDialog.CountDownStopListener {
 
     @Bind(R.id.contstraint_layout)
     ConstraintLayout constraintLayout;
@@ -188,136 +178,72 @@ public class LiveBetFragment extends Fragment implements OnMapReadyCallback , Di
     @Bind(R.id.img_user)
     CircleImageView userImage;
 
-    private Polyline polyline=null,locationPolyline=null;
+    private Polyline polyline = null, locationPolyline = null;
     private int REQUEST_CHECK_SETTINGS = 111;
     private LocationManager mLocationManager;
     private Handler counterHandler;
     private Runnable counterRunnable;
 
     private GoogleMap googleMap;
-    private Double startLatitude = 0.0, startLongitude = 0.0, positionLatitude = 0.0, positionLongitude = 0.0,endLatitude=0.0,endLongitude=0.0,cdStartLat,cdStartLon;
+    private Double startLatitude = 0.0, startLongitude = 0.0, positionLatitude = 0.0, positionLongitude = 0.0, endLatitude = 0.0, endLongitude = 0.0, cdStartLat, cdStartLon;
     private String challengerId, betType;
     private Intent serviceIntent;
     private ArrayList<LiveBetDetails> liveBetDetailsArrayList = null;
     private LiveBetUserListAdapter liveBetUserListAdapter;
     private MyDialog noInternetDialog;
-    private String locationRoute="";
-/*    private static LiveBetFragment instance;*/
-    private  Timer timer=new Timer("update");
-    private String regNo="";
-    private  String betId="";
-    private String winName="";
-    private String won="";
-    private  boolean winner=true;
-    private  boolean loser=true;
+    private String locationRoute = "";
+    /*    private static LiveBetFragment instance;*/
+    private Timer timer = new Timer("update");
+    private String regNo = "";
+    private String betId = "";
+
+    private String won = "";
+
     private MarkerOptions startMarkerOptions, positionMarkerOptions;
-    private Marker positionMarker=null,startMarker=null;
-private LocationReceiveListener locationReceiveListener=null;
-private DashBoardActivity dashBoardActivity;
-private AppPreference appPreference;
-private CountDownDialog.CountDownStopListener countDownStopListener;
+    private Marker positionMarker = null, startMarker = null;
+    private LocationReceiveListener locationReceiveListener = null;
+    private DashBoardActivity dashBoardActivity;
+    private AppPreference appPreference;
+    private CountDownDialog.CountDownStopListener countDownStopListener;
 
-    private IntentFilter filter=new IntentFilter("bet_update");
+    private IntentFilter filter = new IntentFilter("bet_update");
 
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("Bet receiver on receive");
-            if(intent!=null) {
+            if (intent != null) {
                 if (SLApplication.firstUpdateConnect) {
                     SLApplication.firstUpdateConnect = false;
 
-                    String bodyString=intent.getStringExtra("update_response");
-                    if(CustomProgress.getInstance().isShowing())
+                    String bodyString = intent.getStringExtra("update_response");
+                    if (CustomProgress.getInstance().isShowing())
                         CustomProgress.getInstance().hideProgress();
-                        try {
-
-
-                        JSONObject jsonObject = new JSONObject(bodyString);
-                        String data1 = jsonObject.getString(WINNER_PARTICIPANT);
-                        JSONArray jsonArray1 = new JSONArray(data1);
-                        for (int i = 0; i < jsonArray1.length(); i++) {
-                            JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
-                            regNo = jsonObject2.getString(REG_KEY);
-                            winName = jsonObject2.getString(FIRST_NAME);
-                            //won=jsonObject2.getString(WON);
-
-                        }
-                        won = jsonObject.getString(MYBETS_credit);
-                        JSONArray jsonArray = new JSONArray(data1);
-                        String data2 = jsonObject.getString(BETDETAILS);
-                        //JSONArray jsonArray2 = new JSONArray(data2);
-                        JSONObject jsonObject3 = new JSONObject(data2);
-                        betId = jsonObject3.getString(MYBETS_betid);
-                        startLatitude = jsonObject3.getDouble("userstartlatitude");
-                        startLongitude = jsonObject3.getDouble("userstartlongitude");
-                        positionLatitude=jsonObject3.getDouble("positionlatitude");
-                        positionLongitude=jsonObject3.getDouble("positionlongitude");
-
-                        if (jsonArray.length() != 0) {
-                            if (regNo.equals(appPreference.getPref(REG_KEY, ""))) {
-                                if (!regNo.equals("") && !winName.equals("") && !won.equals("") && !betId.equals("")) {
-                                    if (winner&&!actFlag) {
-
-                                        appPreference.savePref(BET_START_STATUS,"false");
-                                        actFlag=true;
-                                        stopLocationService(serviceIntent);
-                                        clearSavedBetItems();
-                                        cancelTimer();
-                                        winner = false;
-                                        counterHandler.removeCallbacks(counterRunnable);
-                                        appPreference.savePref(Contents.UPDATE_METER, "0");
-                                        if(getActivity()!=null) {
-                                            Intent i = new Intent(getActivity(), WinnerActivity.class);
-                                            i.putExtra(REG_KEY, regNo);
-                                            i.putExtra(FIRST_NAME, winName);
-                                            i.putExtra(MYBETS_betid, betId);
-                                            i.putExtra(WON, won);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-
-                                    }
-                                } else {
-                                    Utils.showCustomToastMsg(getActivity(), R.string.imvalid_entry);
-                                }
-                            } else {
-                                if (loser&&!actFlag) {
-                                    appPreference.savePref(BET_START_STATUS,"false");
-                                    actFlag=true;
-                                    stopLocationService(serviceIntent);
-                                    cancelTimer();
-                                    clearSavedBetItems();
-                                    loser = false;
-                                    counterHandler.removeCallbacks(counterRunnable);
-                                    appPreference.savePref(Contents.UPDATE_METER, "0");
-                                    if(getActivity()!=null) {
-                                        Intent i = new Intent(getActivity(), LoserActivity.class);
-                                        i.putExtra(MYBETS_betid, betId);
-                                        startActivity(i);
-                                        getActivity().finish();
-                                    }
-
-                                }
-                            }
-                        }
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                publishLiveDetails(bodyString);
-                            }
-                        });
-
-
-                }catch (JSONException e){e.printStackTrace();}
+                 parseData(bodyString);
                 }
-            }else{
-                SLApplication.firstUpdateConnect=true;
+            } else {
+                SLApplication.firstUpdateConnect = true;
             }
 
         }
     };
 
+
+    private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Objects.requireNonNull(intent.getAction()).matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                //Do your stuff on GPS status change
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Objects.requireNonNull(getActivity()))) {
+                    Log.e("fitbet ds", "Gps not enabled");
+                    createLocationRequest();
+                }else {
+                    if (!SLApplication.isServiceRunning)
+                        startLocationService(serviceIntent);
+                }
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -330,55 +256,54 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        appPreference=AppPreference.getPrefsHelper(getActivity());
+        appPreference = AppPreference.getPrefsHelper(getActivity());
 
-        appPreference.savePref(Contents.DASH_BOARD_POSICTION,"2");
-      /*  _context.registerReceiver(broadcastReceiver,new IntentFilter("location_update"));*/
-        dashBoardActivity=(DashBoardActivity)getActivity();
+        appPreference.savePref(Contents.DASH_BOARD_POSICTION, "2");
+        /*  _context.registerReceiver(broadcastReceiver,new IntentFilter("location_update"));*/
+        dashBoardActivity = (DashBoardActivity) getActivity();
 
-     /*   instance = this;*/
+        /*   instance = this;*/
         serviceIntent = new Intent(getActivity(), LocService.class);
 
         startLocationService(serviceIntent);
 
-        locationReceiveListener=this;
+        locationReceiveListener = this;
         LocReceiver.registerLocationReceiveListener(locationReceiveListener);
-
-        countDownStopListener=this;
+       Objects.requireNonNull(getContext()).registerReceiver(gpsReceiver,new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        countDownStopListener = this;
 
         System.out.println("onViewCreated LiveBetFragment");
         mapView.onCreate(savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null);
         mapView.onResume(); // needed to get the map to display immediately
         mapView.getMapAsync(this);
-         startMarkerOptions =new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location));
-         positionMarkerOptions =new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location));
+        startMarkerOptions = new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location));
+        positionMarkerOptions = new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location));
 
         noInternetDialog = new MyDialog(getActivity(), null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        if(SLApplication.isCountDownRunning) {
-         System.out.println("inside countdown live");
-           new CountDownDialog(getActivity(),countDownStopListener,appPreference.getSavedCountdownTime());
+        if (SLApplication.isCountDownRunning) {
+            System.out.println("inside countdown live");
+            new CountDownDialog(getActivity(), countDownStopListener, appPreference.getSavedCountdownTime());
 
-       }else {
+        } else {
             initLiveBet();
         }
-
 
 
         arrowImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if(((String)arrowImage.getTag()).equals("down")){
-                  arrowImage.setTag("up");
-                  arrowImage.setImageResource(R.drawable.arrow_up);
-                  setupNewConstraints();
+                if (((String) arrowImage.getTag()).equals("down")) {
+                    arrowImage.setTag("up");
+                    arrowImage.setImageResource(R.drawable.arrow_up);
+                    setupNewConstraints();
 
-              }else{
-                  arrowImage.setTag("down");
-                  arrowImage.setImageResource(R.drawable.arrow_down);
-                  releaseNewConstraints();
-              }
+                } else {
+                    arrowImage.setTag("down");
+                    arrowImage.setImageResource(R.drawable.arrow_down);
+                    releaseNewConstraints();
+                }
             }
         });
 
@@ -413,19 +338,20 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
-        constraintSet.connect(R.id.mapView,ConstraintSet.BOTTOM,R.id.linearLayout,ConstraintSet.TOP,0);
-        constraintSet.connect(R.id.mapView,ConstraintSet.END,R.id.contstraint_layout,ConstraintSet.END,0);
-        constraintSet.connect(R.id.mapView,ConstraintSet.START,R.id.contstraint_layout,ConstraintSet.START,0);
-        constraintSet.connect(R.id.mapView,ConstraintSet.TOP,R.id.txt_bet_name,ConstraintSet.BOTTOM,0);
-        constraintSet.constrainHeight(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
-        constraintSet.constrainWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
-        constraintSet.setVerticalBias(R.id.mapView,0.0f);
-        constraintSet.setHorizontalBias(R.id.mapView,0.0f);
-        constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPx);
+        constraintSet.connect(R.id.mapView, ConstraintSet.BOTTOM, R.id.linearLayout, ConstraintSet.TOP, 0);
+        constraintSet.connect(R.id.mapView, ConstraintSet.END, R.id.contstraint_layout, ConstraintSet.END, 0);
+        constraintSet.connect(R.id.mapView, ConstraintSet.START, R.id.contstraint_layout, ConstraintSet.START, 0);
+        constraintSet.connect(R.id.mapView, ConstraintSet.TOP, R.id.txt_bet_name, ConstraintSet.BOTTOM, 0);
+        constraintSet.constrainHeight(R.id.mapView, ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainWidth(R.id.mapView, ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.setVerticalBias(R.id.mapView, 0.0f);
+        constraintSet.setHorizontalBias(R.id.mapView, 0.0f);
+        constraintSet.constrainHeight(R.id.linearLayout, dpHeightInPx);
         constraintSet.applyTo(constraintLayout);
 
 
     }
+
     private void releaseNewConstraints() {
 
         frameLayout.setVisibility(View.VISIBLE);
@@ -442,26 +368,27 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
-        constraintSet.connect(R.id.mapView,ConstraintSet.BOTTOM,R.id.contstraint_layout,ConstraintSet.BOTTOM,0);
-        constraintSet.connect(R.id.mapView,ConstraintSet.END,R.id.contstraint_layout,ConstraintSet.END,0);
-        constraintSet.connect(R.id.mapView,ConstraintSet.START,R.id.contstraint_layout,ConstraintSet.START,0);
-        constraintSet.connect(R.id.mapView,ConstraintSet.TOP,R.id.txt_bet_name,ConstraintSet.BOTTOM,0);
-        constraintSet.constrainHeight(R.id.mapView,dpHeightInPxMap);
-        constraintSet.constrainWidth(R.id.mapView,ConstraintSet.MATCH_CONSTRAINT);
-        constraintSet.setVerticalBias(R.id.mapView,0.0f);
-        constraintSet.setHorizontalBias(R.id.mapView,0.0f);
-        constraintSet.constrainHeight(R.id.linearLayout,dpHeightInPxLl);
+        constraintSet.connect(R.id.mapView, ConstraintSet.BOTTOM, R.id.contstraint_layout, ConstraintSet.BOTTOM, 0);
+        constraintSet.connect(R.id.mapView, ConstraintSet.END, R.id.contstraint_layout, ConstraintSet.END, 0);
+        constraintSet.connect(R.id.mapView, ConstraintSet.START, R.id.contstraint_layout, ConstraintSet.START, 0);
+        constraintSet.connect(R.id.mapView, ConstraintSet.TOP, R.id.txt_bet_name, ConstraintSet.BOTTOM, 0);
+        constraintSet.constrainHeight(R.id.mapView, dpHeightInPxMap);
+        constraintSet.constrainWidth(R.id.mapView, ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.setVerticalBias(R.id.mapView, 0.0f);
+        constraintSet.setHorizontalBias(R.id.mapView, 0.0f);
+        constraintSet.constrainHeight(R.id.linearLayout, dpHeightInPxLl);
         constraintSet.applyTo(constraintLayout);
 
     }
 
     private boolean isTimerRunning/*,run*/;
-    private void cancelTimer(){
 
-        if(isTimerRunning){
+    private void cancelTimer() {
+
+        if (isTimerRunning) {
             timer.cancel();
             timer.purge();
-            isTimerRunning=false;
+            isTimerRunning = false;
         }
 
     }
@@ -483,70 +410,89 @@ private CountDownDialog.CountDownStopListener countDownStopListener;
 
     @Override
     public void onResume() {
-        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).registerReceiver(mBroadcastReceiver, filter);
+
+            LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).registerReceiver(mBroadcastReceiver, filter);
+           Objects.requireNonNull(getContext()).registerReceiver(gpsReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+
         if (!SLApplication.isServiceRunning)
             startLocationService(serviceIntent);
 
-  if(locationReceiveListener!=null)
-    LocReceiver.registerLocationReceiveListener(locationReceiveListener);
+        if (locationReceiveListener != null)
+            LocReceiver.registerLocationReceiveListener(locationReceiveListener);
 
-    System.out.println("Live bet Inside on resume");
+        System.out.println("Live bet Inside on resume");
 
-new Handler().post(new Runnable() {
-    @Override
-    public void run() {
-        System.out.println("On resume saved user route "+appPreference.getSavedUserRoute());
-        if(!appPreference.getSavedUserRoute().equals(""))
-            drawPolyLine(appPreference.getSavedUserRoute(),Color.RED);
-    }
-});
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("On resume saved user route " + appPreference.getSavedUserRoute());
+                if (!appPreference.getSavedUserRoute().equals(""))
+                    drawPolyLine(appPreference.getSavedUserRoute(), Color.RED);
+            }
+        });
 
 
-    super.onResume();
+        super.onResume();
 
     }
 
     @Override
     public void onStop() {
         System.out.println("Live bet inside onStop ");
-        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
-        LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
+        try {
+
+
+            LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
+            Objects.requireNonNull(getContext()).unregisterReceiver(gpsReceiver);
+            LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
+        }  catch (IllegalArgumentException e){
+        e.printStackTrace();
+    }
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-       // run=false;
+        // run=false;
+        try{
         LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
-
+        Objects.requireNonNull(getContext()).unregisterReceiver(gpsReceiver);
+    }  catch (IllegalArgumentException e){
+        e.printStackTrace();
     }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
+        try {
         LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(gpsReceiver);
         LocReceiver.unregisterLocationReceiveListener(locationReceiveListener);
-       // run=false;
+    }  catch (IllegalArgumentException e){
+        e.printStackTrace();
+    }
+        // run=false;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-if(googleMap!=null)
-        googleMap.setMyLocationEnabled(true);
+        if (googleMap != null)
+            googleMap.setMyLocationEnabled(true);
 
-        if(positionMarker!=null) {
-         // positionMarker.remove();
-    positionMarker.setPosition(new LatLng(positionLatitude,positionLongitude));
-           // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
+        if (positionMarker != null) {
+            // positionMarker.remove();
+            positionMarker.setPosition(new LatLng(positionLatitude, positionLongitude));
+            // animateMarker(positionMarker,positionMarker.getPosition(),new LatLng(positionLatitude,positionLongitude),false);
             System.out.println("onMapReady drawing position marker");
         }
 
 
-     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  positionLatitude,   positionLongitude), 18f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(positionLatitude, positionLongitude), 18f));
 
     }
-
 
 
     private boolean hasGPSDevice(Context context) {
@@ -605,20 +551,20 @@ if(googleMap!=null)
     }
 
     private void getLiveBetDetails() {
-        appPreference.savePref(Contents.BET_START_STATUS,"true");
-        if(!CustomProgress.getInstance().isShowing())
-        CustomProgress.getInstance().showProgress(getActivity(), "", false);
+        appPreference.savePref(Contents.BET_START_STATUS, "true");
+        if (!CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().showProgress(getActivity(), "", false);
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveBetDetails(appPreference.getPref(REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    if(response.body()!=null) {
+                    if (response.body() != null) {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
                         System.out.println("BET details " + bodyString);
 
                         publishBetDetails(bodyString);
-                    }else{
+                    } else {
                         System.out.println("Null BET details");
                         getLiveBetDetails();
                     }
@@ -636,8 +582,8 @@ if(googleMap!=null)
     }
 
     private void publishBetDetails(String bodyString) {
-if(CustomProgress.getInstance().isShowing())
-        CustomProgress.getInstance().hideProgress();
+        if (CustomProgress.getInstance().isShowing())
+            CustomProgress.getInstance().hideProgress();
         try {
             JSONObject mainJsonObject = new JSONObject(bodyString);
             if (mainJsonObject.getString(STATUS_A).trim().equals("Ok")) {
@@ -649,15 +595,15 @@ if(CustomProgress.getInstance().isShowing())
                 startLongitude = betDetailsObject.getDouble(USER_start_longitude);
                 /*positionLatitude=startLatitude;
                 positionLongitude=startLongitude;*/
-                positionMarker=googleMap.addMarker(positionMarkerOptions.position(new LatLng(startLatitude,startLatitude)));
-               startMarker= googleMap.addMarker(startMarkerOptions.position(new LatLng(startLatitude, startLongitude)));
-                if(!appPreference.getSavedStatusFlag()) {
+                positionMarker = googleMap.addMarker(positionMarkerOptions.position(new LatLng(startLatitude, startLatitude)));
+                startMarker = googleMap.addMarker(startMarkerOptions.position(new LatLng(startLatitude, startLongitude)));
+                if (!appPreference.getSavedStatusFlag()) {
                     appPreference.savePref(USER_start_latitude, betDetailsObject.getString(USER_start_latitude));
                     appPreference.savePref(USER_start_longitude, betDetailsObject.getString(USER_start_longitude));
                     appPreference.saveOrigin(betDetailsObject.getString(USER_start_latitude) + "," + betDetailsObject.getString(USER_start_longitude));
                     appPreference.savedStatusFlag(true);
                 }
-               onMapReady(googleMap);
+                onMapReady(googleMap);
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                 df.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date date = df.parse(betDetailsObject.getString(START_DATE));
@@ -673,19 +619,19 @@ if(CustomProgress.getInstance().isShowing())
                 }
 
                 challengerId = betDetailsObject.getString(MYBETS_challengerid);
-appPreference.saveChallengerId(challengerId);
+                appPreference.saveChallengerId(challengerId);
                 betType = betDetailsObject.getString(MYBETS_bettype);
                 appPreference.saveBetType(betType);
-               // userDistance=betDetailsObject.getString("distance");
+                // userDistance=betDetailsObject.getString("distance");
 
                 if (betDetailsObject.getString(MYBETS_bettype).equals(LOCATION)) {
                     startLatitude = betDetailsObject.getDouble(MYBETS_startlatitude);
                     startLongitude = betDetailsObject.getDouble(MYBETS_startlongitude);
-                    endLatitude=betDetailsObject.getDouble("endlatitude");
-                    endLongitude=betDetailsObject.getDouble("endlongitude");
-                    locationRoute=betDetailsObject.getString("route");
-                    googleMap.addMarker(positionMarkerOptions.position(new LatLng(endLatitude,endLongitude)));
-                    drawLocationPolyLine(locationRoute,Color.BLACK);
+                    endLatitude = betDetailsObject.getDouble("endlatitude");
+                    endLongitude = betDetailsObject.getDouble("endlongitude");
+                    locationRoute = betDetailsObject.getString("route");
+                    googleMap.addMarker(positionMarkerOptions.position(new LatLng(endLatitude, endLongitude)));
+                    drawLocationPolyLine(locationRoute, Color.BLACK);
                     // drawMapRout(jsonObject2.getString(MYBETS_startlatitude),jsonObject2.getString(MYBETS_startlongitude),jsonObject2.getString(MYBETS_endlatitude),jsonObject2.getString(MYBETS_endlongitude));
                 }
 
@@ -723,21 +669,21 @@ appPreference.saveChallengerId(challengerId);
                     liveBetDetailsArrayList.add(liveBetDetails);
 
 
-                    if(arrayObject.getString("reg_key").equals(appPreference.getPref(REG_KEY,""))){
-                        positionLatitude=arrayObject.getDouble(POSITION_LATITUDE);
-                        positionLongitude=arrayObject.getDouble( POSITION_LONGITUDE);
+                    if (arrayObject.getString("reg_key").equals(appPreference.getPref(REG_KEY, ""))) {
+                        positionLatitude = arrayObject.getDouble(POSITION_LATITUDE);
+                        positionLongitude = arrayObject.getDouble(POSITION_LONGITUDE);
                         appPreference.savePositionLatitude(arrayObject.getString(POSITION_LATITUDE));
                         appPreference.savePositionLongitude(arrayObject.getString(POSITION_LONGITUDE));
                         txtParticipate.setText(arrayObject.getString(POSITION));
                         txtName.setText(arrayObject.getString(FIRST_NAME));
                         if (!arrayObject.getString(PROFILE_PIC).equals("NA")) {
-                            if (arrayObject.getString(REG_TYPE).equals("normal")&&arrayObject.getString(IMAGE_STATUS).equals("0")){
+                            if (arrayObject.getString(REG_TYPE).equals("normal") && arrayObject.getString(IMAGE_STATUS).equals("0")) {
 
                                 Picasso.get().
-                                        load(Constant.BASE_APP_IMAGE__PATH+arrayObject.getString(PROFILE_PIC))
+                                        load(Constant.BASE_APP_IMAGE__PATH + arrayObject.getString(PROFILE_PIC))
                                         .placeholder(R.drawable.image_loader)
                                         .into(userImage);
-                            }else{
+                            } else {
 
                                 Picasso.get().
                                         load(arrayObject.getString(PROFILE_PIC))
@@ -748,18 +694,17 @@ appPreference.saveChallengerId(challengerId);
                             userImage.setImageDrawable(getContext().getResources().getDrawable(R.drawable.user_profile_avatar));
                         }
 
-                        double totalDistance= (arrayObject.getDouble(DISTANCE));
-                        txtTotalKm.setText(formatNumber2Decimals(totalDistance)+" km");
+                        double totalDistance = (arrayObject.getDouble(DISTANCE));
+                        txtTotalKm.setText(formatNumber2Decimals(totalDistance) + " km");
 
 
-                        double remainingDistance=betDetailsObject.getDouble(TOTAL_DISTANCE)-arrayObject.getDouble(DISTANCE);
-if(remainingDistance>0)
-                        txtRemainingKm.setText(formatNumber2Decimals(remainingDistance)+" km");
-else
-    txtRemainingKm.setText(formatNumber2Decimals(0)+" km");
+                        double remainingDistance = betDetailsObject.getDouble(TOTAL_DISTANCE) - arrayObject.getDouble(DISTANCE);
+                        if (remainingDistance > 0)
+                            txtRemainingKm.setText(formatNumber2Decimals(remainingDistance) + " km");
+                        else
+                            txtRemainingKm.setText(formatNumber2Decimals(0) + " km");
 
                     }
-
 
 
                     liveBetUserListAdapter = new LiveBetUserListAdapter(getActivity(), liveBetDetailsArrayList);
@@ -776,8 +721,6 @@ else
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
-
-
 
 
     }
@@ -844,40 +787,38 @@ else
     }
 
 
-
     private void startLocationService(Intent intent) {
-if(getActivity()!=null) {
-    getActivity().startService(intent);
-    SLApplication.isServiceRunning = true;
-}
-}
+        if (getActivity() != null) {
+            getActivity().startService(intent);
+            SLApplication.isServiceRunning = true;
+        }
+    }
 
     private void stopLocationService(Intent intent) {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             getActivity().stopService(intent);
             SLApplication.isServiceRunning = false;
         }
     }
 
 
+    private double userDistanceDouble = 0.0;
 
-    private double userDistanceDouble=0.0;
     @Override
     public void onLocationReceived(Double lat, Double lon) {
-        cdStartLat=lat;
-        cdStartLon=lon;
-        if(!SLApplication.isCountDownRunning) {
+        cdStartLat = lat;
+        cdStartLon = lon;
+        if (!SLApplication.isCountDownRunning) {
 
             Log.d("onLocationRcvd LIVE ", "" + lat + " , " + lon);
 
             if (positionMarker != null) {
                 positionMarker.setPosition(new LatLng(lat, lon));
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(  lat,   lon), 18f));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 18f));
                 System.out.println("onLocationReceived drawing position marker");
                 onMapReady(googleMap);
 
             }
-
 
 
             new Handler().post(new Runnable() {
@@ -909,10 +850,10 @@ if(getActivity()!=null) {
         Call<ResponseBody> call
                 //Utils.showCustomToastMsg(constant, "------latitude------2--"+""+AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LAT,"")+"------longitude-------2-"+""+AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LOG,""));
 
-                = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(appPreference.getSavedChallengerId(),"0"
-                ,String.valueOf(cdStartLat),
+                = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).StartBet(appPreference.getSavedChallengerId(), "0"
+                , String.valueOf(cdStartLat),
                 String.valueOf(cdStartLon),
-                AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+                AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
 
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -923,17 +864,17 @@ if(getActivity()!=null) {
                     final JSONObject jsonObject;
                     try {
                         jsonObject = new JSONObject(bodyString);
-                        System.out.println("Start bet count down "+bodyString);
+                        System.out.println("Start bet count down " + bodyString);
                         String data = jsonObject.getString("Status");
                         dialog.dismiss();
-                        SLApplication.isCountDownRunning=false;
-                        if(data.equals("Ok")){
+                        SLApplication.isCountDownRunning = false;
+                        if (data.equals("Ok")) {
 
                             AppPreference.getPrefsHelper().savePref(Contents.BET_START_STATUS, "true");
                             clearSavedBetItems();
                             initLiveBet();
 
-                        }else{
+                        } else {
                             String msg = jsonObject.getString("Msg");
                             Utils.showCustomToastMsg(getActivity(), msg);
 
@@ -947,6 +888,7 @@ if(getActivity()!=null) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -957,9 +899,9 @@ if(getActivity()!=null) {
     }
 
 
-    private void drawInteractivePolyLine(List<Route> userRoutes){
+    private void drawInteractivePolyLine(List<Route> userRoutes) {
 
-System.out.println(" drawInteractivePolyLine ");
+        System.out.println(" drawInteractivePolyLine ");
       /*  if (!userRoutes.isEmpty())
         try {
             for (Route route : userRoutes) {
@@ -981,39 +923,36 @@ System.out.println(" drawInteractivePolyLine ");
             System.out.println(e.getLocalizedMessage());
         }*/
 
-      List<LatLng> points=new ArrayList<>();
-      if(!userRoutes.isEmpty())
-          for (Route route:userRoutes) {
-       String point=route.pointString;
-       points.addAll(DirectionFinder.decodePolyLine(point));
-          }
+        List<LatLng> points = new ArrayList<>();
+        if (!userRoutes.isEmpty())
+            for (Route route : userRoutes) {
+                String point = route.pointString;
+                points.addAll(DirectionFinder.decodePolyLine(point));
+            }
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(15);
         polylineOptions.color(Color.RED);
         googleMap.addPolyline(polylineOptions.addAll(points));
 
-      try {
-      }catch (Exception e){
-          System.out.println("Polyline exception "+e.getLocalizedMessage());
-      }
+        try {
+        } catch (Exception e) {
+            System.out.println("Polyline exception " + e.getLocalizedMessage());
+        }
         googleMap.animateCamera(buildCameraUpdate(userRoutes.get(0).endLocation), 10, null);
     }
 
 
-
-
-
-
     PolylineOptions polylineOptions = null;
+
     private void drawPolyLine(@NotNull String userRoute, final int color) {
         List<LatLng> latLngList = new ArrayList<>();
 
-            String[] splitRoutes = userRoute.split("fitbet");
-            List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
-            System.out.println("routeList.size()"+routeList.size());
-            Set<String> routeSets=new LinkedHashSet<>(routeList);
-            routeList.clear();
-            routeList.addAll(routeSets);
+        String[] splitRoutes = userRoute.split("fitbet");
+        List<String> routeList = new LinkedList<>(Arrays.asList(splitRoutes));
+        System.out.println("routeList.size()" + routeList.size());
+        Set<String> routeSets = new LinkedHashSet<>(routeList);
+        routeList.clear();
+        routeList.addAll(routeSets);
 
 
         /*if(polyline==null){
@@ -1057,14 +996,14 @@ System.out.println(" drawInteractivePolyLine ");
 
 //////////////////////////////////////////////////////////////////////
 
-        for (String route:routeList) {
+        for (String route : routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
-            System.out.println("Routes "+route);
+            System.out.println("Routes " + route);
             final List<LatLng> finalLatLngList = latLngList;
-            if(polyline==null) {
-                 polylineOptions = getDefaultPolyLines(finalLatLngList, color);
-            }else{
+            if (polyline == null) {
+                polylineOptions = getDefaultPolyLines(finalLatLngList, color);
+            } else {
 
                 if (polylineOptions != null) {
                     polylineOptions.addAll(finalLatLngList);
@@ -1072,7 +1011,7 @@ System.out.println(" drawInteractivePolyLine ");
             }
 
 
-            if(getActivity()!=null) {
+            if (getActivity() != null) {
                 final PolylineOptions finalPolylineOptions = polylineOptions;
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -1086,10 +1025,8 @@ System.out.println(" drawInteractivePolyLine ");
             }
 
 
-
-       ////////////////////////////////////////////////////////////////////
-            }
-
+            ////////////////////////////////////////////////////////////////////
+        }
 
 
     }
@@ -1097,25 +1034,24 @@ System.out.println(" drawInteractivePolyLine ");
 
     private void drawLocationPolyLine(@NotNull String userRoute, final int color) {
         List<LatLng> latLngList = new ArrayList<>();
-PolylineOptions polylineOptions=null;
+        PolylineOptions polylineOptions = null;
         String[] splitRoutes = userRoute.split("fitbet");
-        List<String> routeList= new LinkedList<>(Arrays.asList(splitRoutes));
-        System.out.println("Location routeList.size()"+routeList.size());
-        Set<String> routeSets=new LinkedHashSet<>(routeList);
+        List<String> routeList = new LinkedList<>(Arrays.asList(splitRoutes));
+        System.out.println("Location routeList.size()" + routeList.size());
+        Set<String> routeSets = new LinkedHashSet<>(routeList);
         routeList.clear();
         routeList.addAll(routeSets);
 
 
-
-        for (String route:routeList) {
+        for (String route : routeList) {
             latLngList.clear();
             latLngList = DirectionFinder.decodePolyLine(route);
-            System.out.println("Routes "+route);
+            System.out.println("Routes " + route);
             final List<LatLng> finalLatLngList = latLngList;
-            if(locationPolyline==null) {
+            if (locationPolyline == null) {
                 polylineOptions = getDefaultPolyLines(finalLatLngList, color);
 
-            }else{
+            } else {
 
                 if (polylineOptions != null) {
                     polylineOptions.addAll(finalLatLngList);
@@ -1123,7 +1059,7 @@ PolylineOptions polylineOptions=null;
             }
 
 
-            if(getActivity()!=null) {
+            if (getActivity() != null) {
                 final PolylineOptions finalPolylineOptions = polylineOptions;
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -1141,12 +1077,10 @@ PolylineOptions polylineOptions=null;
         }
 
 
-
     }
 
 
-
-    private  static double truncate(double value, int places) {
+    private static double truncate(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
         }
@@ -1158,11 +1092,11 @@ PolylineOptions polylineOptions=null;
     }
 
 
-    private String formatNumber2Decimals(double number ){
-        number=number/1000;
+    private String formatNumber2Decimals(double number) {
+        number = number / 1000;
 
 
-        return String.format(Locale.getDefault(), "%.2f", number) ;
+        return String.format(Locale.getDefault(), "%.2f", number);
     }
 
     private boolean actFlag;// to avoid starting of activity twice
@@ -1174,6 +1108,8 @@ PolylineOptions polylineOptions=null;
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
         appPreference.setLatLongList(null);
+        appPreference.savePositionLatitude("0.0");
+        appPreference.savePositionLongitude("0.0");
     }
 
     private void publishLiveDetails(String bodyString) {
@@ -1182,10 +1118,10 @@ PolylineOptions polylineOptions=null;
             String status = jsonObject.getString(STATUS_A);
             if (status.trim().equals("Ok")) {
 
-                final JSONObject jsonObject2 = new JSONObject( jsonObject.getString(BETDETAILS));
+                final JSONObject jsonObject2 = new JSONObject(jsonObject.getString(BETDETAILS));
 
                 JSONArray jsonArray = new JSONArray(jsonObject.getString(PARTICIPANT));
-                String POSITION1="",FIRST_NAME1="";
+                String POSITION1 = "", FIRST_NAME1 = "";
 
                 liveBetDetailsArrayList = new ArrayList<>();
                 liveBetDetailsArrayList.clear();
@@ -1197,7 +1133,7 @@ PolylineOptions polylineOptions=null;
 
                     model.setReg_key(arrayObject.getString(REG_KEY));
 
-                    regNo=arrayObject.getString(REG_KEY);
+                    regNo = arrayObject.getString(REG_KEY);
 
                     model.setFirstname(arrayObject.getString(Contents.FIRST_NAME));
 
@@ -1226,19 +1162,18 @@ PolylineOptions polylineOptions=null;
                     model.setPositionlatitude(arrayObject.getString(Contents.POSITION_LATITUDE));
 
                     liveBetDetailsArrayList.add(model);
-                    if(regNo.equals(appPreference.getPref(REG_KEY,""))){
-                        /*positionLatitude=arrayObject.getDouble(POSITION_LATITUDE);
-                        positionLongitude=arrayObject.getDouble( POSITION_LONGITUDE);*/
-                        POSITION1=arrayObject.getString(POSITION);
+                    if (regNo.equals(appPreference.getPref(REG_KEY, ""))) {
+
+                        POSITION1 = arrayObject.getString(POSITION);
                         txtParticipate.setText(POSITION1);
                         if (!arrayObject.getString(PROFILE_PIC).equals("NA")) {
-                            if (arrayObject.getString(REG_TYPE).equals("normal")&&arrayObject.getString(IMAGE_STATUS).equals("0")){
+                            if (arrayObject.getString(REG_TYPE).equals("normal") && arrayObject.getString(IMAGE_STATUS).equals("0")) {
 
                                 Picasso.get().
-                                        load(Constant.BASE_APP_IMAGE__PATH+arrayObject.getString(PROFILE_PIC))
+                                        load(Constant.BASE_APP_IMAGE__PATH + arrayObject.getString(PROFILE_PIC))
                                         .placeholder(R.drawable.image_loader)
                                         .into(userImage);
-                            }else{
+                            } else {
 
                                 Picasso.get().
                                         load(arrayObject.getString(PROFILE_PIC))
@@ -1249,30 +1184,29 @@ PolylineOptions polylineOptions=null;
                             userImage.setImageDrawable(getActivity().getDrawable(R.drawable.user_profile_avatar));
                         }
 */
-                        double totalDistance= (arrayObject.getDouble(DISTANCE));
-                        if(userDistanceDouble==0.0){
-                            userDistanceDouble=totalDistance;
+                        double totalDistance = (arrayObject.getDouble(DISTANCE));
+                        if (userDistanceDouble == 0.0) {
+                            userDistanceDouble = totalDistance;
                         }
                  /*       double finalDistance= totalDistance/1000;
                         final DecimalFormat f = new DecimalFormat("##.00");
                         txtTotalKm.setText(""+f.format(finalDistance)+" km");*/
-                 System.out.println("formatNumber2Decimals(totalDistance) "+totalDistance+" "+formatNumber2Decimals(totalDistance));
-                 txtTotalKm.setText(formatNumber2Decimals(totalDistance)+" km");
+                        System.out.println("formatNumber2Decimals(totalDistance) " + totalDistance + " " + formatNumber2Decimals(totalDistance));
+                        txtTotalKm.setText(formatNumber2Decimals(totalDistance) + " km");
 
 
-
-                        double remainingDistance=jsonObject2.getDouble(TOTAL_DISTANCE)-arrayObject.getDouble(DISTANCE);
+                        double remainingDistance = jsonObject2.getDouble(TOTAL_DISTANCE) - arrayObject.getDouble(DISTANCE);
 
              /*         DecimalFormat decimalFormat1 = new DecimalFormat("#.##");
                         double decimal1= Double.parseDouble(String.valueOf(remainingDistance).replace("-",""));
                         String input1 = String.valueOf(decimal1).substring(0,5);
                         double numberAsString1= Double.parseDouble(input1);
                         txtRemainingKm.setText(""+decimalFormat1.format(numberAsString1/1000)+" km");*/
-                        System.out.println("formatNumber2Decimals(remainingDistance)"+remainingDistance+" "+formatNumber2Decimals(remainingDistance));
-                        if(remainingDistance>0)
-                            txtRemainingKm.setText(formatNumber2Decimals(remainingDistance)+" km");
+                        System.out.println("formatNumber2Decimals(remainingDistance)" + remainingDistance + " " + formatNumber2Decimals(remainingDistance));
+                        if (remainingDistance > 0)
+                            txtRemainingKm.setText(formatNumber2Decimals(remainingDistance) + " km");
                         else
-                            txtRemainingKm.setText(formatNumber2Decimals(0)+" km");
+                            txtRemainingKm.setText(formatNumber2Decimals(0) + " km");
 
                     }
                 }
@@ -1286,12 +1220,13 @@ PolylineOptions polylineOptions=null;
 
 
             }
-        }catch (Exception e){
-e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
-Handler mHandler=new Handler();
+
+    Handler mHandler = new Handler();
 /*
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
@@ -1346,23 +1281,23 @@ Handler mHandler=new Handler();
 */
 
 
-    double  haversineDistance(double lat1, double lon1,double lat2,double lon2) {
+    double haversineDistance(double lat1, double lon1, double lat2, double lon2) {
         double R = 6371.0710; // Radius of the Earth in km
-        double rlat1 = lat1 * (Math.PI/180); // Convert degrees to radians
-        double  rlon1 = lon1 * (Math.PI/180); // Convert degrees to radians
-        double rlat2 = lat2 * (Math.PI/180); // Convert degrees to radians
-        double  rlon2 = lon2 * (Math.PI/180); // Convert degrees to radians
-        double difflat = rlat2-rlat1; // Radian difference (latitudes)
-        double difflon = rlon2-rlon1; // Radian difference (longitudes)
+        double rlat1 = lat1 * (Math.PI / 180); // Convert degrees to radians
+        double rlon1 = lon1 * (Math.PI / 180); // Convert degrees to radians
+        double rlat2 = lat2 * (Math.PI / 180); // Convert degrees to radians
+        double rlon2 = lon2 * (Math.PI / 180); // Convert degrees to radians
+        double difflat = rlat2 - rlat1; // Radian difference (latitudes)
+        double difflon = rlon2 - rlon1; // Radian difference (longitudes)
 
-        double d = 2 * R * asin(sqrt(sin(difflat/2)* sin(difflat/2)+ cos(rlat1)* cos(rlat2)* sin(difflon/2)* sin(difflon/2)));
+        double d = 2 * R * asin(sqrt(sin(difflat / 2) * sin(difflat / 2) + cos(rlat1) * cos(rlat2) * sin(difflon / 2) * sin(difflon / 2)));
 
-        d=d*1000;
+        d = d * 1000;
 
-        return truncate(d,15);
+        return truncate(d, 15);
     }
 
-    private int getDistanceL(double startLat,double startLon,double positionLat,double positionLon) {
+    private int getDistanceL(double startLat, double startLon, double positionLat, double positionLon) {
 
         Location startLocation = new Location("start");
         startLocation.setLatitude(startLat);
@@ -1371,29 +1306,156 @@ Handler mHandler=new Handler();
         positionLocation.setLatitude(positionLat);
         positionLocation.setLongitude(positionLon);
 
-        return (int)startLocation.distanceTo(positionLocation);
+        return (int) startLocation.distanceTo(positionLocation);
     }
 
 
-
-    private void parseData(String s){
+    private void parseData(String s) {
 
         try {
-            JSONObject mainJsonObject=new JSONObject(s);
-            if(mainJsonObject.getString("winner").equals("no winner")){
+            JSONObject mainJsonObject = new JSONObject(s);
+            if (mainJsonObject.getString("winner").equals("no winner")) {
 
-            }else{
+                won = mainJsonObject.getString(MYBETS_credit);
+                JSONObject betDetailJsonObject = mainJsonObject.getJSONObject("betdetails");
+                betId = betDetailJsonObject.getString(MYBETS_betid);
+                startLatitude = betDetailJsonObject.getDouble("userstartlatitude");
+                startLongitude = betDetailJsonObject.getDouble("userstartlongitude");
+                positionLatitude = betDetailJsonObject.getDouble("positionlatitude");
+                positionLongitude = betDetailJsonObject.getDouble("positionlongitude");
+
+
+                JSONArray participantsJsonArray = mainJsonObject.getJSONArray("participant");
+
+                liveBetDetailsArrayList = new ArrayList<>();
+                liveBetDetailsArrayList.clear();
+                for (int i = 0; i < participantsJsonArray.length(); i++) {
+
+                    JSONObject arrayObject = participantsJsonArray.getJSONObject(i);
+                    LiveBetDetails model = new LiveBetDetails();
+                    model.setPosition(arrayObject.getString(POSITION));
+
+                    model.setReg_key(arrayObject.getString(REG_KEY));
+
+                    regNo = arrayObject.getString(REG_KEY);
+
+                    model.setFirstname(arrayObject.getString(Contents.FIRST_NAME));
+
+                    model.setEmail(arrayObject.getString(Contents.EMAIL));
+
+                    model.setCreditScore(arrayObject.getString(Contents.CREDIT_SCORE));
+
+                    model.setWon(arrayObject.getString(WON));
+
+                    model.setLost(arrayObject.getString(Contents.LOST));
+
+                    model.setCountry(arrayObject.getString(Contents.COUNTRY));
+
+                    model.setProfile_pic(arrayObject.getString(PROFILE_PIC));
+
+                    model.setImage_status(arrayObject.getString(IMAGE_STATUS));
+
+                    model.setRegType(arrayObject.getString(REG_TYPE));
+
+                    model.setDistance(arrayObject.getString(DISTANCE));
+
+                    model.setStartdate(arrayObject.getString(Contents.START_DATE));
+
+                    model.setPositionlongitude(arrayObject.getString(Contents.POSITION_LONGITUDE));
+
+                    model.setPositionlatitude(arrayObject.getString(Contents.POSITION_LATITUDE));
+
+                    liveBetDetailsArrayList.add(model);
+                    if (regNo.equals(appPreference.getPref(REG_KEY, ""))) {
+
+                        txtParticipate.setText(arrayObject.getString(POSITION));
+                        if (!arrayObject.getString(PROFILE_PIC).equals("NA")) {
+                            if (arrayObject.getString(REG_TYPE).equals("normal") && arrayObject.getString(IMAGE_STATUS).equals("0")) {
+
+                                Picasso.get().
+                                        load(Constant.BASE_APP_IMAGE__PATH + arrayObject.getString(PROFILE_PIC))
+                                        .placeholder(R.drawable.image_loader)
+                                        .into(userImage);
+                            } else {
+
+                                Picasso.get().
+                                        load(arrayObject.getString(PROFILE_PIC))
+                                        .placeholder(R.drawable.image_loader)
+                                        .into(userImage);
+                            }
+                        }
+
+                        double totalDistance = (arrayObject.getDouble(DISTANCE));
+                        if (userDistanceDouble == 0.0) {
+                            userDistanceDouble = totalDistance;
+                        }
+
+                        System.out.println("formatNumber2Decimals(totalDistance) " + totalDistance + " " + formatNumber2Decimals(totalDistance));
+                        txtTotalKm.setText(formatNumber2Decimals(totalDistance) + " km");
+
+
+                        double remainingDistance = betDetailJsonObject.getDouble(TOTAL_DISTANCE) - arrayObject.getDouble(DISTANCE);
+
+                        System.out.println("formatNumber2Decimals(remainingDistance)" + remainingDistance + " " + formatNumber2Decimals(remainingDistance));
+                        if (remainingDistance > 0)
+                            txtRemainingKm.setText(formatNumber2Decimals(remainingDistance) + " km");
+                        else
+                            txtRemainingKm.setText(formatNumber2Decimals(0) + " km");
+
+                    }
+                }
+
+                challengerId = betDetailJsonObject.getString(MYBETS_challengerid);
+                appPreference.saveChallengerId(challengerId);
+                liveBetUserListAdapter = new LiveBetUserListAdapter(getActivity(), liveBetDetailsArrayList);
+                betMembersRecyclerView.setHasFixedSize(true);
+                betMembersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                betMembersRecyclerView.setAdapter(liveBetUserListAdapter);
+
+
+            } else {
+                if (mainJsonObject.getString("winner").equals(appPreference.getPref(REG_KEY, "")) && !actFlag) {
+
+                    appPreference.savePref(BET_START_STATUS, "false");
+                    actFlag = true;
+                    stopLocationService(serviceIntent);
+                    clearSavedBetItems();
+                    cancelTimer();
+                    counterHandler.removeCallbacks(counterRunnable);
+                    appPreference.savePref(Contents.UPDATE_METER, "0");
+                    if (getActivity() != null) {
+                        Intent i = new Intent(getActivity(), WinnerActivity.class);
+                        i.putExtra(MYBETS_betid, betId);
+                        i.putExtra(WON, won);
+                        startActivity(i);
+                        getActivity().finish();
+                    }
+                } else {
+                    if (!actFlag) {
+                        appPreference.savePref(BET_START_STATUS, "false");
+                        actFlag = true;
+                        stopLocationService(serviceIntent);
+                        cancelTimer();
+                        clearSavedBetItems();
+                        counterHandler.removeCallbacks(counterRunnable);
+                        appPreference.savePref(Contents.UPDATE_METER, "0");
+                        if (getActivity() != null) {
+                            Intent i = new Intent(getActivity(), LoserActivity.class);
+                            i.putExtra(MYBETS_betid, betId);
+                            startActivity(i);
+                            getActivity().finish();
+                        }
+                    }
+
+                }
 
             }
-
-
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
 
 
 }

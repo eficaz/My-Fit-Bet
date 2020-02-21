@@ -2,49 +2,48 @@ package com.androidapp.fitbet.model;
 
 public class MessageChatListUpCommingBets {
 
-    String distance="";
-    String description="";
+    String distance = "";
+    String description = "";
 
-    String createdate="";
-    String route="";
+    String createdate = "";
+    String route = "";
 
-    String credit="";
-    String winner="";
+    String credit = "";
+    String winner = "";
 
-    String status="";
-    String createdby="";
+    String status = "";
+    String createdby = "";
 
-    String date="";
-    String betid="";
+    String date = "";
+    String betid = "";
 
-    String betname="";
-    String startlocation="";
+    String betname = "";
+    String startlocation = "";
 
-    String endlocation="";
-    String startlongitude="";
+    String endlocation = "";
+    String startlongitude = "";
 
-    String endlongitude="";
-    String startlatitude="";
+    String endlongitude = "";
+    String startlatitude = "";
 
-    String endlatitude="";
-    String bettype="";
+    String endlatitude = "";
+    String bettype = "";
 
-    String enddate="";
-    String total="";
+    String enddate = "";
+    String total = "";
 
-    String challengerid="";
+    String challengerid = "";
 
-    String started ="";
+    String started = "";
 
-    String editstatus ="";
+    String editstatus = "";
 
-    String time ="";
+    String time = "";
 
 
-
-    String profile_pic="";
-    String reg_key="";
-    String image_status="";
+    String profile_pic = "";
+    String reg_key = "";
+    String image_status = "";
 
     public String getReg_key() {
         return reg_key;
@@ -63,7 +62,6 @@ public class MessageChatListUpCommingBets {
     }
 
 
-
     public String getProfile_pic() {
         return profile_pic;
     }
@@ -71,6 +69,7 @@ public class MessageChatListUpCommingBets {
     public void setProfile_pic(String profile_pic) {
         this.profile_pic = profile_pic;
     }
+
     public String getChallengerid() {
         return challengerid;
     }
@@ -102,7 +101,6 @@ public class MessageChatListUpCommingBets {
     public void setTime(String time) {
         this.time = time;
     }
-
 
 
     public String getDistance() {
@@ -264,9 +262,6 @@ public class MessageChatListUpCommingBets {
     public void setTotal(String total) {
         this.total = total;
     }
-
-
-
 
 
 }

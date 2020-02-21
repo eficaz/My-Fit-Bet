@@ -10,110 +10,108 @@
     android:layout_marginTop="5dp"
     android:layout_height="60dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/row"
+        tools:ignore="MissingConstraints">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/row"
-            tools:ignore="MissingConstraints">
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight=".5"
+                <com.androidapp.fitbet.utils.CircleImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:src="@drawable/user_profile_avatar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/margin_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/lato_regular"
+                    android:text=""
+                    android:gravity="center|start" />
+
+                <TextView
+                    android:id="@+id/tv_Country"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/lato_regular"
+                    android:text=""
+                    android:gravity="center|start" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <com.androidapp.fitbet.utils.CircleImageView
-                        android:id="@+id/img_user"
-                        android:layout_width="30dp"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/invite"
+                        android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:background="@color/white"
-                        android:src="@drawable/user_profile_avatar" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:orientation="vertical">
+                        android:background="@drawable/shape_button_roud_corner"
+                        android:backgroundTint="@color/light_blue"
+                        android:textColor="@color/white"
+                        android:textSize="8dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/invite" />
 
                     <TextView
-                        android:id="@+id/tv_Name"
+                        android:id="@+id/tv_km"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/light_blue"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text=""
-                        android:gravity="center|start"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_Country"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:singleLine="true"
-                        android:textSize="12sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text=""
-                        android:gravity="center|start"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2.5"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TableRow
-                        android:layout_width="match_parent"
                         android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_height="wrap_content" >
+                        android:gravity="center" />
+                </TableRow>
 
-                        <Button
-                            android:id="@+id/invite"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:background="@drawable/shape_button_roud_corner"
-                            android:backgroundTint="@color/light_blue"
-                            android:textColor="@color/white"
-                            android:textSize="8dp"
-                            android:fontFamily="@font/lato_bold"
-                            android:text="@string/invite" />
-
-                        <TextView
-                            android:id="@+id/tv_km"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/light_blue"
-                            android:ellipsize="marquee"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:scrollHorizontally="true"
-                            android:singleLine="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            />
-                    </TableRow>
-
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import java.util.Locale;
 
 /**
  * Adapter for manage elements of ListPickerYearView
+ *
  * @author JJamet
  */
 class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndicatorViewHolder> {
@@ -75,13 +76,13 @@ class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndic
         calendar.set(Calendar.YEAR, currentYear);
         holder.textView.setText(yearFormat.format(calendar.getTime()));
 
-        if(onClickYearListener != null)
+        if (onClickYearListener != null)
             holder.container.setOnClickListener(new BufferYearClickListener(currentYear, position));
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(listYears.get(position).equals(selectedYear))
+        if (listYears.get(position).equals(selectedYear))
             return LIST_ITEM_TYPE_INDICATOR;
         else
             return LIST_ITEM_TYPE_STANDARD;
@@ -89,6 +90,7 @@ class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndic
 
     /**
      * Get the list of years
+     *
      * @return years
      */
     public List<Integer> getListYears() {
@@ -97,6 +99,7 @@ class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndic
 
     /**
      * Assign the list of years, replace current list
+     *
      * @param listYears list of years
      */
     public void setListYears(List<Integer> listYears) {
@@ -112,10 +115,11 @@ class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndic
 
     /**
      * Assign the current selected year
+     *
      * @param selectedYear year selected
      */
     public void setSelectedYear(int selectedYear) throws SelectYearException {
-        if(!listYears.contains(selectedYear))
+        if (!listYears.contains(selectedYear))
             throw new SelectYearException(selectedYear, listYears);
         this.selectedYear = selectedYear;
         this.positionSelectedYear = listYears.indexOf(selectedYear);
@@ -137,6 +141,7 @@ class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndic
 
     /**
      * Set the listener called when the year is clicked
+     *
      * @param onClickYearListener year listener
      */
     public void setOnClickYearListener(OnClickYearListener onClickYearListener) {
@@ -149,8 +154,9 @@ class YearPickerAdapter extends RecyclerView.Adapter<YearPickerAdapter.TextIndic
     public interface OnClickYearListener {
         /**
          * Called on click
-         * @param view Current view clicked
-         * @param year Year of current item clicked
+         *
+         * @param view     Current view clicked
+         * @param year     Year of current item clicked
          * @param position Position of item clicked
          */
         void onItemYearClick(View view, Integer year, int position);

@@ -2,35 +2,35 @@ package com.androidapp.fitbet.model;
 
 public class LiveBetDetails {
 
-    String position="";
+    String position = "";
 
-    String reg_key="";
+    String reg_key = "";
 
-    String firstname="";
+    String firstname = "";
 
-    String email="";
+    String email = "";
 
-    String creditScore="";
+    String creditScore = "";
 
-    String won="";
+    String won = "";
 
-    String lost="";
+    String lost = "";
 
-    String country="";
+    String country = "";
 
-    String profile_pic="";
+    String profile_pic = "";
 
-    String image_status="";
+    String image_status = "";
 
-    String regType="";
+    String regType = "";
 
-    String distance="";
+    String distance = "";
 
-    String startdate="";
+    String startdate = "";
 
-    String positionlongitude="";
+    String positionlongitude = "";
 
-    String positionlatitude="";
+    String positionlatitude = "";
 
     public String getPosition() {
         return position;
@@ -151,7 +151,6 @@ public class LiveBetDetails {
     public void setPositionlatitude(String positionlatitude) {
         this.positionlatitude = positionlatitude;
     }
-
 
 
 }

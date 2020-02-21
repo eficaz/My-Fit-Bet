@@ -2,36 +2,36 @@ package com.androidapp.fitbet.model;
 
 public class ArchivesDetails {
 
-    String position="";
-    String reg_key="";
+    String position = "";
+    String reg_key = "";
 
-    String firstname="";
-    String email="";
+    String firstname = "";
+    String email = "";
 
-    String creditScore="";
-    String won="";
+    String creditScore = "";
+    String won = "";
 
-    String lost="";
-    String country="";
+    String lost = "";
+    String country = "";
 
-    String profile_pic="";
-    String regType="";
+    String profile_pic = "";
+    String regType = "";
 
-    String distance="";
-    String startdate="";
+    String distance = "";
+    String startdate = "";
 
-    String positionlongitude="";
-    String positionlatitude="";
+    String positionlongitude = "";
+    String positionlatitude = "";
 
-    String startlocation="";
-    String image_status="";
-    String endlocation="";
+    String startlocation = "";
+    String image_status = "";
+    String endlocation = "";
 
-    String startlatitude="";
-    String endlatitude="";
-    String startlongitude="";
-    String endlongitude="";
-    String route="";
+    String startlatitude = "";
+    String endlatitude = "";
+    String startlongitude = "";
+    String endlongitude = "";
+    String route = "";
 
     public String getRoute() {
         return route;
@@ -40,6 +40,7 @@ public class ArchivesDetails {
     public void setRoute(String route) {
         this.route = route;
     }
+
     public String getStartlatitude() {
         return startlatitude;
     }
@@ -73,7 +74,6 @@ public class ArchivesDetails {
     }
 
 
-
     public String getImage_status() {
         return image_status;
     }
@@ -81,7 +81,6 @@ public class ArchivesDetails {
     public void setImage_status(String image_status) {
         this.image_status = image_status;
     }
-
 
 
     public String getPosition() {
@@ -211,7 +210,6 @@ public class ArchivesDetails {
     public void setEndlocation(String endlocation) {
         this.endlocation = endlocation;
     }
-
 
 
 }

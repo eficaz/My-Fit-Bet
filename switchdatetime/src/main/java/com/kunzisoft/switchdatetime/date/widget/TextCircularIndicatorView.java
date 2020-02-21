@@ -15,6 +15,7 @@ import com.kunzisoft.switchdatetime.R;
 
 /**
  * TextView with circular colored background
+ *
  * @author JJamet
  */
 public class TextCircularIndicatorView extends AppCompatTextView {
@@ -40,7 +41,7 @@ public class TextCircularIndicatorView extends AppCompatTextView {
      */
     private void init(AttributeSet attrs) {
 
-        if(attrs != null) {
+        if (attrs != null) {
             TypedArray circularIndicatorTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.TextCircularIndicatorView);
             setCircleColor(circularIndicatorTypedArray.getColor(R.styleable.TextCircularIndicatorView_colorCircleIndicator, mCircleColor));
             circularIndicatorTypedArray.recycle();

@@ -2,44 +2,44 @@ package com.androidapp.fitbet.model;
 
 public class BetDetails {
 
-    String Status="";
-    String totalmessage="";
-    String totalparticipants="";
-    String betid="";
-    String betname="";
+    String Status = "";
+    String totalmessage = "";
+    String totalparticipants = "";
+    String betid = "";
+    String betname = "";
 
-    String description="";
-    String date="";
-    String distance="";
-    String enddate="";
-    String startlocation="";
+    String description = "";
+    String date = "";
+    String distance = "";
+    String enddate = "";
+    String startlocation = "";
 
-    String endlocation="";
+    String endlocation = "";
 
-    String startlongitude="";
-    String endlongitude="";
-    String startlatitude="";
-    String endlatitude="";
+    String startlongitude = "";
+    String endlongitude = "";
+    String startlatitude = "";
+    String endlatitude = "";
 
-    String credit="";
-    String route="";
-    String bettype="";
-    String createdby="";
-    String challengerid="";
+    String credit = "";
+    String route = "";
+    String bettype = "";
+    String createdby = "";
+    String challengerid = "";
 
-    String started="";
-    String editstatus="";
-    String participants="";
-    String reg_key="";
-    String firstname="";
-    String email="";
-    String creditScore="";
-    String won="";
-    String lost="";
-    String country="";
-    String profile_pic="";
-    String regType="";
-    String image_status="";
+    String started = "";
+    String editstatus = "";
+    String participants = "";
+    String reg_key = "";
+    String firstname = "";
+    String email = "";
+    String creditScore = "";
+    String won = "";
+    String lost = "";
+    String country = "";
+    String profile_pic = "";
+    String regType = "";
+    String image_status = "";
 
     public String getImage_status() {
         return image_status;
@@ -50,7 +50,7 @@ public class BetDetails {
     }
 
 
-    String distance_participants="";
+    String distance_participants = "";
 
     public String getStatus() {
         return Status;

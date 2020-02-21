@@ -18,7 +18,6 @@ import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.ui.DashBoardActivity;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
-import com.androidapp.fitbet.utils.SLApplication;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -27,16 +26,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM Service";
     private LocalBroadcastManager broadcaster;
+
     @Override
     public void onCreate() {
         broadcaster = LocalBroadcastManager.getInstance(this);
     }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO: Handle FCM messages here.
@@ -47,16 +47,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
 
-
-
-
         Log.d("msg", "onMessageReceived betid: " + remoteMessage.getData().get("bet_date"));
-        System.out.println("Notification content "+remoteMessage.getData().toString());
+        System.out.println("Notification content " + remoteMessage.getData().toString());
         Intent intent = new Intent(this, DashBoardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = "com.eficaz_android.fitbet";
-        NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, channelId);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -76,29 +73,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
         }
         manager.notify(0, builder.build());
-if(!TextUtils.isEmpty(remoteMessage.getData().get("betid"))&& AppPreference.getPrefsHelper().getPref(Contents.BET_START_STATUS,"").equals("false")) {
+        if (!TextUtils.isEmpty(remoteMessage.getData().get("betid")) && AppPreference.getPrefsHelper().getPref(Contents.BET_START_STATUS, "").equals("false")) {
 
-    AppPreference.getPrefsHelper().saveBetId(remoteMessage.getData().get("betid"));
-    AppPreference.getPrefsHelper().saveBetDate(remoteMessage.getData().get("bet_date"));
-    AppPreference.getPrefsHelper().saveChallengerId(remoteMessage.getData().get("challenger_id"));
-    calculateCountDownTime(remoteMessage.getData().get("bet_date"));
+            AppPreference.getPrefsHelper().saveBetId(remoteMessage.getData().get("betid"));
+            AppPreference.getPrefsHelper().saveBetDate(remoteMessage.getData().get("bet_date"));
+            AppPreference.getPrefsHelper().saveChallengerId(remoteMessage.getData().get("challenger_id"));
+            calculateCountDownTime(remoteMessage.getData().get("bet_date"));
 
-    sendMessageToReceiver(remoteMessage.getNotification().getBody());
+            sendMessageToReceiver(remoteMessage.getNotification().getBody());
 
-}
+        }
 
     }
 
     private void sendMessageToReceiver(String message) {
-System.out.println("sendMessageToReceiver "+message);
-Intent intent = new Intent();
-intent.putExtra("message",message);
-intent.setAction("count_down");
-broadcaster.sendBroadcast(intent);
+        System.out.println("sendMessageToReceiver " + message);
+        Intent intent = new Intent();
+        intent.putExtra("message", message);
+        intent.setAction("count_down");
+        broadcaster.sendBroadcast(intent);
 
     }
 
-    private  void calculateCountDownTime(String betDate){
+    private void calculateCountDownTime(String betDate) {
         try {
 
 
@@ -108,20 +105,18 @@ broadcaster.sendBroadcast(intent);
             outputFmt.setTimeZone(TimeZone.getTimeZone("UTC"));
             String currentDateTime = outputFmt.format(time);
 
-            Date currentDate=outputFmt.parse(currentDateTime);
+            Date currentDate = outputFmt.parse(currentDateTime);
 
 
-
-        Date betStartDate=outputFmt.parse(betDate);
+            Date betStartDate = outputFmt.parse(betDate);
 
             long diffInMs = betStartDate.getTime() - currentDate.getTime();
 
-            int count= (int) (diffInMs/1000);
+            int count = (int) (diffInMs / 1000);
 
-            System.out.println("calculateCountDownTime "+count);
+            System.out.println("calculateCountDownTime " + count);
 
             AppPreference.getPrefsHelper().saveCountDownTime(count);
-
 
 
         } catch (ParseException e) {

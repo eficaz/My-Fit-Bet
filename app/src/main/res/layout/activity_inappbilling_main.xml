@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
    Copyright 2012 Google Inc. All rights reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/screen_wait"
         android:layout_height="wrap_content"
@@ -25,6 +25,7 @@
         android:contentDescription="@string/content_description_app_loading_image"
         android:src="@drawable/coins"
         android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/screen_main"
         android:layout_height="match_parent"
@@ -32,6 +33,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible">
+
         <ImageView
             android:src="@drawable/coins"
             android:layout_height="wrap_content"
@@ -63,6 +65,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="20dp">
+
             <ImageView
                 android:src="@drawable/coins"
                 android:onClick="onDriveButtonClicked"
@@ -85,6 +88,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="20dp">
+
             <ImageView
                 android:id="@+id/upgrade_button"
                 android:src="@drawable/coins"

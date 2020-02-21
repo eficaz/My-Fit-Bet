@@ -44,21 +44,24 @@ public class ApisModel {
 
     private void setLocalServer() {
         BASE_URL = "https://eficaztechsol.com/fitbet/api/";
-        MAP_BASE_URL="https://maps.googleapis.com/maps/api/directions/";
-        PLACE_BASE_URL="https://maps.googleapis.com/maps/api/place/details/";
+        MAP_BASE_URL = "https://maps.googleapis.com/maps/api/directions/";
+        PLACE_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/";
     }
+
     private void setProductionServer() {
         BASE_URL = "https://fitbet.com.au/api/"
-                /*"http://35.244.74.56/api/"*/
-                /*"http://34.87.204.239/api/"*/;
-        MAP_BASE_URL="https://maps.googleapis.com/maps/api/directions/";
-        PLACE_BASE_URL="https://maps.googleapis.com/maps/api/place/details/";
+        /*"http://35.244.74.56/api/"*/
+        /*"http://34.87.204.239/api/"*/;
+        MAP_BASE_URL = "https://maps.googleapis.com/maps/api/directions/";
+        PLACE_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/";
     }
+
     private void setTestServer() {
         BASE_URL = "";//Test Estel Server OLD
-        MAP_BASE_URL="https://maps.googleapis.com/maps/api/directions/";
-        PLACE_BASE_URL="https://maps.googleapis.com/maps/api/place/details/";
+        MAP_BASE_URL = "https://maps.googleapis.com/maps/api/directions/";
+        PLACE_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/";
     }
+
     void setCommonUrl() {
     }
 }

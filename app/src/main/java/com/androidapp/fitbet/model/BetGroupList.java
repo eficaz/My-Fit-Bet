@@ -3,23 +3,23 @@ package com.androidapp.fitbet.model;
 public class BetGroupList {
 
 
-    String betid="";
+    String betid = "";
 
-    String groupid="";
+    String groupid = "";
 
-    String name="";
+    String name = "";
 
-    String description="";
+    String description = "";
 
-    String groupimage="";
+    String groupimage = "";
 
-    String reg_key="";
+    String reg_key = "";
 
-    String createdate="";
+    String createdate = "";
 
-    String status="";
+    String status = "";
 
-    String total="";
+    String total = "";
 
     public String getTotal() {
         return total;
@@ -93,7 +93,6 @@ public class BetGroupList {
     public void setStatus(String status) {
         this.status = status;
     }
-
 
 
 }

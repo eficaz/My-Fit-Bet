@@ -19,7 +19,6 @@ import com.androidapp.fitbet.customview.MyDialog;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
-import com.androidapp.fitbet.ui.WinnerActivity;
 import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.CircleImageView;
 import com.androidapp.fitbet.utils.Contents;
@@ -55,16 +54,12 @@ import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_WEEK;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_WON;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_YEAR;
 import static com.androidapp.fitbet.utils.Contents.DAY;
-import static com.androidapp.fitbet.utils.Contents.FIRST_NAME;
 import static com.androidapp.fitbet.utils.Contents.IMAGE_STATUS;
 import static com.androidapp.fitbet.utils.Contents.MONTH;
-import static com.androidapp.fitbet.utils.Contents.MYBETS_betid;
 import static com.androidapp.fitbet.utils.Contents.PROFILE_PIC;
-import static com.androidapp.fitbet.utils.Contents.REG_KEY;
 import static com.androidapp.fitbet.utils.Contents.REG_TYPE;
 import static com.androidapp.fitbet.utils.Contents.TOTAL_DISTANCE;
 import static com.androidapp.fitbet.utils.Contents.WEEK_DISTANCE;
-import static com.androidapp.fitbet.utils.Contents.WON;
 
 public class DashBoardFragment extends Fragment {
 
@@ -113,25 +108,27 @@ public class DashBoardFragment extends Fragment {
     ArrayList<String> dateDes = new ArrayList<>();
     ArrayList<String> speed = new ArrayList<>();
     private MyDialog noInternetDialog;
-private  AppPreference appPreference;
+    private AppPreference appPreference;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated DashBoardFragment");
-        appPreference=AppPreference.getPrefsHelper(getActivity());
-        appPreference.savePref(DASH_BOARD_POSICTION,"0");
-        noInternetDialog=new MyDialog(getActivity(),null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
+        appPreference = AppPreference.getPrefsHelper(getActivity());
+        appPreference.savePref(DASH_BOARD_POSICTION, "0");
+        noInternetDialog = new MyDialog(getActivity(), null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
         intintView();
     }
+
     private void intintView() {
-        if(Utils.isConnectedToInternet(getActivity())) {
-            if(!CustomProgress.getInstance().isShowing())
+        if (Utils.isConnectedToInternet(getActivity())) {
+            if (!CustomProgress.getInstance().isShowing())
                 CustomProgress.getInstance().showProgress(getActivity(), "", false);
             intintChart();
 
             callDashboardDetailsApi();
-        }else {
-noInternetDialog.show();
+        } else {
+            noInternetDialog.show();
         }
 
         week.setOnClickListener(new View.OnClickListener() {
@@ -148,10 +145,10 @@ noInternetDialog.show();
                 year_.setBackgroundTintList(getResources().getColorStateList(R.color.gray_2));
                 dateDes.clear();
                 speed.clear();
-                if(Utils.isConnectedToInternet(getActivity())) {
+                if (Utils.isConnectedToInternet(getActivity())) {
                     CustomProgress.getInstance().showProgress(getActivity(), "", false);
                     callweekApi();
-                }else
+                } else
                     noInternetDialog.show();
 
 
@@ -171,10 +168,10 @@ noInternetDialog.show();
                 year_.setBackgroundTintList(getResources().getColorStateList(R.color.gray_2));
                 dateDes.clear();
                 speed.clear();
-                if(Utils.isConnectedToInternet(getActivity())) {
+                if (Utils.isConnectedToInternet(getActivity())) {
                     CustomProgress.getInstance().showProgress(getActivity(), "", false);
                     callmonthApi();
-                }else{
+                } else {
                     noInternetDialog.show();
                 }
 
@@ -194,10 +191,10 @@ noInternetDialog.show();
                 year_.setBackgroundTintList(getResources().getColorStateList(R.color.gray_2));
                 dateDes.clear();
                 speed.clear();
-                if(Utils.isConnectedToInternet(getActivity())) {
+                if (Utils.isConnectedToInternet(getActivity())) {
                     CustomProgress.getInstance().showProgress(getActivity(), "", false);
                     callsex_monthApi();
-                }else{
+                } else {
                     noInternetDialog.show();
                 }
 
@@ -217,14 +214,15 @@ noInternetDialog.show();
                 week.setBackgroundTintList(getResources().getColorStateList(R.color.gray_2));
                 dateDes.clear();
                 speed.clear();
-                if(Utils.isConnectedToInternet(getActivity())) {
+                if (Utils.isConnectedToInternet(getActivity())) {
                     CustomProgress.getInstance().showProgress(getActivity(), "", false);
-                callyear_Api();
-               }else
+                    callyear_Api();
+                } else
                     noInternetDialog.show();
             }
         });
     }
+
     private void intintChart() {
         week.setBackgroundResource(R.drawable.shape_button_roud_corner1);
         week.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
@@ -240,27 +238,30 @@ noInternetDialog.show();
         speed.clear();
 
     }
+
     private void callDashboardDetailsApi() {
 
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("dashboard details "+bodyString);
+                    System.out.println("dashboard details " + bodyString);
                     DashboardDetailReportapiresult(bodyString);
                     //CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void DashboardDetailReportapiresult(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
@@ -274,37 +275,37 @@ noInternetDialog.show();
                 won.setText(jsonObject1.getString(DASH_BOARD_WON));
                 lost.setText(jsonObject1.getString(DASH_BOARD_LOST));
                 credit.setText(jsonObject1.getString(DASH_BOARD_CREDIT_SCORE));
-                final Context mContext = getActivity() ;
+                final Context mContext = getActivity();
                 if (!jsonObject1.getString(PROFILE_PIC).equals("NA")) {
-                    if (jsonObject1.getString(REG_TYPE).equals("normal")&&jsonObject1.getString(IMAGE_STATUS).equals("0")){
+                    if (jsonObject1.getString(REG_TYPE).equals("normal") && jsonObject1.getString(IMAGE_STATUS).equals("0")) {
                         //Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC)).into(img_user);
-                        Picasso.get().load(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC))
+                        Picasso.get().load(Constant.BASE_APP_IMAGE__PATH + jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
-                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH+jsonObject1.getString(PROFILE_PIC));
-                    }else{
+                        appPreference.saveProfileImage(Constant.BASE_APP_IMAGE__PATH + jsonObject1.getString(PROFILE_PIC));
+                    } else {
                         Picasso.get().load(jsonObject1.getString(PROFILE_PIC))
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
                         appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                     }
-                }
-                else{
+                } else {
                     img_user.setImageResource(R.drawable.user_profile_avatar);
                     appPreference.saveProfileImage(jsonObject1.getString(PROFILE_PIC));
                 }
-            }else if(status.equals("No Users")){
+            } else if (status.equals("No Users")) {
                 Intent i = new Intent(getActivity(), LoginActivity.class);
                 startActivity(i);
                 getActivity().finish();
                 getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void callweekApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardWeek(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardWeek(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -316,14 +317,16 @@ noInternetDialog.show();
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void callmonthApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardMonth(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardMonth(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -335,12 +338,14 @@ noInternetDialog.show();
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void monthReportapiresult(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
@@ -352,16 +357,16 @@ noInternetDialog.show();
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
                 average_speed.setText(jsonObject.getString(AVERAGESPEED));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(DAY));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
 
 
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
@@ -369,23 +374,23 @@ noInternetDialog.show();
                     chart.getXAxis().removeAllLimitLines();
 
 
-                }else{
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(DAY));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void callsex_monthApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Dashboard6Month(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Dashboard6Month(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -397,6 +402,7 @@ noInternetDialog.show();
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -415,36 +421,36 @@ noInternetDialog.show();
                 JSONArray jsonArray = new JSONArray(data1);
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
-                average_speed.setText(jsonObject.getString(AVERAGESPEED ));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_speed.setText(jsonObject.getString(AVERAGESPEED));
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     //chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(MONTH));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     chart.invalidate();
                     chart.getXAxis().removeAllLimitLines();
-                }else{
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(MONTH));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void callyear_Api() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardYear(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardYear(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -457,6 +463,7 @@ noInternetDialog.show();
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -475,32 +482,32 @@ noInternetDialog.show();
                 JSONArray jsonArray = new JSONArray(data1);
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
-                average_speed.setText(jsonObject.getString(AVERAGESPEED ));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_speed.setText(jsonObject.getString(AVERAGESPEED));
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(MONTH));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     chart.invalidate();
                     chart.getXAxis().removeAllLimitLines();
 
 
-                }else{
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(MONTH));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -516,45 +523,45 @@ noInternetDialog.show();
                 JSONArray jsonArray = new JSONArray(data1);
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList year = new ArrayList();
-                average_speed.setText(jsonObject.getString(AVERAGESPEED ));
-                average_km.setText(""+  String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE )))/1000 )+" Km");
-                total_km.setText(""+ String.format("%.2f",Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString( TOTAL_DISTANCE  )))/1000)+ " Km");
-                if(jsonObject.getString("totaldistance").equals("0")){
+                average_speed.setText(jsonObject.getString(AVERAGESPEED));
+                average_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(AVERAGE_DISTANCE))) / 1000) + " Km");
+                total_km.setText("" + String.format("%.2f", Utils.roundTwoDecimals(Double.parseDouble(jsonObject.getString(TOTAL_DISTANCE))) / 1000) + " Km");
+                if (jsonObject.getString("totaldistance").equals("0")) {
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(DAY));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
-
-
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
 
 
                     chart.setNoDataText(getResources().getString(R.string.no_chart_data_available));
                     chart.invalidate();
                     chart.getXAxis().removeAllLimitLines();
 
-                }else{
+                } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonList = jsonArray.getJSONObject(i);
                         speed.add(jsonList.getString(WEEK_DISTANCE));
                         dateDes.add(jsonList.getString(DAY));
                     }
-                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes,0);
+                    StaticsUtils_BarChart.setBarChartData(getActivity(), chart, dateDes.size(), speed, dateDes, 0);
                 }
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

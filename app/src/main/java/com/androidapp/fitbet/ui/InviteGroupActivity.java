@@ -85,10 +85,10 @@ public class InviteGroupActivity extends BaseActivity {
     TableRow ed_delete_row;
 
     Bundle bundle;
-    boolean isEditable=false;
-    boolean clcikable=false;
+    boolean isEditable = false;
+    boolean clcikable = false;
 
-    ArrayList<Invitemembers>invitemembersDetails;
+    ArrayList<Invitemembers> invitemembersDetails;
 
     ArrayList<Invitemembers> multiselect_list = new ArrayList<>();
 
@@ -97,12 +97,12 @@ public class InviteGroupActivity extends BaseActivity {
     InviteDetailsListAdapter inviteListAdapter;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -110,8 +110,8 @@ public class InviteGroupActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -120,12 +120,11 @@ public class InviteGroupActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -161,7 +160,6 @@ public class InviteGroupActivity extends BaseActivity {
         }));*/
 
 
-
         invite_group_list.addOnItemTouchListener(new RecyclerItemClickListener(SLApplication.getContext(), invite_group_list, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -179,13 +177,14 @@ public class InviteGroupActivity extends BaseActivity {
                     getActivity().finish();
                 }*/
             }
+
             @Override
             public void onItemLongClick(View view, int position) {
                 if (!isMultiSelect) {
-                    clcikable=true;
+                    clcikable = true;
                     multiselect_list = new ArrayList<Invitemembers>();
                     isMultiSelect = true;
-                }else{
+                } else {
 
                 }
                 multi_select(position);
@@ -193,33 +192,25 @@ public class InviteGroupActivity extends BaseActivity {
         }));
 
 
-
-
-
-
-
-
-
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String deleteId = null;
-                ArrayList<String>deleteIdList=new ArrayList<String>();
-                if(multiselect_list.size()>0)
-                {
-                    for(int i=0;i<multiselect_list.size();i++) {
+                ArrayList<String> deleteIdList = new ArrayList<String>();
+                if (multiselect_list.size() > 0) {
+                    for (int i = 0; i < multiselect_list.size(); i++) {
                         invitemembersDetails.remove(multiselect_list.get(i));
-                        deleteId=String.valueOf(multiselect_list.get(i).getReg_key());
+                        deleteId = String.valueOf(multiselect_list.get(i).getReg_key());
                         deleteIdList.add(deleteId);
                     }
-                    callDeleteGroupApi(deleteIdList.toString(),bundle.getString(Contents.GROUP_ID));
-                }else{
-                    for(int i=0;i<multiselect_list.size();i++) {
+                    callDeleteGroupApi(deleteIdList.toString(), bundle.getString(Contents.GROUP_ID));
+                } else {
+                    for (int i = 0; i < multiselect_list.size(); i++) {
                         invitemembersDetails.remove(multiselect_list.get(i));
-                        deleteId=String.valueOf(multiselect_list.get(i).getReg_key());
+                        deleteId = String.valueOf(multiselect_list.get(i).getReg_key());
                         deleteIdList.add(deleteId);
                     }
-                    callDeleteGroupApi(deleteIdList.toString(),bundle.getString(Contents.GROUP_ID));
+                    callDeleteGroupApi(deleteIdList.toString(), bundle.getString(Contents.GROUP_ID));
                 }
             }
         });
@@ -269,16 +260,18 @@ public class InviteGroupActivity extends BaseActivity {
         finish();
         super.onBackPressed();
     }
+
     private void filter(String text) {
-        if(!text.equals("")){
+        if (!text.equals("")) {
             inviteListAdapter.filterList(text);
-        }else{
+        } else {
             inviteListAdapter.filterList("");
         }
 
     }
-    private void callDeleteGroupApi(String deletearray,String groupid) {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DeleteInviteMember(deletearray,groupid);
+
+    private void callDeleteGroupApi(String deletearray, String groupid) {
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DeleteInviteMember(deletearray, groupid);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -286,7 +279,7 @@ public class InviteGroupActivity extends BaseActivity {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     final JSONObject jsonObject = new JSONObject(bodyString);
                     String data = jsonObject.getString("Status");
-                    if(data.equals("Ok")){
+                    if (data.equals("Ok")) {
                         refreshAdapter();
                         delete.setVisibility(View.GONE);
                         searchView.setVisibility(View.VISIBLE);
@@ -300,6 +293,7 @@ public class InviteGroupActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -310,74 +304,72 @@ public class InviteGroupActivity extends BaseActivity {
     public void multi_select(int position) {
         if (multiselect_list.contains(invitemembersDetails.get(position))) {
             multiselect_list.remove(invitemembersDetails.get(position));
-        }
-        else {
+        } else {
             multiselect_list.add(invitemembersDetails.get(position));
         }
-        if (multiselect_list.size() > 0){
-            if(multiselect_list.size()>1){
+        if (multiselect_list.size() > 0) {
+            if (multiselect_list.size() > 1) {
                 ed_delete_row.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
                 searchView.setVisibility(View.GONE);
-            } else{
+            } else {
                 ed_delete_row.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
                 searchView.setVisibility(View.GONE);
 
             }
-        }else{
+        } else {
             delete.setVisibility(View.GONE);
             ed_delete_row.setVisibility(View.GONE);
             searchView.setVisibility(View.VISIBLE);
         }
-        users_count.setText(""+multiselect_list.size());
+        users_count.setText("" + multiselect_list.size());
         refreshAdapter();
     }
 
 
-   /* public void multi_select(int position) {
-        if (multiselect_list.contains(invitemembersDetails.get(position))) {
-            multiselect_list.remove(invitemembersDetails.get(position));
-        }
-        else {
-            multiselect_list.add(invitemembersDetails.get(position));
-        }
-        if (multiselect_list.size() > 0){
-            if(multiselect_list.size()>1){
-                delete.setVisibility(View.VISIBLE);
-                searchView.setVisibility(View.GONE);
-            } else{
-                delete.setVisibility(View.VISIBLE);
-                searchView.setVisibility(View.GONE);
+    /* public void multi_select(int position) {
+         if (multiselect_list.contains(invitemembersDetails.get(position))) {
+             multiselect_list.remove(invitemembersDetails.get(position));
+         }
+         else {
+             multiselect_list.add(invitemembersDetails.get(position));
+         }
+         if (multiselect_list.size() > 0){
+             if(multiselect_list.size()>1){
+                 delete.setVisibility(View.VISIBLE);
+                 searchView.setVisibility(View.GONE);
+             } else{
+                 delete.setVisibility(View.VISIBLE);
+                 searchView.setVisibility(View.GONE);
 
-            }
-        }else{
-            delete.setVisibility(View.GONE);
-            searchView.setVisibility(View.VISIBLE);
-        }
-        refreshAdapter();
+             }
+         }else{
+             delete.setVisibility(View.GONE);
+             searchView.setVisibility(View.VISIBLE);
+         }
+         refreshAdapter();
 
-    }*/
-    public void refreshAdapter()
-    {
-        inviteListAdapter.selected_usersList=multiselect_list;
-        inviteListAdapter.groupListModels=invitemembersDetails;
+     }*/
+    public void refreshAdapter() {
+        inviteListAdapter.selected_usersList = multiselect_list;
+        inviteListAdapter.groupListModels = invitemembersDetails;
         inviteListAdapter.notifyDataSetChanged();
     }
+
     private void inviteGroupList() {
         CustomProgress.getInstance().showProgress(this, "", false);
-        if(bundle.getString(Contents.GROUP_ID)!= null ||bundle.getString(Contents.GROUP_ID)!= "")
-        {
+        if (bundle.getString(Contents.GROUP_ID) != null || bundle.getString(Contents.GROUP_ID) != "") {
             btn_invite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(InviteGroupActivity.this, InviteGroupListActivity.class);
-                    i.putExtra(Contents.GROUP_ID,bundle.getString(Contents.GROUP_ID));
+                    i.putExtra(Contents.GROUP_ID, bundle.getString(Contents.GROUP_ID));
                     startActivity(i);
                 }
             });
 
-            String search="";
+            String search = "";
             Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).InviteGroupDeatails(bundle.getString(Contents.GROUP_ID));
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -385,32 +377,34 @@ public class InviteGroupActivity extends BaseActivity {
                     try {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
                         CustomProgress.getInstance().hideProgress();
-                        groupDetailsList(bodyString,bundle.getString(Contents.GROUP_ID));
+                        groupDetailsList(bodyString, bundle.getString(Contents.GROUP_ID));
                         //listOrderGroup(bodyString);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                 }
             });
         }
     }
-    private void groupDetailsList(String bodyString,String groupId) {
-      try{
-          final JSONObject jsonObject = new JSONObject(bodyString);
-          String data = jsonObject.getString("Status");
-          if(data.equals("Ok")){
-              name.setText(jsonObject.getString("name"));
-              description.setText(jsonObject.getString("description"));
 
-              if (!jsonObject.getString(GROUP_IMAGE).equals("NA")) {
-                  if (jsonObject.getString(GROUP_IMAGE).equals("normal")&&jsonObject.getString(IMAGE_STATUS).equals("0")){
-                      Picasso.get().
-                              load(jsonObject.getString(BASEPATH)+jsonObject.getString(GROUP_IMAGE))
-                              .placeholder(R.drawable.image_loader)
-                              .into(img_user);
+    private void groupDetailsList(String bodyString, String groupId) {
+        try {
+            final JSONObject jsonObject = new JSONObject(bodyString);
+            String data = jsonObject.getString("Status");
+            if (data.equals("Ok")) {
+                name.setText(jsonObject.getString("name"));
+                description.setText(jsonObject.getString("description"));
+
+                if (!jsonObject.getString(GROUP_IMAGE).equals("NA")) {
+                    if (jsonObject.getString(GROUP_IMAGE).equals("normal") && jsonObject.getString(IMAGE_STATUS).equals("0")) {
+                        Picasso.get().
+                                load(jsonObject.getString(BASEPATH) + jsonObject.getString(GROUP_IMAGE))
+                                .placeholder(R.drawable.image_loader)
+                                .into(img_user);
                      /* Glide.with(this)
                               .load(jsonObject.getString(BASEPATH)+jsonObject.getString(GROUP_IMAGE))
                               .centerCrop()
@@ -432,7 +426,7 @@ public class InviteGroupActivity extends BaseActivity {
                               })
                               .transform(new CircleTransform(this))
                               .into(img_user);*/
-                  }else{
+                    } else {
 
 
                      /* Glide.with(this)
@@ -442,10 +436,10 @@ public class InviteGroupActivity extends BaseActivity {
                               .into(img_user);*/
 
 
-                      Picasso.get().
-                              load(jsonObject.getString(BASEPATH)+jsonObject.getString(GROUP_IMAGE))
-                              .placeholder(R.drawable.image_loader)
-                              .into(img_user);
+                        Picasso.get().
+                                load(jsonObject.getString(BASEPATH) + jsonObject.getString(GROUP_IMAGE))
+                                .placeholder(R.drawable.image_loader)
+                                .into(img_user);
                      /* Glide.with(this)
                               .load( jsonObject.getString(BASEPATH)+jsonObject.getString(GROUP_IMAGE))
                               .listener(new RequestListener<String, GlideDrawable>() {
@@ -461,48 +455,47 @@ public class InviteGroupActivity extends BaseActivity {
                               })
                               .transform(new CircleTransform(this))
                               .into(img_user);*/
-                  }
-              } else {
-                  img_user.setImageDrawable(getResources().getDrawable(R.drawable.group_icons));
-              }
-              JSONObject jsonObject1 = new JSONObject(bodyString);
-              String data1 = jsonObject1.getString("groupmembers");
-              String basepath=jsonObject1.getString(BASEPATH);
-              JSONArray jsonArray = new JSONArray(data1);
-              invitemembersDetails = new ArrayList<>();
-              invitemembersDetails.clear();
-              if(jsonArray.length()==0){
-                  no_data.setVisibility(View.VISIBLE);
-              }else{
-                  no_data.setVisibility(View.GONE);
-              }
-              for (int i = 0; i < jsonArray.length(); i++) {
-                  JSONObject jsonList = jsonArray.getJSONObject(i);
-                  Invitemembers model = new Invitemembers();
-                  model.setReg_key(jsonList.getString(Contents.REG_KEY));
-                  model.setFirstname(jsonList.getString(Contents.FIRST_NAME));
-                  model.setEmail(jsonList.getString(Contents.EMAIL));
-                  model.setCreditScore(jsonList.getString(Contents.CREDIT_SCORE));
-                  model.setWon(jsonList.getString(Contents.WON));
-                  model.setLost(jsonList.getString(Contents.LOST));
-                  model.setCountry(jsonList.getString(Contents.COUNTRY));
-                  model.setProfile_pic(jsonList.getString(Contents.PROFILE_PIC));
-                  model.setRegType(jsonList.getString(Contents.REG_TYPE));
-                  model.setDistance(jsonList.getString(Contents.DISTANCE));
-                  invitemembersDetails.add(model);
-              }
-              inviteListAdapter = new InviteDetailsListAdapter(this, invitemembersDetails,multiselect_list,groupId,basepath);
-              invite_group_list.setHasFixedSize(true);
-              invite_group_list.setLayoutManager(new LinearLayoutManager(this));
-              invite_group_list.setAdapter(inviteListAdapter);
+                    }
+                } else {
+                    img_user.setImageDrawable(getResources().getDrawable(R.drawable.group_icons));
+                }
+                JSONObject jsonObject1 = new JSONObject(bodyString);
+                String data1 = jsonObject1.getString("groupmembers");
+                String basepath = jsonObject1.getString(BASEPATH);
+                JSONArray jsonArray = new JSONArray(data1);
+                invitemembersDetails = new ArrayList<>();
+                invitemembersDetails.clear();
+                if (jsonArray.length() == 0) {
+                    no_data.setVisibility(View.VISIBLE);
+                } else {
+                    no_data.setVisibility(View.GONE);
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonList = jsonArray.getJSONObject(i);
+                    Invitemembers model = new Invitemembers();
+                    model.setReg_key(jsonList.getString(Contents.REG_KEY));
+                    model.setFirstname(jsonList.getString(Contents.FIRST_NAME));
+                    model.setEmail(jsonList.getString(Contents.EMAIL));
+                    model.setCreditScore(jsonList.getString(Contents.CREDIT_SCORE));
+                    model.setWon(jsonList.getString(Contents.WON));
+                    model.setLost(jsonList.getString(Contents.LOST));
+                    model.setCountry(jsonList.getString(Contents.COUNTRY));
+                    model.setProfile_pic(jsonList.getString(Contents.PROFILE_PIC));
+                    model.setRegType(jsonList.getString(Contents.REG_TYPE));
+                    model.setDistance(jsonList.getString(Contents.DISTANCE));
+                    invitemembersDetails.add(model);
+                }
+                inviteListAdapter = new InviteDetailsListAdapter(this, invitemembersDetails, multiselect_list, groupId, basepath);
+                invite_group_list.setHasFixedSize(true);
+                invite_group_list.setLayoutManager(new LinearLayoutManager(this));
+                invite_group_list.setAdapter(inviteListAdapter);
 
-          }
-          
-      }catch (Exception e){
-          e.printStackTrace();
-      }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
 
 }

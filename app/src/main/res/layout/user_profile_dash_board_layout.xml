@@ -17,7 +17,8 @@
             android:background="@drawable/diloag_rounded_corner"
             android:layout_gravity="center"
             android:gravity="center"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="4"
@@ -41,13 +42,14 @@
                         android:gravity="center"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <com.androidapp.fitbet.utils.CircleImageView
                             android:id="@+id/img_user"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/user_profile_avatar"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -70,11 +72,12 @@
                             android:textColor="@color/main_text_color"
                             android:textSize="18dp"
                             android:text="" />
+
                         <TableRow
                             android:layout_width="match_parent"
                             android:layout_gravity="center|start"
                             android:gravity="start|center"
-                            android:layout_height="40dp" >
+                            android:layout_height="40dp">
 
 
                             <TextView
@@ -91,6 +94,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -121,12 +125,14 @@
                     android:textSize="10sp"
                     android:text="@string/won" />
             </LinearLayout>
+
             <View
                 android:layout_width="2dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/pading_gray2"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -176,6 +182,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/diloag_rounded_corner"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -184,6 +191,7 @@
                 android:layout_marginStart="10dp"
 
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -197,7 +205,7 @@
                         android:padding="5dp"
                         android:layout_marginEnd="@dimen/margin_10"
                         android:layout_marginStart="@dimen/margin_10"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/week"
@@ -247,10 +255,12 @@
                             android:text="@string/year1" />
                     </TableRow>
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:background="@color/md_grey_100"
-                    android:layout_height="2dp"/>
+                    android:layout_height="2dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -261,7 +271,8 @@
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -269,6 +280,7 @@
                             android:gravity="center"
                             android:text="Average Speed "
                             android:textColor="@color/main_text_color" />
+
                         <TextView
                             android:id="@+id/average_speed"
                             android:layout_width="wrap_content"
@@ -281,6 +293,7 @@
                             android:textSize="18dp"
                             android:text=""
                             android:textColor="@color/light_blue" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -291,6 +304,7 @@
                     </TableRow>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -301,14 +315,15 @@
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TableRow
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -316,6 +331,7 @@
                                 android:fontFamily="@font/lato_regular"
                                 android:text="@string/average"
                                 android:textColor="@color/main_text_color" />
+
                             <TextView
                                 android:id="@+id/average_km"
                                 android:layout_width="wrap_content"
@@ -335,7 +351,8 @@
                             android:layout_weight="1"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -344,6 +361,7 @@
                                 android:text="@string/total"
                                 android:fontFamily="@font/lato_regular"
                                 android:textColor="@color/main_text_color" />
+
                             <TextView
                                 android:id="@+id/total_km"
                                 android:layout_width="wrap_content"
@@ -362,6 +380,7 @@
                     </TableRow>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -373,7 +392,7 @@
                         android:layout_width="match_parent"
                         android:background="#ffffff"
                         android:layout_marginBottom="15dp"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                 </LinearLayout>
             </LinearLayout>

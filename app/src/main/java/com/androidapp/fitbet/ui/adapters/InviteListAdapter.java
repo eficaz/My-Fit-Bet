@@ -42,22 +42,24 @@ import retrofit2.Response;
 
 import static com.androidapp.fitbet.network.Constant.BASE_APP_IMAGE__PATH;
 
-public class InviteListAdapter extends RecyclerView.Adapter  {
+public class InviteListAdapter extends RecyclerView.Adapter {
     Context constant;
     public ArrayList<Invitemembers> groupListModels;
-    public List<Invitemembers> selected_usersList=new ArrayList<>();
+    public List<Invitemembers> selected_usersList = new ArrayList<>();
     private List<Invitemembers> contactListFiltered;
-    String groupId,basepath;
+    String groupId, basepath;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+
     public InviteListAdapter(Context context, ArrayList<Invitemembers> myDataset, ArrayList<Invitemembers> selectedList, String groupId, String basepath) {
         this.constant = context;
         this.groupListModels = myDataset;
         this.selected_usersList = selectedList;
-        this.basepath=basepath;
+        this.basepath = basepath;
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
-        this.groupId=groupId;
+        this.groupId = groupId;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -65,6 +67,7 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
         InviteListAdapter.ViewHolder vh = new InviteListAdapter.ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         final Invitemembers m = groupListModels.get(position);
@@ -80,13 +83,13 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
             }
         });
         if (!m.getProfile_pic().equals("NA")) {
-            if(m.getRegType().equals("normal")){
-                if (m.getRegType().equals("normal")&&m.getImage_status().equals("0")){
+            if (m.getRegType().equals("normal")) {
+                if (m.getRegType().equals("normal") && m.getImage_status().equals("0")) {
                     Picasso.get().
-                            load(BASE_APP_IMAGE__PATH+m.getProfile_pic())
+                            load(BASE_APP_IMAGE__PATH + m.getProfile_pic())
                             .placeholder(R.drawable.image_loader)
                             .into(viewholder.img_user);
-                }else{
+                } else {
                     Picasso.get().
                             load(m.getProfile_pic())
                             .placeholder(R.drawable.image_loader)
@@ -115,7 +118,7 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
                         })
                         .transform(new CircleTransform(constant))
                         .into(viewholder.img_user);*/
-            }else{
+            } else {
                 viewholder.img_user.setImageDrawable(constant.getResources().getDrawable(R.drawable.user_profile_avatar));
               /*  Glide.with(constant)
                         .load(m.getProfile_pic())
@@ -147,13 +150,13 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
             viewholder.img_user.setImageDrawable(d);
         }
         //viewholder.tv_km.setText(""+Double.parseDouble(m.getDistance())/1000+" Km");
-        if(m.getDistance().equals("null")|| m.getDistance().equals("")){
-            double i2= Double.parseDouble(m.getDistance())/1000;
+        if (m.getDistance().equals("null") || m.getDistance().equals("")) {
+            double i2 = Double.parseDouble(m.getDistance()) / 1000;
             //viewholder.tv_km.setText(""+i2+" km");
-            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2)+" Km");
-        }else{
-            double i2= Double.parseDouble(m.getDistance())/1000;
-            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2)+" Km");
+            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2) + " Km");
+        } else {
+            double i2 = Double.parseDouble(m.getDistance()) / 1000;
+            viewholder.tv_km.setText(new DecimalFormat("##.##").format(i2) + " Km");
         }
 
 
@@ -176,7 +179,7 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
             @Override
             public void onClick(View v) {
                 CustomProgress.getInstance().showProgress(constant, "", false);
-                callincviteApi(m.getReg_key(),groupId,position);
+                callincviteApi(m.getReg_key(), groupId, position);
             }
         });
        /* if(selected_usersList.contains(groupListModels.get(position)))
@@ -184,24 +187,27 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
         else
             viewholder.card_view.setBackgroundColor(ContextCompat.getColor(constant, R.color.white));*/
     }
+
     private void callincviteApi(String regKey, String groupId, final int position) {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddInviteMember(groupId,regKey);
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddInviteMember(groupId, regKey);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    groupDetailsList(bodyString,position);
+                    groupDetailsList(bodyString, position);
                     //listOrderGroup(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void groupDetailsList(String bodyString, int position) {
         final JSONObject jsonObject;
         try {
@@ -209,7 +215,7 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
             String data = jsonObject.getString("Status");
             String msg = jsonObject.getString("Msg");
             Utils.showCustomToastMsg(constant, msg);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 CustomProgress.getInstance().hideProgress();
                 groupListModels.remove(position);
                 notifyDataSetChanged();
@@ -218,13 +224,14 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
             e.printStackTrace();
         }
     }
+
     public void filterList(String charText) {
 
         charText = charText.toLowerCase(Locale.getDefault());
         groupListModels.clear();
         if (charText.length() == 0) {
             groupListModels.addAll(contactListFiltered);
-        }else {
+        } else {
             for (Invitemembers wp : contactListFiltered) {
                 if (wp.getFirstname().toLowerCase(Locale.getDefault()).contains(charText)) {
                     groupListModels.add(wp);
@@ -233,11 +240,13 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
         }
         notifyDataSetChanged();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, tv_Country,tv_km;
+        TextView tv_Name, tv_Country, tv_km;
         Button invite;
         LinearLayout row;
+
         //CardView card_view;
         public ViewHolder(View convertView) {
             super(convertView);
@@ -246,11 +255,12 @@ public class InviteListAdapter extends RecyclerView.Adapter  {
             tv_Name = convertView.findViewById(R.id.tv_Name);
             tv_km = convertView.findViewById(R.id.tv_km);
             tv_Country = convertView.findViewById(R.id.tv_Country);
-            invite=convertView.findViewById(R.id.invite);
-            row=convertView.findViewById(R.id.row);
+            invite = convertView.findViewById(R.id.invite);
+            row = convertView.findViewById(R.id.row);
             itemView.setTag(itemView);
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

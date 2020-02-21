@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -28,12 +27,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
 import com.androidapp.fitbet.customview.MyDialog;
-import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
+import com.androidapp.fitbet.interfaces.CameraGalleryCapture;
 import com.androidapp.fitbet.model.CommonUsage;
 import com.androidapp.fitbet.network.Constant;
 import com.androidapp.fitbet.network.RetroClient;
 import com.androidapp.fitbet.network.RetroInterface;
-import com.androidapp.fitbet.presenter.DashBoardPresenter;
 import com.androidapp.fitbet.ui.fragments.ArchivesListFragment;
 import com.androidapp.fitbet.ui.fragments.BetFragment;
 import com.androidapp.fitbet.ui.fragments.DashBoardFragment;
@@ -73,6 +71,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.view.View.GONE;
+import static com.androidapp.fitbet.utils.Contents.BET_PAGE_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.BET_START_STATUS;
 import static com.androidapp.fitbet.utils.Contents.CAMERA_REQUEST_CODE;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
@@ -81,45 +80,44 @@ import static com.androidapp.fitbet.utils.Contents.STATUS_A;
 import static com.androidapp.fitbet.utils.Contents.USER_start_latitude;
 import static com.androidapp.fitbet.utils.Contents.USER_start_longitude;
 
-public class DashBoardActivity extends BaseActivity implements CommonUsage, BottomNavigationView.OnNavigationItemSelectedListener,MyDialog.MyDialogClickListener {
+public class DashBoardActivity extends BaseActivity implements CommonUsage, BottomNavigationView.OnNavigationItemSelectedListener, MyDialog.MyDialogClickListener {
 
-/*    @Bind(R.id.tabs)
-    TabLayout tabLayout;*/
-@Bind(R.id.content_main)
-FrameLayout content_main;
+    /*    @Bind(R.id.tabs)
+        TabLayout tabLayout;*/
+    @Bind(R.id.content_main)
+    FrameLayout content_main;
 
-@Bind(R.id.navigationView)
+    @Bind(R.id.navigationView)
     BottomNavigationView mBottomNavigationView;
 
-@Bind(R.id.fab)
-ImageView mFab;
+    @Bind(R.id.fab)
+    ImageView mFab;
 
-BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
+    BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
-    final static int REQUEST_LOCATION = 199;
 
-private int flag=0;
+    private int flag = 0;
 
-     LocationManager manager;
+    LocationManager manager;
     AlertDialog.Builder builder;
 
-    DashBoardPresenter dashBoardPresenter;
-
-    boolean live_bet=false;
 
 
-    CameraGalaryCaputer cameraGalaryCaputer;
+    boolean live_bet = false;
+
+
+    CameraGalleryCapture cameraGalaryCaputer;
     private MyDialog noInternetDialog;
-    private int REQUEST_CHECK_SETTINGS=111;
-private AppPreference appPreference;
+    private int REQUEST_CHECK_SETTINGS = 111;
+    private AppPreference appPreference;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -127,8 +125,8 @@ private boolean firstConnect=true;
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -138,28 +136,28 @@ private boolean firstConnect=true;
     @Override
     public void onMessageReceived(String message) {
 
-if(isMessageDeliverable) {
-    System.out.println("Dashboard activity onMessageReceived = " + message);
+        if (isMessageDeliverable) {
+            System.out.println("Dashboard activity onMessageReceived = " + message);
 
-    SLApplication.isCountDownRunning = true;
-    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
-    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
-    mFab.setImageResource(R.drawable.tab_center_icon_active1);
-    getSupportFragmentManager().beginTransaction().remove(getCurrentFragment()).replace(R.id.content_main, new LiveBetFragment(), Utils.BetScreenName).commitAllowingStateLoss();
-}
+            SLApplication.isCountDownRunning = true;
+            mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+            mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+            mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+            mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+            mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+            mFab.setImageResource(R.drawable.tab_center_icon_active1);
+            setCurrentTabSelected(0);
+            getSupportFragmentManager().beginTransaction().remove(getCurrentFragment()).replace(R.id.content_main, new LiveBetFragment(), Utils.BetScreenName).commitAllowingStateLoss();
+        }
     }
-
 
 
     Fragment getCurrentFragment() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if(fragments.isEmpty()) {
+        if (fragments.isEmpty()) {
             return null;
         }
-        return fragments.get(fragments.size()-1);
+        return fragments.get(fragments.size() - 1);
     }
 
     @Override
@@ -168,37 +166,38 @@ if(isMessageDeliverable) {
         setContentView(R.layout.sactivity_dashboard);
         ButterKnife.bind(this);
         System.out.println("onCreate dashboard activity");
-        appPreference=AppPreference.getPrefsHelper(this);
+        appPreference = AppPreference.getPrefsHelper(this);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        dashBoardPresenter = new DashBoardPresenter(this);
-        mOnNavigationItemSelectedListener=this;
+
+        mOnNavigationItemSelectedListener = this;
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         disableShiftMode(mBottomNavigationView);
         mBottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
-        noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
-if(SLApplication.isCountDownRunning){
-    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
-    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
-    mFab.setImageResource(R.drawable.tab_center_icon_active1);
-    getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new LiveBetFragment(),Utils.BetScreenName).commitAllowingStateLoss();
-}else {
-    if (Utils.isConnectedToInternet(this)) {
-        callLiveBetApi();
-    } else if (!noInternetDialog.isShowing())
-        noInternetDialog.show();
-}
+        noInternetDialog = new MyDialog(this, null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
+        if (SLApplication.isCountDownRunning) {
+            mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+            mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+            mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+            mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+            mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+            mFab.setImageResource(R.drawable.tab_center_icon_active1);
+            setCurrentTabSelected(0);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new LiveBetFragment(), Utils.BetScreenName).commitAllowingStateLoss();
+        } else {
+            if (Utils.isConnectedToInternet(this)) {
+                callLiveBetApi();
+            } else if (!noInternetDialog.isShowing())
+                noInternetDialog.show();
+        }
 
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!appPreference.getPref(DASH_BOARD_POSICTION,"").equals("2")) {
+                if (!appPreference.getPref(DASH_BOARD_POSICTION, "").equals("2")) {
                     live_bet = true;
                     mFab.setImageResource(R.drawable.tab_center_icon_active1);
                     if (Utils.isConnectedToInternet(DashBoardActivity.this)) {
@@ -220,15 +219,16 @@ if(SLApplication.isCountDownRunning){
     @Override
     protected void onStart() {
         super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
     }
 
 
-    private boolean isMessageDeliverable=true;
+    private boolean isMessageDeliverable = true;
+
     @Override
     protected void onStop() {
         System.out.println("onStop Dashboard");
-        isMessageDeliverable=false;
+        isMessageDeliverable = false;
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
         super.onStop();
     }
@@ -236,74 +236,76 @@ if(SLApplication.isCountDownRunning){
     @Override
     protected void onResume() {
         System.out.println("onResume Dashboard");
-        isMessageDeliverable=true;
+        isMessageDeliverable = true;
         super.onResume();
     }
 
-    public void setImageToFab(){
+    public void setImageToFab() {
 
-    mFab.setImageResource(R.drawable.tab_center_icon_active1);
-    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
-    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
-    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+        mFab.setImageResource(R.drawable.tab_center_icon_active1);
+        mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+        mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+        mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+        mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+        mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
 
-}
+    }
 
 
-    public void hideBottomNavigationView(){
+    public void hideBottomNavigationView() {
         mBottomNavigationView.setVisibility(GONE);
         mFab.setVisibility(GONE);
 
 
     }
-    public void showBottomNavigationView(){
+
+    public void showBottomNavigationView() {
         mBottomNavigationView.setVisibility(View.VISIBLE);
         mFab.setVisibility(View.VISIBLE);
     }
+
     private void init() {
 
 
-            switch (appPreference.getPref(Contents.DASH_BOARD_POSICTION, "")) {
+        switch (appPreference.getPref(Contents.DASH_BOARD_POSICTION, "")) {
 
 
-                case "0":
-                    if (CustomProgress.getInstance().isShowing())
-                        CustomProgress.getInstance().hideProgress();
-                    // if(mBottomNavigationView.getSelectedItemId()!=R.id.navigation_me)
-                    mBottomNavigationView.setSelectedItemId(R.id.navigation_me);
+            case "0":
+                if (CustomProgress.getInstance().isShowing())
+                    CustomProgress.getInstance().hideProgress();
+                // if(mBottomNavigationView.getSelectedItemId()!=R.id.navigation_me)
+                mBottomNavigationView.setSelectedItemId(R.id.navigation_me);
 
 
-                    break;
-                case "1":
-                    if (CustomProgress.getInstance().isShowing())
-                        CustomProgress.getInstance().hideProgress();
-                    if (mBottomNavigationView.getSelectedItemId() != R.id.navigation_bet)
-                        mBottomNavigationView.setSelectedItemId(R.id.navigation_bet);
+                break;
+            case "1":
+                if (CustomProgress.getInstance().isShowing())
+                    CustomProgress.getInstance().hideProgress();
+                if (mBottomNavigationView.getSelectedItemId() != R.id.navigation_bet)
+                    mBottomNavigationView.setSelectedItemId(R.id.navigation_bet);
 
-                    break;
+                break;
 
-                case "3":
-                    if (CustomProgress.getInstance().isShowing())
-                        CustomProgress.getInstance().hideProgress();
-                    if (mBottomNavigationView.getSelectedItemId() != R.id.navigation_archive)
-                        mBottomNavigationView.setSelectedItemId(R.id.navigation_archive);
+            case "3":
+                if (CustomProgress.getInstance().isShowing())
+                    CustomProgress.getInstance().hideProgress();
+                if (mBottomNavigationView.getSelectedItemId() != R.id.navigation_archive)
+                    mBottomNavigationView.setSelectedItemId(R.id.navigation_archive);
 
-                    break;
-                case "4":
-                    if (CustomProgress.getInstance().isShowing())
-                        CustomProgress.getInstance().hideProgress();
-                    if (mBottomNavigationView.getSelectedItemId() != R.id.navigation_settings)
-                        mBottomNavigationView.setSelectedItemId(R.id.navigation_settings);
+                break;
+            case "4":
+                if (CustomProgress.getInstance().isShowing())
+                    CustomProgress.getInstance().hideProgress();
+                if (mBottomNavigationView.getSelectedItemId() != R.id.navigation_settings)
+                    mBottomNavigationView.setSelectedItemId(R.id.navigation_settings);
 
-                    break;
+                break;
 
         }
 
 
-
     }
+
     @SuppressLint("RestrictedApi")
     public static void disableShiftMode(BottomNavigationView view) {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
@@ -336,23 +338,22 @@ if(SLApplication.isCountDownRunning){
     }
 
 
-
-
     private void callLiveBetApi() {
         CustomProgress.getInstance().showProgress(DashBoardActivity.this, "", false);
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveBetDetails(appPreference.getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LiveBetDetails(appPreference.getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("callLiveBetApi dashboard"+bodyString);
+                    System.out.println("callLiveBetApi dashboard" + bodyString);
                     publishLiveDetails(bodyString);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -371,7 +372,7 @@ if(SLApplication.isCountDownRunning){
             String status = jsonObject.getString(STATUS_A);
 
             if (status.trim().equals("Ok")) {
-               if(!appPreference.getSavedStatusFlag()) {
+                if (!appPreference.getSavedStatusFlag()) {
                     JSONObject betDetailsObject = jsonObject.getJSONObject("betdetails");
                     appPreference.savePref(USER_start_latitude, betDetailsObject.getString(USER_start_latitude));
                     appPreference.savePref(USER_start_longitude, betDetailsObject.getString(USER_start_longitude));
@@ -379,50 +380,49 @@ if(SLApplication.isCountDownRunning){
                     appPreference.savedStatusFlag(true);
                 }
                 System.out.println("inside  ok");
-                        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(DashBoardActivity.this)) {
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(DashBoardActivity.this)) {
 
-                            createLocationRequest();
-                            flag=1;
-                        }else{
-
-
-                            mBottomNavigationView.getMenu().getItem(0).setChecked(false);
-                            mBottomNavigationView.getMenu().getItem(1).setChecked(false);
-                            mBottomNavigationView.getMenu().getItem(3).setChecked(false);
-                            mBottomNavigationView.getMenu().getItem(4).setChecked(false);
-                            mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
-                            mFab.setImageResource(R.drawable.tab_center_icon_active1);
-                            if(CustomProgress.getInstance().isShowing())
-                                CustomProgress.getInstance().hideProgress();
-                            appPreference.savePref(BET_START_STATUS,"true");
-                            getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new LiveBetFragment(),Utils.BetScreenName).commitAllowingStateLoss();
-
-                        }
+                    createLocationRequest();
+                    flag = 1;
+                } else {
 
 
+                    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+                    mBottomNavigationView.getMenu().getItem(1).setChecked(false);
+                    mBottomNavigationView.getMenu().getItem(3).setChecked(false);
+                    mBottomNavigationView.getMenu().getItem(4).setChecked(false);
+                    mBottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+                    mFab.setImageResource(R.drawable.tab_center_icon_active1);
+                    if (CustomProgress.getInstance().isShowing())
+                        CustomProgress.getInstance().hideProgress();
+                    appPreference.savePref(BET_START_STATUS, "true");
+                    setCurrentTabSelected(0);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new LiveBetFragment(), Utils.BetScreenName).commitAllowingStateLoss();
 
-            }else{
-                if(CustomProgress.getInstance().isShowing())
+                }
+
+
+            } else {
+                if (CustomProgress.getInstance().isShowing())
                     CustomProgress.getInstance().hideProgress();
-                String message=jsonObject.getString("Msg");
-                appPreference.savePref(BET_START_STATUS,"false");
+                String message = jsonObject.getString("Msg");
+                appPreference.savePref(BET_START_STATUS, "false");
                 //callJoinBetsAPi();
                 System.out.println("inside error - not ok");
                 clearSavedBetItems();
-                if(live_bet){
-                MyDialog myDialog=new MyDialog(this,this,"",message,getString(R.string.ok),"",false,"livebet");
-                myDialog.show();
-                live_bet=false;
-                }else{
+                if (live_bet) {
+                    MyDialog myDialog = new MyDialog(this, this, "", message, getString(R.string.ok), "", false, "livebet");
+                    myDialog.show();
+                    live_bet = false;
+                } else {
                     init();
 
                 }
 
 
-
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -434,6 +434,8 @@ if(SLApplication.isCountDownRunning){
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
         appPreference.setLatLongList(null);
+        appPreference.savePositionLatitude("0.0");
+        appPreference.savePositionLongitude("0.0");
     }
 
 
@@ -443,14 +445,14 @@ if(SLApplication.isCountDownRunning){
         }
         if (CACHEDKEY.CAMERA.ordinal() == type) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                EasyImage.openCamera(DashBoardActivity.this,CAMERA_REQUEST_CODE);
+                EasyImage.openCamera(DashBoardActivity.this, CAMERA_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 111);
             }
         }
         if (CACHEDKEY.GALLERY.ordinal() == type) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                EasyImage.openGallery(DashBoardActivity.this,GALLERY_REQUEST_CODE);
+                EasyImage.openGallery(DashBoardActivity.this, GALLERY_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
             }
@@ -458,9 +460,7 @@ if(SLApplication.isCountDownRunning){
     }
 
 
-
-
-    public void passVal(CameraGalaryCaputer cameraGalaryCaputer) {
+    public void passVal(CameraGalleryCapture cameraGalaryCaputer) {
         this.cameraGalaryCaputer = cameraGalaryCaputer;
 
     }
@@ -469,7 +469,7 @@ if(SLApplication.isCountDownRunning){
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        EasyImage.handleActivityResult(requestCode, resultCode, data, this,new EasyImage.Callbacks() {
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new EasyImage.Callbacks() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
 
@@ -477,7 +477,7 @@ if(SLApplication.isCountDownRunning){
 
             @Override
             public void onImagesPicked(@NonNull List<File> imageFile, EasyImage.ImageSource source, int type) {
-                cameraGalaryCaputer.requestSuccess(new File(imageFile.toString().replaceAll("[\\[\\]]","")));
+                cameraGalaryCaputer.requestSuccess(new File(imageFile.toString().replaceAll("[\\[\\]]", "")));
             }
 
             @Override
@@ -487,46 +487,52 @@ if(SLApplication.isCountDownRunning){
         });
 
     }
-private int currentTabSelected;
+
+    public void setCurrentTabSelected(int currentTabSelected) {
+        this.currentTabSelected = currentTabSelected;
+    }
+
+    private int currentTabSelected;
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Fragment fragment=null;
+        Fragment fragment = null;
         mBottomNavigationView.getMenu().setGroupCheckable(0, true, true);
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.navigation_me:
-                if(currentTabSelected==R.id.navigation_me)
+                if (currentTabSelected == R.id.navigation_me)
                     return true;
 
                 menuItem.setChecked(true);
                 mFab.setImageResource(R.drawable.tab_center_icon1);
-                fragment=new DashBoardFragment();
+                fragment = new DashBoardFragment();
 
                 break;
             case R.id.navigation_bet:
-                if(currentTabSelected==R.id.navigation_bet)
+                if (currentTabSelected == R.id.navigation_bet)
                     return true;
                 menuItem.setChecked(true);
                 mFab.setImageResource(R.drawable.tab_center_icon1);
-       fragment=new BetFragment();
+                fragment = new BetFragment();
                 break;
             case R.id.navigation_archive:
-                if(currentTabSelected==R.id.navigation_archive)
+                if (currentTabSelected == R.id.navigation_archive)
                     return true;
                 menuItem.setChecked(true);
                 mFab.setImageResource(R.drawable.tab_center_icon1);
-        fragment=new ArchivesListFragment();
+                fragment = new ArchivesListFragment();
                 break;
             case R.id.navigation_settings:
-                if(currentTabSelected==R.id.navigation_settings)
+                if (currentTabSelected == R.id.navigation_settings)
                     return true;
                 menuItem.setChecked(true);
                 mFab.setImageResource(R.drawable.tab_center_icon1);
-             fragment=new SettingsFragment();
+                fragment = new SettingsFragment();
                 break;
         }
-        currentTabSelected=menuItem.getItemId();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main,fragment,Utils.BetScreenName).commitAllowingStateLoss();
+        currentTabSelected = menuItem.getItemId();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment, Utils.BetScreenName).commitAllowingStateLoss();
+        appPreference.savePref(BET_PAGE_POSICTION, "0");
         return true;
     }
 
@@ -547,15 +553,15 @@ private int currentTabSelected;
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
 
-                Log.d("Location","High accuracy location enabled");
-               // Toast.makeText(DashBoardActivity.this, "addOnSuccessListener", Toast.LENGTH_SHORT).show();
+                Log.d("Location", "High accuracy location enabled");
+                // Toast.makeText(DashBoardActivity.this, "addOnSuccessListener", Toast.LENGTH_SHORT).show();
                 // All location settings are satisfied. The client can initialize
                 // location requests here.
                 // ...
 
-                if(flag==1){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new LiveBetFragment(),Utils.BetScreenName).commitAllowingStateLoss();
-                    flag=0;
+                if (flag == 1) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new LiveBetFragment(), Utils.BetScreenName).commitAllowingStateLoss();
+                    flag = 0;
                 }
 
             }
@@ -585,7 +591,7 @@ private int currentTabSelected;
     @Override
     public void onClick(MyDialog dialog, int type, String flag) {
 
-        switch (flag){
+        switch (flag) {
             case "livebet":
                 mFab.setImageResource(R.drawable.tab_center_icon1);
                 mBottomNavigationView.setSelectedItemId(R.id.navigation_bet);
@@ -606,12 +612,12 @@ private int currentTabSelected;
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Utils.showCustomToastMsg(this,"Please click BACK again to exit");
+        Utils.showCustomToastMsg(this, "Please click BACK again to exit");
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }

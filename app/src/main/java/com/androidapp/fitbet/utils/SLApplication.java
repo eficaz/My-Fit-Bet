@@ -11,8 +11,6 @@ import androidx.multidex.MultiDexApplication;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.forceupdate.ForceUpdateChecker;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -23,17 +21,15 @@ import java.util.Map;
 import static com.google.firebase.remoteconfig.FirebaseRemoteConfig.TAG;
 
 
-public class SLApplication extends MultiDexApplication implements Application.ActivityLifecycleCallbacks{
-    public static boolean isServiceRunning=false;
-    public static boolean isCountDownRunning=false;
+public class SLApplication extends MultiDexApplication implements Application.ActivityLifecycleCallbacks {
+    public static boolean isServiceRunning = false;
+    public static boolean isCountDownRunning = false;
 
     public static SLApplication mInstance;
     public static boolean isBetCreatedOrEdited;
-    public static boolean firstConnect=true;
-    public static boolean firstUpdateConnect=true;
+    public static boolean firstConnect = true;
+    public static boolean firstUpdateConnect = true;
     private Activity activeActivity;
-
-
 
 
     @Override
@@ -61,21 +57,25 @@ public class SLApplication extends MultiDexApplication implements Application.Ac
                 });
 
     }
+
     public static Context getContext() {
         if (mInstance == null)
             mInstance = new SLApplication();
         return mInstance;
     }
+
     public static SLApplication getInstance() {
         if (mInstance == null)
             mInstance = new SLApplication();
         return mInstance;
     }
+
     public static Context getAppContext() {
         if (mInstance == null)
             mInstance = new SLApplication();
         return mInstance.getApplicationContext();
     }
+
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
 
@@ -85,9 +85,11 @@ public class SLApplication extends MultiDexApplication implements Application.Ac
     public void onActivityStarted(Activity activity) {
 
     }
+
     public Activity getActiveActivity() {
         return activeActivity;
     }
+
     @Override
     public void onActivityResumed(Activity activity) {
 
@@ -114,8 +116,9 @@ public class SLApplication extends MultiDexApplication implements Application.Ac
 
 
     }
-public static void removeLocationUpdates(){
 
-}
+    public static void removeLocationUpdates() {
+
+    }
 
 }

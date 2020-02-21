@@ -30,12 +30,12 @@ public class PrivacyPolicyActivity extends BaseActivity {
     @Bind(R.id.txt_page_heading)
     TextView txtPageHeading;
     @Bind(R.id.txt_rules_heading)
-            TextView txtRulesHeading;
+    TextView txtRulesHeading;
     @Bind(R.id.txt_rules)
-            TextView txtRules;
+    TextView txtRules;
 
 
-    String content="<p align=\"center\"><strong>PRIVACY POLICY</strong></p>\n" +
+    String content = "<p align=\"center\"><strong>PRIVACY POLICY</strong></p>\n" +
             "<p>FitBet's goal is to help users&rsquo; lives become more active and healthier using advanced mobile internet technology. To attain that; with the help of a betting medium; we collect, store and analyze variety of data from you and your devices.</p>\n" +
             "<p>This statement is intended to clearly explain in human readable language what data we collect and how it is used. If after reading this statement you have further questions, please contact us at the email address listed at the end of this document.</p>\n" +
             "<p><strong><u>WHAT INFORMATION WE COLLECT</u></strong><br>\n" +
@@ -94,14 +94,12 @@ public class PrivacyPolicyActivity extends BaseActivity {
             "  Contact us at info@fitbet.com.au if you have further questions or concerns about your data. Last updated: 09/10/2019</p>";
 
 
-
-
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -109,8 +107,8 @@ public class PrivacyPolicyActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -119,13 +117,11 @@ public class PrivacyPolicyActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
-
 
 
     @Override
@@ -133,29 +129,26 @@ public class PrivacyPolicyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
         ButterKnife.bind(this);
-LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        String name=getIntent().getStringExtra("name");
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+        String name = getIntent().getStringExtra("name");
 
 
-if(name.equals("privacy")) {
-    privacy_and_policy.setVisibility(View.VISIBLE);
-    txtPageHeading.setText(getString(R.string.privacy_and_policy));
-    txtRules.setVisibility(View.GONE);
-    txtRulesHeading.setVisibility(View.GONE);
+        if (name.equals("privacy")) {
+            privacy_and_policy.setVisibility(View.VISIBLE);
+            txtPageHeading.setText(getString(R.string.privacy_and_policy));
+            txtRules.setVisibility(View.GONE);
+            txtRulesHeading.setVisibility(View.GONE);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        privacy_and_policy.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
-    } else
-        privacy_and_policy.setText(Html.fromHtml(content));
-}else{
-    privacy_and_policy.setVisibility(View.GONE);
-    txtPageHeading.setText(getString(R.string.rules_regulations));
-    txtRules.setVisibility(View.VISIBLE);
-    txtRulesHeading.setVisibility(View.VISIBLE);
-}
-
-
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                privacy_and_policy.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
+            } else
+                privacy_and_policy.setText(Html.fromHtml(content));
+        } else {
+            privacy_and_policy.setVisibility(View.GONE);
+            txtPageHeading.setText(getString(R.string.rules_regulations));
+            txtRules.setVisibility(View.VISIBLE);
+            txtRulesHeading.setVisibility(View.VISIBLE);
+        }
 
 
         btn_back.setOnClickListener(new View.OnClickListener() {

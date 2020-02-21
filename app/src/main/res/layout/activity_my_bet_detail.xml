@@ -5,11 +5,13 @@
     android:background="@drawable/settings_bg"
     android:layout_height="match_parent"
     tools:context=".ui.MyBetDetailActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:background="@drawable/settings_bg"
         android:layout_height="match_parent">
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -38,12 +40,14 @@
                 android:gravity="end|center"
                 android:layout_marginEnd="30dp"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/imgChat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/coin_icon" />
+
                 <TextView
                     android:id="@+id/credits"
                     android:layout_width="wrap_content"
@@ -57,6 +61,7 @@
                     android:text="0" />
             </TableRow>
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -249,6 +254,7 @@
                             android:visibility="gone"
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
+
                             <Button
                                 android:id="@+id/start"
                                 android:layout_width="wrap_content"
@@ -259,6 +265,7 @@
                                 android:backgroundTint="@color/start_button_color"
                                 android:textColor="@color/white"
                                 android:text="@string/start" />
+
                             <Button
                                 android:id="@+id/invite"
                                 android:layout_width="wrap_content"
@@ -268,213 +275,218 @@
                                 android:backgroundTint="@color/light_blue"
                                 android:textColor="@color/white"
                                 android:text="@string/invite" />
-                           <!-- <Button
-                                android:id="@+id/join_now"
-                                android:layout_width="wrap_content"
-                                android:layout_height="30dp"
-                                android:textSize="10sp"
-                                android:background="@drawable/shape_button_roud_corner"
-                                android:backgroundTint="@color/light_blue"
-                                android:textColor="@color/white"
-                                android:text="@string/join_now" />-->
+                            <!-- <Button
+                                 android:id="@+id/join_now"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="30dp"
+                                 android:textSize="10sp"
+                                 android:background="@drawable/shape_button_roud_corner"
+                                 android:backgroundTint="@color/light_blue"
+                                 android:textColor="@color/white"
+                                 android:text="@string/join_now" />-->
                         </LinearLayout>
 
                     </TableRow>
                 </LinearLayout>
             </LinearLayout>
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1.7">
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:background="@drawable/dashboard_shape_button_roud_corner1"
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:background="@drawable/dashboard_shape_button_roud_corner1"
+                android:layout_gravity="center"
+                android:gravity="center"
+
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/row3"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_gravity="center"
                     android:gravity="center"
-
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/row3"
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginStart="15dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/participants"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:text="0"
+                            android:fontFamily="@font/lato_bold"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:singleLine="true"
+                            android:textSize="10sp"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/main_text_color"
+                            android:layout_height="wrap_content"
+                            android:text="@string/participants" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/message_row"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_marginStart="15dp"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/messages"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:fontFamily="@font/lato_bold"
+                            android:textColor="@color/main_text_color"
+                            android:textSize="15dp"
+                            android:text="0" />
 
-                            <TextView
-                                android:id="@+id/participants"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:text="0"
-                                android:fontFamily="@font/lato_bold"
-                                android:textColor="@color/main_text_color"
-                                android:textSize="15dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:singleLine="true"
-                                android:textSize="10sp"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:fontFamily="@font/lato_regular"
-                                android:textColor="@color/main_text_color"
-                                android:layout_height="wrap_content"
-                                android:text="@string/participants" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/message_row"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/messages"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:fontFamily="@font/lato_bold"
-                                android:textColor="@color/main_text_color"
-                                android:textSize="15dp"
-                                android:text="0" />
-
-                            <TextView
-                                android:id="@+id/textView18"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="10sp"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:fontFamily="@font/lato_regular"
-                                android:textColor="@color/main_text_color"
-                                android:text="@string/messages" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/calander_row"
-                            android:layout_width="0dp"
-                            android:layout_weight=".8"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:textStyle="bold"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:textSize="15dp"
-                                android:backgroundTint="@color/main_text_color"
-                                android:background="@drawable/calendar"
-                                />
-
-
-                            <TextView
-                                android:id="@+id/calander"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="10sp"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/lato_regular"
-                                android:textColor="@color/main_text_color"
-                                android:text="" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/clock_row"
-                            android:layout_width="0dp"
-                            android:layout_weight=".8"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:textStyle="bold"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:textSize="15dp"
-                                android:backgroundTint="@color/main_text_color"
-                                android:background="@drawable/clock"
-                                />
-
-                            <TextView
-                                android:id="@+id/clock"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="10sp"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/lato_regular"
-                                android:textColor="@color/main_text_color"
-                                android:text="" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/map_row"
-                            android:layout_width="0dp"
-                            android:layout_weight=".6"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:textStyle="bold"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:textSize="15dp"
-                                android:backgroundTint="@color/main_text_color"
-                                android:background="@drawable/pin"
-                                />
-
-                            <TextView
-                                android:id="@+id/textView20"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="10sp"
-                                android:layout_marginTop="5dp"
-                                android:textColor="@color/main_text_color"
-                                android:layout_gravity="center|start"
-                                android:gravity="center|start"
-                                android:text="@string/map" />
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView18"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/main_text_color"
+                            android:text="@string/messages" />
                     </LinearLayout>
-                </TableRow>
+
+                    <LinearLayout
+                        android:id="@+id/calander_row"
+                        android:layout_width="0dp"
+                        android:layout_weight=".8"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:textSize="15dp"
+                            android:backgroundTint="@color/main_text_color"
+                            android:background="@drawable/calendar" />
+
+
+                        <TextView
+                            android:id="@+id/calander"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/main_text_color"
+                            android:text="" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/clock_row"
+                        android:layout_width="0dp"
+                        android:layout_weight=".8"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:textSize="15dp"
+                            android:backgroundTint="@color/main_text_color"
+                            android:background="@drawable/clock" />
+
+                        <TextView
+                            android:id="@+id/clock"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/main_text_color"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/map_row"
+                        android:layout_width="0dp"
+                        android:layout_weight=".6"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:textSize="15dp"
+                            android:backgroundTint="@color/main_text_color"
+                            android:background="@drawable/pin" />
+
+                        <TextView
+                            android:id="@+id/textView20"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/main_text_color"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:text="@string/map" />
+                    </LinearLayout>
+                </LinearLayout>
+            </TableRow>
 
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10">
+
             <TextView
                 android:id="@+id/no_data"
                 android:layout_width="match_parent"
@@ -484,6 +496,7 @@
                 android:visibility="gone"
                 android:gravity="center"
                 android:text="@string/no_data" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/invite_group_list"
                 android:layout_width="match_parent"

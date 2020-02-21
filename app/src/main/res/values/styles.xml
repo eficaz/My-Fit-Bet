@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="customTheme" parent="@android:style/Theme.Dialog">
         <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -18,12 +19,14 @@
         <item name="colorAccent">@color/black</item>
 
     </style>
+
     <style name="NOAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <declare-styleable name="CircleImageView">
         <attr name="civ_border_width" format="dimension" />
         <attr name="civ_border_color" format="color" />

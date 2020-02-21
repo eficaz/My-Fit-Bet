@@ -2,19 +2,19 @@ package com.androidapp.fitbet.model;
 
 public class Message {
 
-    String firstname="";
+    String firstname = "";
 
-    String profile_pic="";
+    String profile_pic = "";
 
-    String regType="";
+    String regType = "";
 
-    String message="";
+    String message = "";
 
-    String senddate="";
+    String senddate = "";
 
-    String sender="";
+    String sender = "";
 
-    String image_status="";
+    String image_status = "";
 
     public String getImage_status() {
         return image_status;
@@ -23,8 +23,6 @@ public class Message {
     public void setImage_status(String image_status) {
         this.image_status = image_status;
     }
-
-
 
 
     public Message(String name, String date, String message) {
@@ -36,9 +34,11 @@ public class Message {
     public Message() {
 
     }
+
     public String getFirstname() {
         return firstname;
     }
+
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }

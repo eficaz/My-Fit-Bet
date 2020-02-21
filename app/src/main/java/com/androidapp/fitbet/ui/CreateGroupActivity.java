@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
-import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
+import com.androidapp.fitbet.interfaces.CameraGalleryCapture;
 import com.androidapp.fitbet.model.CommonUsage;
 import com.androidapp.fitbet.ui.fragments.CreateGroupFragment;
 import com.androidapp.fitbet.utils.CACHEDKEY;
@@ -42,16 +42,14 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
     TableRow btn_back;
 
 
+    CameraGalleryCapture cameraGalaryCaputer;
 
-
-    CameraGalaryCaputer cameraGalaryCaputer;
-
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -59,8 +57,8 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -69,12 +67,11 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -83,11 +80,11 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
         setContentView(R.layout.activity_create_group_main);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main2,new CreateGroupFragment(), Utils.BetScreenName).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main2, new CreateGroupFragment(), Utils.BetScreenName).commitAllowingStateLoss();
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           onBackPressed();
+                onBackPressed();
             }
         });
     }
@@ -117,14 +114,14 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
         }
         if (CACHEDKEY.CAMERA.ordinal() == type) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                EasyImage.openCamera(CreateGroupActivity.this,CAMERA_REQUEST_CODE);
+                EasyImage.openCamera(CreateGroupActivity.this, CAMERA_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 111);
             }
         }
         if (CACHEDKEY.GALLERY.ordinal() == type) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                EasyImage.openGallery(CreateGroupActivity.this,GALLERY_REQUEST_CODE);
+                EasyImage.openGallery(CreateGroupActivity.this, GALLERY_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
             }
@@ -136,7 +133,6 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
         finish();
         super.onBackPressed();
     }
-   
 
 
     @Override
@@ -157,7 +153,7 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
             }
         });*/
 
-        EasyImage.handleActivityResult(requestCode, resultCode, data, this,new EasyImage.Callbacks() {
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new EasyImage.Callbacks() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
 
@@ -165,7 +161,7 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
 
             @Override
             public void onImagesPicked(@NonNull List<File> imageFile, EasyImage.ImageSource source, int type) {
-                cameraGalaryCaputer.requestSuccess(new File(imageFile.toString().replaceAll("[\\[\\]]","")));
+                cameraGalaryCaputer.requestSuccess(new File(imageFile.toString().replaceAll("[\\[\\]]", "")));
             }
 
             @Override
@@ -174,8 +170,9 @@ public class CreateGroupActivity extends BaseActivity implements CommonUsage {
             }
         });
     }
+
     //Here is new method
-    public void passVal(CameraGalaryCaputer cameraGalaryCaputer) {
+    public void passVal(CameraGalleryCapture cameraGalaryCaputer) {
         this.cameraGalaryCaputer = cameraGalaryCaputer;
 
     }

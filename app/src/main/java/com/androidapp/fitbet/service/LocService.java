@@ -34,24 +34,27 @@ public class LocService extends Service implements DirectionFinderListener {
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationRequest mLocationRequest;
 
-private double latitude,longitude,distance=0.0,positionLatitude,positionLongitude;
-private String origin,destination;
-AppPreference appPreference;
+    private double latitude, longitude, distance = 0.0, positionLatitude, positionLongitude;
+    private String origin, destination;
+    AppPreference appPreference;
+
     public void setLocation(Location location) {
         this.mLocation = location;
     }
 
-    private Location mLocation=null;
+    private Location mLocation = null;
+
     public Location getLocation() {
         return mLocation;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
         mHandler = new Handler();
-        mFusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
-        mLocationRequest=getLocRequest();
-      appPreference=AppPreference.getPrefsHelper();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mLocationRequest = getLocRequest();
+        appPreference = AppPreference.getPrefsHelper();
     }
 
     private LocationRequest getLocRequest() {
@@ -63,83 +66,84 @@ AppPreference appPreference;
 
         return locationRequest;
     }
-    private int i=1,j=2;
-private LocationCallback locationCallback=new LocationCallback(){
-    @Override
-    public void onLocationResult(LocationResult locationResult) {
-        Log.d("LocService", "onLocationResult: "+locationResult.getLastLocation().getLatitude()+","+locationResult.getLastLocation().getLongitude());
-        setLocation(locationResult.getLastLocation());
-latitude=locationResult.getLastLocation().getLatitude();
-longitude=locationResult.getLastLocation().getLongitude();
+
+    private int i = 1, j = 2;
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Log.d("LocService", "onLocationResult: " + locationResult.getLastLocation().getLatitude() + "," + locationResult.getLastLocation().getLongitude());
+            setLocation(locationResult.getLastLocation());
+            latitude = locationResult.getLastLocation().getLatitude();
+            longitude = locationResult.getLastLocation().getLongitude();
 
 
-if(appPreference!=null)
-            if(appPreference.getPref(Contents.BET_START_STATUS,"").equals("true")){
+            if (appPreference != null)
+                if (appPreference.getPref(Contents.BET_START_STATUS, "").equals("true")) {
 
-                i++;
-                j++;
+                    i++;
+                    j++;
 
-         if(i==2) {
+                    if (i == 2) {
 
-             i = 0;
-
-
-             appPreference.savePref(Contents.USER_start_latitude, String.valueOf(latitude));
-             appPreference.savePref(Contents.USER_start_latitude, String.valueOf(latitude));
+                        i = 0;
 
 
-             destination = "" + latitude + "," + longitude;
-
-             System.out.println("Origin and destination " + appPreference.getSavedOrigin() + " , " + destination);
-
-             if (!appPreference.getSavedOrigin().equals("")) {
+                        appPreference.savePref(Contents.USER_start_latitude, String.valueOf(latitude));
+                        appPreference.savePref(Contents.USER_start_latitude, String.valueOf(latitude));
 
 
-                 fetchDirections(appPreference.getSavedOrigin(), destination);
+                        destination = "" + latitude + "," + longitude;
 
-             }
-             appPreference.saveOrigin(destination);
+                        System.out.println("Origin and destination " + appPreference.getSavedOrigin() + " , " + destination);
 
-
-         }
-if(j==3){
-    j=0;
-
-    if (!appPreference.getPositionLatitude().equals("0.0") ) {
-        double distance = Double.parseDouble(appPreference.getSavedDistance());
-        distance = distance + getDistanceL(Double.parseDouble(appPreference.getPositionLatitude()), Double.parseDouble(appPreference.getSavedPositionLongitude()), latitude, longitude);
-
-        appPreference.saveDistance(String.valueOf(distance));
-    }
-
-    appPreference.savePositionLatitude(String.valueOf(latitude));
-    appPreference.savePositionLongitude(String.valueOf(longitude));
-    SLApplication.firstUpdateConnect=true;
-    Intent serviceIntent=new Intent(LocService.this,BetUpdateService.class);
-    serviceIntent.putExtra("positionLatitude",latitude);
-    serviceIntent.putExtra("positionLongitude",longitude);
-    BetUpdateService.enqueueWork(LocService.this,serviceIntent);
-}
+                        if (!appPreference.getSavedOrigin().equals("")) {
 
 
-            }
+                            fetchDirections(appPreference.getSavedOrigin(), destination);
 
-        Intent broadcastIntent=new Intent(LocService.this, LocReceiver.class);
-        broadcastIntent.setAction("location_update");
-        broadcastIntent.putExtra("lat",locationResult.getLastLocation().getLatitude());
-        broadcastIntent.putExtra("lon",+locationResult.getLastLocation().getLongitude());
-        SLApplication.firstConnect=true;
-        sendBroadcast(broadcastIntent);
-    }
-
-    @Override
-    public void onLocationAvailability(LocationAvailability locationAvailability) {
-        super.onLocationAvailability(locationAvailability);
-    }
-};
+                        }
+                        appPreference.saveOrigin(destination);
 
 
-    private int getDistanceL(double startLat,double startLon,double positionLat,double positionLon) {
+                    }
+                    if (j == 3) {
+                        j = 0;
+
+                        if (!appPreference.getPositionLatitude().equals("0.0")) {
+                            double distance = Double.parseDouble(appPreference.getSavedDistance());
+                            distance = distance + getDistanceL(Double.parseDouble(appPreference.getPositionLatitude()), Double.parseDouble(appPreference.getSavedPositionLongitude()), latitude, longitude);
+
+                            appPreference.saveDistance(String.valueOf(distance));
+                        }
+
+                        appPreference.savePositionLatitude(String.valueOf(latitude));
+                        appPreference.savePositionLongitude(String.valueOf(longitude));
+                        SLApplication.firstUpdateConnect = true;
+                        Intent serviceIntent = new Intent(LocService.this, BetUpdateService.class);
+                        serviceIntent.putExtra("positionLatitude", latitude);
+                        serviceIntent.putExtra("positionLongitude", longitude);
+                        BetUpdateService.enqueueWork(LocService.this, serviceIntent);
+                    }
+
+
+                }
+
+            Intent broadcastIntent = new Intent(LocService.this, LocReceiver.class);
+            broadcastIntent.setAction("location_update");
+            broadcastIntent.putExtra("lat", locationResult.getLastLocation().getLatitude());
+            broadcastIntent.putExtra("lon", +locationResult.getLastLocation().getLongitude());
+            SLApplication.firstConnect = true;
+            sendBroadcast(broadcastIntent);
+        }
+
+        @Override
+        public void onLocationAvailability(LocationAvailability locationAvailability) {
+            super.onLocationAvailability(locationAvailability);
+        }
+    };
+
+
+    private int getDistanceL(double startLat, double startLon, double positionLat, double positionLon) {
 
         Location startLocation = new Location("start");
         startLocation.setLatitude(startLat);
@@ -148,11 +152,12 @@ if(j==3){
         positionLocation.setLatitude(positionLat);
         positionLocation.setLongitude(positionLon);
 
-        return (int)startLocation.distanceTo(positionLocation);
+        return (int) startLocation.distanceTo(positionLocation);
     }
+
     private void fetchDirections(String origin, String destination) {
 
-        System.out.println("fetchDirections "+"origin "+origin+" , "+"destination "+destination);
+        System.out.println("fetchDirections " + "origin " + origin + " , " + "destination " + destination);
         try {
             new DirectionFinder(this, origin, destination).execute();
         } catch (UnsupportedEncodingException e) {
@@ -163,26 +168,26 @@ if(j==3){
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        SLApplication.isServiceRunning=true;
+        SLApplication.isServiceRunning = true;
         System.out.println("Starting loc service");
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest,locationCallback, Looper.myLooper());
+                mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback, Looper.myLooper());
 
             }
-        },500);
+        }, 500);
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mFusedLocationProviderClient!=null)
-        mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        if (mFusedLocationProviderClient != null)
+            mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
         System.out.println("Destroy Loc service");
-        SLApplication.isServiceRunning=false;
+        SLApplication.isServiceRunning = false;
     }
 
     @Nullable
@@ -195,7 +200,7 @@ if(j==3){
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
-        SLApplication.isServiceRunning=false;
+        SLApplication.isServiceRunning = false;
         stopSelf();
 
     }
@@ -211,12 +216,11 @@ if(j==3){
 
         appPreference.setLatLongList(route);
 
-        String r= StringEscapeUtils.escapeJava(route.get(0).pointString);
-        if(appPreference.getSavedUserRoute().equals("")) {
+        String r = StringEscapeUtils.escapeJava(route.get(0).pointString);
+        if (appPreference.getSavedUserRoute().equals("")) {
 
             appPreference.saveUserRoute(r);
-        }
-        else
-          appPreference.saveUserRoute( appPreference.getSavedUserRoute() + "fitbet" + r);
+        } else
+            appPreference.saveUserRoute(appPreference.getSavedUserRoute() + "fitbet" + r);
     }
 }

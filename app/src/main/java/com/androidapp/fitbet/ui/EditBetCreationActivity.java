@@ -26,7 +26,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
 import com.androidapp.fitbet.customview.MyDialog;
@@ -39,7 +38,6 @@ import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.SLApplication;
 import com.androidapp.fitbet.utils.Utils;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
-
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -70,7 +68,6 @@ public class EditBetCreationActivity extends BaseActivity {
     private static final String TAG = "Bet creation";
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
     private static final String STATE_TEXTVIEW = "STATE_TEXTVIEW";
-
 
 
     @Bind(R.id.bet_from_date)
@@ -149,48 +146,48 @@ public class EditBetCreationActivity extends BaseActivity {
     Space space;
 
 
-    String fromDate="",toDate="";
+    String fromDate = "", toDate = "";
 
-    String distance="0";
+    String distance = "0";
 
     SimpleDateFormat sdf;
     SimpleDateFormat sdf1;
 
 
-    boolean fromORto=false;
+    boolean fromORto = false;
 
-    boolean distanceKm=false;
+    boolean distanceKm = false;
 
-    boolean distanceLocation=false;
+    boolean distanceLocation = false;
 
-    String credits="0";
+    String credits = "0";
 
-    String startLat="0.0";
-    String startLog="0.0";
-    String endLat="0.0";
-    String endLog="0.0";
-    int kmInDec=0;
+    String startLat = "0.0";
+    String startLog = "0.0";
+    String endLat = "0.0";
+    String endLog = "0.0";
+    int kmInDec = 0;
     double meter;
 
-    String bet_id="";
+    String bet_id = "";
 
     //Bundle bundle;
-    String bodyString,chalagerId;
+    String bodyString, chalagerId;
 
     String distance_draw;
     private LocationManager mLocationManager;
     String overview_polyline;
 
-private MyDialog noInternetDialog;
+    private MyDialog noInternetDialog;
     private boolean canCreate;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -198,8 +195,8 @@ private MyDialog noInternetDialog;
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -208,12 +205,11 @@ private MyDialog noInternetDialog;
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -225,17 +221,17 @@ private MyDialog noInternetDialog;
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        startLat= bundle.getString(Contents.pass_startlatitude);
-        startLog= bundle.getString(Contents.pass_startlongitude);
-        endLat= bundle.getString(Contents.pass_endlatitude);
-        endLog= bundle.getString(Contents.pass_endlongitude);
-        bodyString= bundle.getString(Contents.bet_edit_details);
-        chalagerId= bundle.getString(Contents.MYBETS_challengerid);
-        distance_draw= bundle.getString(Contents.MYBETS_distance);
-        overview_polyline= bundle.getString(Contents.OVERVIEW_POLYLINE);
-        noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
-        if(Utils.isConnectedToInternet(EditBetCreationActivity.this))
-        callDashboardDetailsApi();
+        startLat = bundle.getString(Contents.pass_startlatitude);
+        startLog = bundle.getString(Contents.pass_startlongitude);
+        endLat = bundle.getString(Contents.pass_endlatitude);
+        endLog = bundle.getString(Contents.pass_endlongitude);
+        bodyString = bundle.getString(Contents.bet_edit_details);
+        chalagerId = bundle.getString(Contents.MYBETS_challengerid);
+        distance_draw = bundle.getString(Contents.MYBETS_distance);
+        overview_polyline = bundle.getString(Contents.OVERVIEW_POLYLINE);
+        noInternetDialog = new MyDialog(this, null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
+        if (Utils.isConnectedToInternet(EditBetCreationActivity.this))
+            callDashboardDetailsApi();
         else
             noInternetDialog.show();
 
@@ -246,30 +242,30 @@ private MyDialog noInternetDialog;
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SLApplication.isBetCreatedOrEdited=false;
+                SLApplication.isBetCreatedOrEdited = false;
                 finish();
                 CallInappPurchass();
             }
         });
 
-        if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("false")){
+        if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("false")) {
             if (bundle != null) {
                 int Radius = 6371;
-                double lat1 =0.0;
+                double lat1 = 0.0;
                 double lat2 = 0.0;
                 double lon1 = 0.0;
                 double lon2 = 0.0;
                 double dLat = 0.0;
                 double dLon = 0.0;
-                if(!startLat.equals("")){
+                if (!startLat.equals("")) {
                     lat1 = Double.parseDouble(startLat);
                     lat2 = Double.parseDouble(endLat);
                     lon1 = Double.parseDouble(startLog);
                     lon2 = Double.parseDouble(endLog);
                     dLat = Math.toRadians(lat2 - lat1);
                     dLon = Math.toRadians(lon2 - lon1);
-                }else{
-                    lat1 =0.0;
+                } else {
+                    lat1 = 0.0;
                     lat2 = 0.0;
                     lon1 = 0.0;
                     lon2 = 0.0;
@@ -287,7 +283,7 @@ private MyDialog noInternetDialog;
                 kmInDec = Integer.valueOf(newFormat.format(km));
                 meter = valueResult % 1000;
                 int meterInDec = Integer.valueOf(newFormat.format(meter));
-                try{
+                try {
                     Geocoder geocoder;
                     List<Address> start_addresses;
                     List<Address> end_addresses;
@@ -308,15 +304,15 @@ private MyDialog noInternetDialog;
                     String end_postalCode = end_addresses.get(0).getPostalCode();
                     String end_knownName = end_addresses.get(0).getFeatureName();
                     to_address.setText(end_address);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 //bet_km.setText(kmInDec +"KM");
-                distanceLocation=true;
-            }else{
-                distanceKm=true;
+                distanceLocation = true;
+            } else {
+                distanceKm = true;
             }
-            if(startLat.equals("0")){
+            if (startLat.equals("0")) {
                 edBet_km.setVisibility(View.VISIBLE);
                 bet_distance_by_km.setTextColor(getResources().getColor(R.color.light_blue));
                 bet_distance_by_location.setTextColor(getResources().getColor(R.color.hint_text_color));
@@ -326,46 +322,45 @@ private MyDialog noInternetDialog;
                 bet_km.setVisibility(View.GONE);
                 fromRow.setVisibility(View.GONE);
                 toRow.setVisibility(View.GONE);
-                distanceKm=true;
-                distanceLocation=false;
+                distanceKm = true;
+                distanceLocation = false;
 
-            }else{
-                double dis= Double.parseDouble(distance_draw.replace("km","").replace("m",""))/1000;
-                bet_km.setText(""+dis+"km");
+            } else {
+                double dis = Double.parseDouble(distance_draw.replace("km", "").replace("m", "")) / 1000;
+                bet_km.setText("" + dis + "km");
                 edBet_km.setVisibility(View.GONE);
                 bet_km.setVisibility(View.VISIBLE);
                 fromRow.setVisibility(View.VISIBLE);
                 toRow.setVisibility(View.VISIBLE);
-                distanceKm=false;
-                distanceLocation=true;
+                distanceKm = false;
+                distanceLocation = true;
                 view1.setBackgroundColor(getResources().getColor(R.color.hint_text_color));
                 view2.setBackgroundColor(getResources().getColor(R.color.light_blue));
                 bet_distance_by_km.setTextColor(getResources().getColor(R.color.hint_text_color));
                 bet_distance_by_location.setTextColor(getResources().getColor(R.color.light_blue));
 
             }
-            bet_name.setText(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betname,""));
-            bet_credit.setText(AppPreference.getPrefsHelper().getPref(Contents.CREDIT_SCORE,""));
+            bet_name.setText(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betname, ""));
+            bet_credit.setText(AppPreference.getPrefsHelper().getPref(Contents.CREDIT_SCORE, ""));
 
-            try{
+            try {
                 DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
                 String output = null;
                 DateFormat justDay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 justDay.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date thisMorningMidnight = justDay.parse(AppPreference.getPrefsHelper().getPref(Contents.START_DATE,""));
+                Date thisMorningMidnight = justDay.parse(AppPreference.getPrefsHelper().getPref(Contents.START_DATE, ""));
                 output = outputformat.format(thisMorningMidnight);
                 bet_from_date.setText(output);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
 
-
-            bet_to_date.setText(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_enddate,""));
-            fromDate=AppPreference.getPrefsHelper().getPref(Contents.START_DATE,"");
-            toDate=AppPreference.getPrefsHelper().getPref(Contents.MYBETS_enddate,"");
-            bet_description.setText(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_description,""));
-            try{
+            bet_to_date.setText(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_enddate, ""));
+            fromDate = AppPreference.getPrefsHelper().getPref(Contents.START_DATE, "");
+            toDate = AppPreference.getPrefsHelper().getPref(Contents.MYBETS_enddate, "");
+            bet_description.setText(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_description, ""));
+            try {
                 DateFormat justDay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 justDay.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date thisMorningMidnight = justDay.parse(fromDate);
@@ -378,11 +373,11 @@ private MyDialog noInternetDialog;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String cal_date = sdf.format(cal.getTime());
                 sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                toDate=cal_date;
-            }catch (Exception e){
+                toDate = cal_date;
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             callMybetDetailsApi();
             CustomProgress.getInstance().showProgress(this, "", false);
         }
@@ -397,7 +392,7 @@ private MyDialog noInternetDialog;
         bet_from_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fromORto=true;
+                fromORto = true;
                 new SingleDateAndTimePickerDialog.Builder(EditBetCreationActivity.this)
                         .bottomSheet()
                         .curved().minutesStep(1)
@@ -413,7 +408,7 @@ private MyDialog noInternetDialog;
                         .listener(new SingleDateAndTimePickerDialog.Listener() {
                             @Override
                             public void onDateSelected(Date date) {
-                                try{
+                                try {
                                     sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -428,12 +423,12 @@ private MyDialog noInternetDialog;
                                     Date strDate = outputformat.parse(output);
                                     if (System.currentTimeMillis() > strDate.getTime()) {
                                         Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_choose_after_date);
-                                        fromDate="";
+                                        fromDate = "";
                                         bet_from_date.setText("");
-                                        toDate="";
+                                        toDate = "";
                                         bet_to_date.setText("");
                                         //catalog_outdated = 1;
-                                        fromORto=true;
+                                        fromORto = true;
                                         Date currentTime = Calendar.getInstance().getTime();
                                         new SingleDateAndTimePickerDialog.Builder(EditBetCreationActivity.this)
                                                 .bottomSheet()
@@ -454,7 +449,7 @@ private MyDialog noInternetDialog;
                                                     public void onDateSelected(Date date) {
                                                         sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                                         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                                                        try{
+                                                        try {
                                                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                                             //df.setTimeZone(TimeZone.getTimeZone("UTC"));
                                                             //Date date1 = df.parse(String.valueOf(date));
@@ -466,18 +461,18 @@ private MyDialog noInternetDialog;
                                                             Date strDate = outputformat.parse(output);
                                                             if (System.currentTimeMillis() > strDate.getTime()) {
                                                                 Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_choose_after_date);
-                                                                fromDate="";
+                                                                fromDate = "";
                                                                 bet_from_date.setText("");
-                                                                toDate="";
+                                                                toDate = "";
                                                                 bet_to_date.setText("");
                                                                 //catalog_outdated = 1;
-                                                            }else{
-                                                                if(fromORto==true){
-                                                                    fromDate=sdf.format(date);
-                                                                    bet_from_date.setText(""+output);
-                                                                } else{
-                                                                    toDate=sdf.format(date);
-                                                                    bet_to_date.setText(""+output);
+                                                            } else {
+                                                                if (fromORto == true) {
+                                                                    fromDate = sdf.format(date);
+                                                                    bet_from_date.setText("" + output);
+                                                                } else {
+                                                                    toDate = sdf.format(date);
+                                                                    bet_to_date.setText("" + output);
                                                                 }
                                                             }
                                                             DateFormat justDay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -492,22 +487,22 @@ private MyDialog noInternetDialog;
                                                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                                             String cal_date = sdf.format(cal.getTime());
                                                             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                                                            toDate=cal_date;
+                                                            toDate = cal_date;
 
-                                                        }catch (Exception e){
+                                                        } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
                                                     }
                                                 })
                                                 .display();
 
-                                    }else{
-                                        if(fromORto==true){
-                                            fromDate=sdf.format(date);
-                                            bet_from_date.setText(""+output);
-                                        } else{
-                                            toDate=sdf.format(date);
-                                            bet_to_date.setText(""+output);
+                                    } else {
+                                        if (fromORto == true) {
+                                            fromDate = sdf.format(date);
+                                            bet_from_date.setText("" + output);
+                                        } else {
+                                            toDate = sdf.format(date);
+                                            bet_to_date.setText("" + output);
                                         }
                                     }
                                     DateFormat justDay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -522,10 +517,10 @@ private MyDialog noInternetDialog;
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                                     String cal_date = sdf.format(cal.getTime());
-                                    toDate=cal_date;
+                                    toDate = cal_date;
 
 
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -536,7 +531,7 @@ private MyDialog noInternetDialog;
         bet_to_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fromORto=false;
+                fromORto = false;
                 new SingleDateAndTimePickerDialog.Builder(EditBetCreationActivity.this)
                         .bottomSheet()
                         .curved()
@@ -552,7 +547,7 @@ private MyDialog noInternetDialog;
                         .listener(new SingleDateAndTimePickerDialog.Listener() {
                             @Override
                             public void onDateSelected(Date date) {
-                                try{
+                                try {
                                     sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -564,12 +559,12 @@ private MyDialog noInternetDialog;
                                     DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
                                     String output = null;
                                     output = outputformat.format(date);
-                                    if(fromORto==true){
-                                        fromDate=sdf.format(date);
-                                        bet_from_date.setText(""+output);
-                                    } else{
-                                        toDate=sdf.format(date);
-                                        bet_to_date.setText(""+output);
+                                    if (fromORto == true) {
+                                        fromDate = sdf.format(date);
+                                        bet_from_date.setText("" + output);
+                                    } else {
+                                        toDate = sdf.format(date);
+                                        bet_to_date.setText("" + output);
                                     }
                                     DateFormat justDay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     justDay.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -583,8 +578,8 @@ private MyDialog noInternetDialog;
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     String cal_date = sdf.format(cal.getTime());
                                     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                                    toDate=cal_date;
-                                }catch (Exception e){
+                                    toDate = cal_date;
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -598,24 +593,24 @@ private MyDialog noInternetDialog;
             public void onClick(View v) {
 
                 if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(EditBetCreationActivity.this)) {
-                    Log.e("fitbet","Gps already enabled");
+                    Log.e("fitbet", "Gps already enabled");
                     showSettingsAlert("NETWORK");
-                }else{
+                } else {
                     AppPreference.getPrefsHelper().savePref(Contents.MYBETS_betname, bet_name.getText().toString());
                     AppPreference.getPrefsHelper().savePref(Contents.MYBETS_betid, bet_id);
                     AppPreference.getPrefsHelper().savePref(Contents.CREDIT_SCORE, bet_credit.getText().toString());
                     AppPreference.getPrefsHelper().savePref(Contents.START_DATE, fromDate);
                     AppPreference.getPrefsHelper().savePref(Contents.MYBETS_enddate, toDate);
                     AppPreference.getPrefsHelper().savePref(Contents.MYBETS_EDIT_OR_CREATE, "false");
-                    AppPreference.getPrefsHelper().savePref(Contents.MYBETS_description,  bet_description.getText().toString());
+                    AppPreference.getPrefsHelper().savePref(Contents.MYBETS_description, bet_description.getText().toString());
                     startActivity(new Intent(EditBetCreationActivity.this, MapDistanceByLoctionActivity.class));
                     finish();
                     edBet_km.setVisibility(View.GONE);
                     bet_km.setVisibility(View.VISIBLE);
                     fromRow.setVisibility(View.GONE);
                     toRow.setVisibility(View.GONE);
-                    distanceKm=false;
-                    distanceLocation=true;
+                    distanceKm = false;
+                    distanceLocation = true;
                     bet_km.setText("");
                     view1.setBackgroundColor(getResources().getColor(R.color.hint_text_color));
                     view2.setBackgroundColor(getResources().getColor(R.color.light_blue));
@@ -628,7 +623,7 @@ private MyDialog noInternetDialog;
             @Override
             public void onClick(View v) {
                 edBet_km.setVisibility(View.VISIBLE);
-                distanceLocation=true;
+                distanceLocation = true;
                 bet_distance_by_km.setTextColor(getResources().getColor(R.color.light_blue));
                 bet_distance_by_location.setTextColor(getResources().getColor(R.color.hint_text_color));
                 view1.setBackgroundColor(getResources().getColor(R.color.light_blue));
@@ -637,68 +632,68 @@ private MyDialog noInternetDialog;
                 bet_km.setVisibility(View.GONE);
                 fromRow.setVisibility(View.GONE);
                 toRow.setVisibility(View.GONE);
-                 distanceKm=true;
-                 distanceLocation=false;
-                 bet_km.setText("");
+                distanceKm = true;
+                distanceLocation = false;
+                bet_km.setText("");
             }
         });
         btnCreateBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bet_name.getText().toString().equals("")){
+                if (bet_name.getText().toString().equals("")) {
                     Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_enter_bet_name);
-                }else if(bet_credit.getText().toString().equals("")){
+                } else if (bet_credit.getText().toString().equals("")) {
                     Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.enter_credit);
-                }else if(fromDate.equals("")||toDate.equals("")) {
+                } else if (fromDate.equals("") || toDate.equals("")) {
                     Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.select_date);
-                } else if(bet_description.getText().toString().trim().equals("")){
-                        Utils.showCustomToastMsg(EditBetCreationActivity.this,"Please Enter Description");
-                    }else if(!checkBoxRules.isChecked()){
+                } else if (bet_description.getText().toString().trim().equals("")) {
+                    Utils.showCustomToastMsg(EditBetCreationActivity.this, "Please Enter Description");
+                } else if (!checkBoxRules.isChecked()) {
 
-                    Utils.showCustomToastMsg(EditBetCreationActivity.this,"Please agree to the Rules and Regulations");
-                } else if(distanceKm){
-                    if(!edBet_km.getText().toString().equals("")){
-                        if(distanceKm){
-                           try{
-                               DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
-                               Date strDate = outputformat.parse(bet_from_date.getText().toString());
-                               if (System.currentTimeMillis() > strDate.getTime()) {
-                                   Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_choose_after_date);
-                               }else{
-                                   callUpdateBetApi();
-                                   CustomProgress.getInstance().showProgress(EditBetCreationActivity.this, "", false);
-                               }
-                           }catch (Exception e){
+                    Utils.showCustomToastMsg(EditBetCreationActivity.this, "Please agree to the Rules and Regulations");
+                } else if (distanceKm) {
+                    if (!edBet_km.getText().toString().equals("")) {
+                        if (distanceKm) {
+                            try {
+                                DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+                                Date strDate = outputformat.parse(bet_from_date.getText().toString());
+                                if (System.currentTimeMillis() > strDate.getTime()) {
+                                    Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_choose_after_date);
+                                } else {
+                                    callUpdateBetApi();
+                                    CustomProgress.getInstance().showProgress(EditBetCreationActivity.this, "", false);
+                                }
+                            } catch (Exception e) {
 
-                           }
+                            }
                            /* callUpdateBetApi();
                             CustomProgress.getInstance().showProgress(EditBetCreationActivity.this, "", false);*/
                         }
-                    } else if(distanceLocation){
+                    } else if (distanceLocation) {
                         Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.enter_km);
                     }
-                }else if(distanceLocation){
+                } else if (distanceLocation) {
 
-                     if(!distanceLocation){
+                    if (!distanceLocation) {
                         Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.enter_km);
-                    }else{
-                         try{
-                             DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
-                             Date strDate = outputformat.parse(bet_from_date.getText().toString());
-                             if (System.currentTimeMillis() > strDate.getTime()) {
-                                 Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_choose_after_date);
-                             }else{
-                                 callUpdateLocationTypeBetApi();
+                    } else {
+                        try {
+                            DateFormat outputformat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
+                            Date strDate = outputformat.parse(bet_from_date.getText().toString());
+                            if (System.currentTimeMillis() > strDate.getTime()) {
+                                Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.please_choose_after_date);
+                            } else {
+                                callUpdateLocationTypeBetApi();
 
-                             }
-                         }catch (Exception e){
+                            }
+                        } catch (Exception e) {
 
-                         }
+                        }
 
-                     }
-                    if(distance.equals("")){
+                    }
+                    if (distance.equals("")) {
                         Utils.showCustomToastMsg(EditBetCreationActivity.this, R.string.select_start_end_location);
-                    }else{
+                    } else {
 
                     }
                 }
@@ -706,11 +701,11 @@ private MyDialog noInternetDialog;
         });
 
 
-
         edBet_km.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 0) {
@@ -718,11 +713,12 @@ private MyDialog noInternetDialog;
                         space.setVisibility(View.VISIBLE);
                         //space1.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     space.setVisibility(View.GONE);
                     //space1.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -765,7 +761,7 @@ private MyDialog noInternetDialog;
     }
 
     private void callMybetDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_BET_ID,""),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_BET_ID, ""), AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -773,16 +769,16 @@ private MyDialog noInternetDialog;
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     final JSONObject jsonObject = new JSONObject(bodyString);
                     String data = jsonObject.getString(STATUS_A);
-                    if(data.equals("Ok")){
+                    if (data.equals("Ok")) {
 
 
                         CustomProgress.getInstance().hideProgress();
 
                         bet_name.setText(jsonObject.getString(Contents.MYBETS_betname));
                         bet_credit.setText(jsonObject.getString(Contents.MYBETS_credit));
-                        bet_id=jsonObject.getString(Contents.MYBETS_betid);
+                        bet_id = jsonObject.getString(Contents.MYBETS_betid);
                         AppPreference.getPrefsHelper().savePref(Contents.MYBETS_betid, bet_id);
-                        try{
+                        try {
                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                             df.setTimeZone(TimeZone.getTimeZone("UTC"));
                             Date date = df.parse(jsonObject.getString(Contents.MYBETS_date));
@@ -792,10 +788,10 @@ private MyDialog noInternetDialog;
                             String output = null;
                             output = outputformat.format(date);
                             bet_from_date.setText(output);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        try{
+                        try {
                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                             df.setTimeZone(TimeZone.getTimeZone("UTC"));
                             Date date = df.parse(jsonObject.getString(Contents.MYBETS_enddate));
@@ -805,28 +801,28 @@ private MyDialog noInternetDialog;
                             String output = null;
                             output = outputformat.format(date);
                             bet_to_date.setText(output);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         bet_description.setText(jsonObject.getString(Contents.DESCRIPTION));
                         from_address.setText(jsonObject.getString(Contents.MYBETS_startlocation));
                         to_address.setText(jsonObject.getString(Contents.MYBETS_endlocation));
-                        meter=Double.parseDouble(jsonObject.getString(Contents.DISTANCE))/1000;
-                        if(jsonObject.getString(Contents.MYBETS_bettype).equals("distance")){
+                        meter = Double.parseDouble(jsonObject.getString(Contents.DISTANCE)) / 1000;
+                        if (jsonObject.getString(Contents.MYBETS_bettype).equals("distance")) {
                             bet_km.setText(jsonObject.getString(Contents.MYBETS_credit));
                            /*edBet_km.setText(""+Double.parseDouble(jsonList.getString(Contents.DISTANCE))/1000);
                            bet_km.setText(""+Double.parseDouble(jsonList.getString(Contents.DISTANCE))/1000); */
-                            edBet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE))/1000) +"");
-                            bet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE))/1000) +"");
+                            edBet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE)) / 1000) + "");
+                            bet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE)) / 1000) + "");
 
-                            distanceKm=true;
-                            distanceLocation=false;
+                            distanceKm = true;
+                            distanceLocation = false;
                             bet_distance_by_location.setClickable(true);
                             bet_distance_by_location.setFocusable(true);
                             bet_distance_by_km.setClickable(true);
                             bet_distance_by_km.setFocusable(true);
                             view1.setBackgroundColor(getResources().getColor(R.color.light_blue));
-                            view2.setBackgroundColor(getResources().getColor(R.color.hint_text_color ));
+                            view2.setBackgroundColor(getResources().getColor(R.color.hint_text_color));
                             bet_distance_by_km.setTextColor(getResources().getColor(R.color.light_blue));
                             bet_distance_by_location.setTextColor(getResources().getColor(R.color.hint_text_color));
                             fromRow.setVisibility(View.GONE);
@@ -834,11 +830,11 @@ private MyDialog noInternetDialog;
                             edBet_km.setVisibility(View.VISIBLE);
                             bet_km.setVisibility(View.GONE);
 
-                            startLat= jsonObject.getString(Contents.MYBETS_startlatitude);
-                            startLog= jsonObject.getString(Contents.MYBETS_startlongitude);
-                            endLat= jsonObject.getString(Contents.MYBETS_endlatitude);
-                            endLog= jsonObject.getString(Contents.MYBETS_endlongitude);
-                            distance_draw= String.valueOf(Double.parseDouble(jsonObject.getString(Contents.DISTANCE)));
+                            startLat = jsonObject.getString(Contents.MYBETS_startlatitude);
+                            startLog = jsonObject.getString(Contents.MYBETS_startlongitude);
+                            endLat = jsonObject.getString(Contents.MYBETS_endlatitude);
+                            endLog = jsonObject.getString(Contents.MYBETS_endlongitude);
+                            distance_draw = String.valueOf(Double.parseDouble(jsonObject.getString(Contents.DISTANCE)));
                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                             // df.setTimeZone(TimeZone.getTimeZone("UTC"));
                             // Date date = df.parse(jsonList.getString(Contents.MYBETS_date));
@@ -853,14 +849,14 @@ private MyDialog noInternetDialog;
                             Date date = df1.parse(jsonObject.getString(Contents.MYBETS_date));
                             String formattedDate = df1.format(date);
 
-                            fromDate=formattedDate;
+                            fromDate = formattedDate;
 
-                            toDate=toDatea;
-                        }else{
+                            toDate = toDatea;
+                        } else {
                             //edBet_km.setText(jsonList.getString(Contents.MYBETS_credit));
 
-                            edBet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE))/1000) +"");
-                            bet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE))/1000) +"");
+                            edBet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE)) / 1000) + "");
+                            bet_km.setText((Double.parseDouble(jsonObject.getString(Contents.DISTANCE)) / 1000) + "");
                             view1.setBackgroundColor(getResources().getColor(R.color.hint_text_color));
                             view2.setBackgroundColor(getResources().getColor(R.color.light_blue));
                             bet_distance_by_km.setTextColor(getResources().getColor(R.color.hint_text_color));
@@ -869,17 +865,17 @@ private MyDialog noInternetDialog;
                             bet_km.setVisibility(View.VISIBLE);
                             fromRow.setVisibility(View.VISIBLE);
                             toRow.setVisibility(View.VISIBLE);
-                            distanceKm=false;
-                            distanceLocation=true;
+                            distanceKm = false;
+                            distanceLocation = true;
                             bet_distance_by_km.setClickable(true);
                             bet_distance_by_km.setFocusable(true);
                             bet_distance_by_location.setClickable(true);
                             bet_distance_by_location.setFocusable(true);
-                            distance_draw= String.valueOf(Double.parseDouble(jsonObject.getString(Contents.DISTANCE)));
-                            startLat= jsonObject.getString(Contents.MYBETS_startlatitude);
-                            startLog= jsonObject.getString(Contents.MYBETS_startlongitude);
-                            endLat= jsonObject.getString(Contents.MYBETS_endlatitude);
-                            endLog= jsonObject.getString(Contents.MYBETS_endlongitude);
+                            distance_draw = String.valueOf(Double.parseDouble(jsonObject.getString(Contents.DISTANCE)));
+                            startLat = jsonObject.getString(Contents.MYBETS_startlatitude);
+                            startLog = jsonObject.getString(Contents.MYBETS_startlongitude);
+                            endLat = jsonObject.getString(Contents.MYBETS_endlatitude);
+                            endLog = jsonObject.getString(Contents.MYBETS_endlongitude);
                             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                             df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -893,13 +889,13 @@ private MyDialog noInternetDialog;
                             Date Todate = df.parse(jsonObject.getString(Contents.MYBETS_enddate));
                             df.setTimeZone(TimeZone.getDefault());
                             String toDatea = df.format(Todate);
-                            fromDate=formattedDate;
-                            toDate=toDatea;
+                            fromDate = formattedDate;
+                            toDate = toDatea;
 
                         }
                         String data1 = jsonObject.getString(PARTICIPANTS);
-                        JSONArray yukilanarray =  new JSONArray(data1);
-                        if(yukilanarray.length()>1){
+                        JSONArray yukilanarray = new JSONArray(data1);
+                        if (yukilanarray.length() > 1) {
                             bet_name.setEnabled(false);
                             bet_credit.setEnabled(false);
                             bet_description.setEnabled(false);
@@ -914,7 +910,7 @@ private MyDialog noInternetDialog;
                             row4.setBackgroundColor(getResources().getColor(R.color.pading_gray1));
                             row5.setBackgroundColor(getResources().getColor(R.color.pading_gray1));
                             row6.setBackgroundColor(getResources().getColor(R.color.pading_gray1));
-                        }else{
+                        } else {
                             bet_name.setEnabled(true);
                             bet_credit.setEnabled(true);
                             bet_description.setEnabled(true);
@@ -923,7 +919,7 @@ private MyDialog noInternetDialog;
                             bet_distance_by_location.setEnabled(true);
                         }
 
-                       // BetDetailsList(bodyString);
+                        // BetDetailsList(bodyString);
 
                     }
                     //createMybets(bodyString);
@@ -933,6 +929,7 @@ private MyDialog noInternetDialog;
                 }
 
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -949,8 +946,9 @@ private MyDialog noInternetDialog;
             return false;
         return providers.contains(LocationManager.GPS_PROVIDER);
     }
+
     private void callDashboardDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).DashboardDetails(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -962,12 +960,14 @@ private MyDialog noInternetDialog;
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void DashboardDetailReportapiresult(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
@@ -975,9 +975,9 @@ private MyDialog noInternetDialog;
             if (status.trim().equals("Ok")) {
                 String data1 = jsonObject.getString(DASH_BOARD_USERS);
                 JSONObject jsonObject1 = new JSONObject(data1);
-                credits=jsonObject1.getString(DASH_BOARD_CREDIT_SCORE);
+                credits = jsonObject1.getString(DASH_BOARD_CREDIT_SCORE);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -986,22 +986,22 @@ private MyDialog noInternetDialog;
         CustomProgress.getInstance().showProgress(EditBetCreationActivity.this, "", false);
         //double distance;
         //distance = Double.parseDouble(edBet_km.getText().toString().trim())/1000;
-        double dis= Double.parseDouble(distance_draw.replace("km","").replace("m",""));
-        String distance_draw_meter= String.valueOf(dis);
+        double dis = Double.parseDouble(distance_draw.replace("km", "").replace("m", ""));
+        String distance_draw_meter = String.valueOf(dis);
         Call<ResponseBody> locationCall;
 
-        if(canCreate){
+        if (canCreate) {
 
-                 locationCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmUpdateBet(bet_name.getText().toString(),
-                    bet_description.getText().toString(),fromDate,toDate, distance_draw_meter,
-                    from_address.getText().toString(),to_address.getText().toString(),startLog,endLog,startLat,endLat,overview_polyline, bet_credit.getText().toString().trim(),
-                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"location",AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid,""));
-        }else{
+            locationCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmUpdateBet(bet_name.getText().toString(),
+                    bet_description.getText().toString(), fromDate, toDate, distance_draw_meter,
+                    from_address.getText().toString(), to_address.getText().toString(), startLog, endLog, startLat, endLat, overview_polyline, bet_credit.getText().toString().trim(),
+                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""), "location", AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid, ""));
+        } else {
 
             locationCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpdateBet(bet_name.getText().toString(),
-                    bet_description.getText().toString(),fromDate,toDate, distance_draw_meter,
-                    from_address.getText().toString(),to_address.getText().toString(),startLog,endLog,startLat,endLat,overview_polyline, bet_credit.getText().toString().trim(),
-                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),"location",AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid,""));
+                    bet_description.getText().toString(), fromDate, toDate, distance_draw_meter,
+                    from_address.getText().toString(), to_address.getText().toString(), startLog, endLog, startLat, endLat, overview_polyline, bet_credit.getText().toString().trim(),
+                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""), "location", AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid, ""));
         }
 
         locationCall.enqueue(new Callback<ResponseBody>() {
@@ -1009,13 +1009,13 @@ private MyDialog noInternetDialog;
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("Edit bet location "+bodyString);
+                    System.out.println("Edit bet location " + bodyString);
                     final JSONObject jsonObject = new JSONObject(bodyString);
                     String msg = jsonObject.getString("Msg");
                     String data = jsonObject.getString("Status");
                     CustomProgress.getInstance().hideProgress();
-                   // if(Integer.parseInt(credits)>Integer.parseInt(bet_credit.getText().toString())){
-                    switch (data){
+                    // if(Integer.parseInt(credits)>Integer.parseInt(bet_credit.getText().toString())){
+                    switch (data) {
 
                         case "Ok":
 
@@ -1023,7 +1023,7 @@ private MyDialog noInternetDialog;
                             AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
                             /*Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
                             startActivity(intent);*/
-                            SLApplication.isBetCreatedOrEdited=true;
+                            SLApplication.isBetCreatedOrEdited = true;
                             finish();
                             break;
                         case "Error_credit":
@@ -1038,11 +1038,11 @@ private MyDialog noInternetDialog;
                             showMessage(msg);
                             break;
                         case "Error":
-                            if(jsonObject.getString("can_create").equals("yes")) {
+                            if (jsonObject.getString("can_create").equals("yes")) {
                                 hideKeyboard();
                                 showConfirmDialog(msg);
 
-                            }else {
+                            } else {
 
                                 hideKeyboard();
                                 showMessage(msg);
@@ -1051,17 +1051,18 @@ private MyDialog noInternetDialog;
                     }
 
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     public void showSettingsAlert(String provider) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditBetCreationActivity.this);
         alertDialog.setTitle(provider + " SETTINGS");
@@ -1082,36 +1083,37 @@ private MyDialog noInternetDialog;
                 });
         alertDialog.show();
     }
+
     private void callUpdateBetApi() {
         double distance;
-        distance = Double.parseDouble(edBet_km.getText().toString().trim())*1000;
-                //.distanceTo(locationB)/1000;
+        distance = Double.parseDouble(edBet_km.getText().toString().trim()) * 1000;
+        //.distanceTo(locationB)/1000;
         Call<ResponseBody> distanceCall;
-if(canCreate){
-    distanceCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmUpdateBet(
-            bet_name.getText().toString(),
-            bet_description.getText().toString(),
-            fromDate,
-            toDate,
-            String.valueOf(distance),
-            "","","","","","","",
-            bet_credit.getText().toString().trim(),
-            AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),
-            "distance",
-            AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid,""));
-}else{
-    distanceCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpdateBet(
-            bet_name.getText().toString(),
-            bet_description.getText().toString(),
-            fromDate,
-            toDate,
-            String.valueOf(distance),
-            "","","","","","","",
-            bet_credit.getText().toString().trim(),
-            AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),
-            "distance",
-            AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid,""));
-}
+        if (canCreate) {
+            distanceCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).confirmUpdateBet(
+                    bet_name.getText().toString(),
+                    bet_description.getText().toString(),
+                    fromDate,
+                    toDate,
+                    String.valueOf(distance),
+                    "", "", "", "", "", "", "",
+                    bet_credit.getText().toString().trim(),
+                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""),
+                    "distance",
+                    AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid, ""));
+        } else {
+            distanceCall = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).UpdateBet(
+                    bet_name.getText().toString(),
+                    bet_description.getText().toString(),
+                    fromDate,
+                    toDate,
+                    String.valueOf(distance),
+                    "", "", "", "", "", "", "",
+                    bet_credit.getText().toString().trim(),
+                    AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""),
+                    "distance",
+                    AppPreference.getPrefsHelper().getPref(Contents.MYBETS_betid, ""));
+        }
 
         distanceCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -1119,51 +1121,51 @@ if(canCreate){
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     final JSONObject jsonObject = new JSONObject(bodyString);
-                    System.out.println("edit bet = "+bodyString);
+                    System.out.println("edit bet = " + bodyString);
                     String msg = jsonObject.getString("Msg");
                     String data = jsonObject.getString("Status");
                     CustomProgress.getInstance().hideProgress();
-                        switch (data){
+                    switch (data) {
 
-                            case "Ok":
+                        case "Ok":
 
-                                AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
-                                AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
+                            AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "1");
+                            AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "1");
                             /*Intent intent = new Intent(BetCreationActivity.this, DashBoardActivity.class);
                             startActivity(intent);*/
-                            SLApplication.isBetCreatedOrEdited=true;
-                                finish();
-                                break;
-                            case "Error_credit":
+                            SLApplication.isBetCreatedOrEdited = true;
+                            finish();
+                            break;
+                        case "Error_credit":
+
+                            hideKeyboard();
+                            showMessage(msg);
+                            bet_credit.setText("");
+                            break;
+                        case "Error_date":
+
+                            hideKeyboard();
+                            showMessage(msg);
+                            break;
+                        case "Error":
+                            if (jsonObject.getString("can_create").equals("yes")) {
+                                hideKeyboard();
+                                showConfirmDialog(msg);
+
+                            } else {
 
                                 hideKeyboard();
                                 showMessage(msg);
-                                bet_credit.setText("");
-                                break;
-                            case "Error_date":
-
-                                hideKeyboard();
-                                showMessage(msg);
-                                break;
-                            case "Error":
-                                if(jsonObject.getString("can_create").equals("yes")) {
-                                    hideKeyboard();
-                                    showConfirmDialog(msg);
-
-                                }else {
-
-                                    hideKeyboard();
-                                    showMessage(msg);
-                                }
-                                break;
-                        }
-
+                            }
+                            break;
+                    }
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
@@ -1183,15 +1185,15 @@ if(canCreate){
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if(Utils.isConnectedToInternet(EditBetCreationActivity.this)) {
-                                    canCreate=true;
-                                    if(distanceKm)
+                                if (Utils.isConnectedToInternet(EditBetCreationActivity.this)) {
+                                    canCreate = true;
+                                    if (distanceKm)
                                         callUpdateBetApi();
                                     else
                                         callUpdateLocationTypeBetApi();
-                                }else  noInternetDialog.show();
+                                } else noInternetDialog.show();
                             }
-                        }) .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
@@ -1202,16 +1204,18 @@ if(canCreate){
     }
 
 
-    private void showMessage(String message){
+    private void showMessage(String message) {
 
-        MyDialog myDialog=new MyDialog(EditBetCreationActivity.this,null,"",message,getString(R.string.ok),"",false,"edit_bet_error");
+        MyDialog myDialog = new MyDialog(EditBetCreationActivity.this, null, "", message, getString(R.string.ok), "", false, "edit_bet_error");
         myDialog.show();
     }
+
     private void CallInappPurchass() {
         /*Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
         bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);*/
     }
+
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1220,7 +1224,7 @@ if(canCreate){
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SLApplication.isBetCreatedOrEdited=false;
+        SLApplication.isBetCreatedOrEdited = false;
         finish();
     }
 

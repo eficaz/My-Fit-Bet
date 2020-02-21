@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.androidapp.fitbet.R;
@@ -22,15 +21,15 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  */
 
 public class Videoplayer extends BaseActivity {
-private MKPlayer player;
+    private MKPlayer player;
     String url;
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -38,21 +37,21 @@ private MKPlayer player;
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -61,13 +60,13 @@ private MKPlayer player;
         setContentView(R.layout.videoplayer);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        url=getIntent().getStringExtra("url");
-        player=new MKPlayer(this);
+        url = getIntent().getStringExtra("url");
+        player = new MKPlayer(this);
         player.onComplete(new Runnable() {
             @Override
             public void run() {
                 //callback when video is finish
-                Toast.makeText(getApplicationContext(), "video play completed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "video play completed", Toast.LENGTH_SHORT).show();
             }
         }).onInfo(new MKPlayer.OnInfoListener() {
             @Override
@@ -90,7 +89,7 @@ private MKPlayer player;
         }).onError(new MKPlayer.OnErrorListener() {
             @Override
             public void onError(int what, int extra) {
-                Toast.makeText(getApplicationContext(), "video play error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "video play error", Toast.LENGTH_SHORT).show();
             }
         });
 

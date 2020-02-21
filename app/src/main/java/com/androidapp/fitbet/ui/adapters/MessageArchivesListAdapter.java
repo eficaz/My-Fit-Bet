@@ -26,12 +26,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class MessageArchivesListAdapter extends RecyclerView.Adapter  {
+public class MessageArchivesListAdapter extends RecyclerView.Adapter {
     Context constant;
     public ArrayList<Archives> groupListModels;
-   // public List<Archives> selected_usersList=new ArrayList<>();
+    // public List<Archives> selected_usersList=new ArrayList<>();
     private List<Archives> contactListFiltered;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+
     public MessageArchivesListAdapter(Context context, ArrayList<Archives> myDataset) {
         this.constant = context;
         this.groupListModels = myDataset;
@@ -39,6 +40,7 @@ public class MessageArchivesListAdapter extends RecyclerView.Adapter  {
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -46,12 +48,13 @@ public class MessageArchivesListAdapter extends RecyclerView.Adapter  {
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         final Archives m = groupListModels.get(position);
         final ViewHolder viewholder = (ViewHolder) holder;
         viewholder.tv_Name.setText(m.getBetname());
-        try{
+        try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             df.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = df.parse(m.getDate());
@@ -61,20 +64,20 @@ public class MessageArchivesListAdapter extends RecyclerView.Adapter  {
             String output = null;
             output = outputformat.format(date);
             viewholder.tv_Description.setText(output);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //viewholder.tv_Description.setText(m.getDescription());
-        viewholder.left_days.setText(""+Double.parseDouble(m.getDistance())/1000+" km");
+        viewholder.left_days.setText("" + Double.parseDouble(m.getDistance()) / 1000 + " km");
 
 
         viewholder.rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(constant, MessageActivity.class);
-                i.putExtra(Contents.MYBETS_betid,m.getBetid());
-                i.putExtra(Contents.MYBETS_betname,m.getBetname());
-                i.putExtra(Contents.TOTAL_PARTICIPANTS,m.getTotal());
+                i.putExtra(Contents.MYBETS_betid, m.getBetid());
+                i.putExtra(Contents.MYBETS_betname, m.getBetname());
+                i.putExtra(Contents.TOTAL_PARTICIPANTS, m.getTotal());
                 constant.startActivity(i);
             }
         });
@@ -98,14 +101,14 @@ public class MessageArchivesListAdapter extends RecyclerView.Adapter  {
         }*/
 
 
-
     }
+
     public void filterList(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         groupListModels.clear();
         if (charText.length() == 0) {
             groupListModels.addAll(contactListFiltered);
-        }else {
+        } else {
             for (Archives wp : contactListFiltered) {
                 if (wp.getBetname().toLowerCase(Locale.getDefault()).contains(charText)) {
                     groupListModels.add(wp);
@@ -114,21 +117,24 @@ public class MessageArchivesListAdapter extends RecyclerView.Adapter  {
         }
         notifyDataSetChanged();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView tv_Name, tv_Description,left_days,tv_groupCount;
+        TextView tv_Name, tv_Description, left_days, tv_groupCount;
         LinearLayout rowView;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
+            rowView = convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
-            left_days= convertView.findViewById(R.id.left_days);
+            left_days = convertView.findViewById(R.id.left_days);
             tv_groupCount = convertView.findViewById(R.id.users_count);
             tv_Description = convertView.findViewById(R.id.tv_Description);
             itemView.setTag(itemView);
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

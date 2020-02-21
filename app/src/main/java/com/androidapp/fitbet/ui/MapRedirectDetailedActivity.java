@@ -29,8 +29,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,7 +38,7 @@ import butterknife.ButterKnife;
 import static com.androidapp.fitbet.polyline.GoogleMapHelper.getDefaultPolyLines;
 
 
-public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapReadyCallback {
+public class MapRedirectDetailedActivity extends BaseActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
 
 
@@ -59,17 +57,17 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
     TextView distance;
 
     Bundle bundle;
-    String originalPositionLat , originalPositionLog ,originalStartLat,originalStartLog,originalRoute,originalDistance,startAddress,endAddress;
-    Double startLongitude=0.0, positionLongitude, startLatitude, positionLatitude,distanceInMeters;
+    String originalPositionLat, originalPositionLog, originalStartLat, originalStartLog, originalRoute, originalDistance, startAddress, endAddress;
+    Double startLongitude = 0.0, positionLongitude, startLatitude, positionLatitude, distanceInMeters;
     private Polyline polyline;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -77,8 +75,8 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -87,12 +85,11 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -101,20 +98,20 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
         setContentView(R.layout.activity_map_redirect_detaiuld_by_loction);
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        bundle =  getIntent().getExtras();
-        originalPositionLat =bundle.getString(Contents.POSITION_LATITUDE);
-        originalPositionLog =bundle.getString(Contents.POSITION_LONGITUDE);
-        originalStartLat =bundle.getString(Contents.MYBETS_startlatitude);
-        originalStartLog =bundle.getString(Contents.MYBETS_startlongitude);
-        originalRoute=bundle.getString("original route");
-        originalDistance=bundle.getString("original distance");
-        startAddress=bundle.getString("start address");
-        endAddress=bundle.getString("end address");
-        startLatitude=Double.parseDouble(originalStartLat);
-        startLongitude=Double.parseDouble(originalStartLog);
-        positionLatitude=Double.parseDouble(originalPositionLat);
-        positionLongitude=Double.parseDouble(originalPositionLog);
-        distanceInMeters=Double.parseDouble(originalDistance);
+        bundle = getIntent().getExtras();
+        originalPositionLat = bundle.getString(Contents.POSITION_LATITUDE);
+        originalPositionLog = bundle.getString(Contents.POSITION_LONGITUDE);
+        originalStartLat = bundle.getString(Contents.MYBETS_startlatitude);
+        originalStartLog = bundle.getString(Contents.MYBETS_startlongitude);
+        originalRoute = bundle.getString("original route");
+        originalDistance = bundle.getString("original distance");
+        startAddress = bundle.getString("start address");
+        endAddress = bundle.getString("end address");
+        startLatitude = Double.parseDouble(originalStartLat);
+        startLongitude = Double.parseDouble(originalStartLog);
+        positionLatitude = Double.parseDouble(originalPositionLat);
+        positionLongitude = Double.parseDouble(originalPositionLog);
+        distanceInMeters = Double.parseDouble(originalDistance);
 
         mMapView.onCreate(savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -131,12 +128,12 @@ public class MapRedirectDetailedActivity extends BaseActivity  implements OnMapR
         startpoint.setText(startAddress);
         endpoint.setText(endAddress);
         distance.setText(formatNumber2Decimals(distanceInMeters));
-new Handler().post(new Runnable() {
-    @Override
-    public void run() {
-        drawPolyLines(originalRoute);
-    }
-});
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                drawPolyLines(originalRoute);
+            }
+        });
 
 
     }
@@ -150,21 +147,21 @@ new Handler().post(new Runnable() {
 
     private void drawPolyLines(String userRoute) {
 
-   String r= StringEscapeUtils.unescapeJava(userRoute);
-   System.out.println("map route "+r);
+        String r = StringEscapeUtils.unescapeJava(userRoute);
+        System.out.println("map route " + r);
         List<LatLng> latLngList = DirectionFinder.decodePolyLine(r);
 
-            PolylineOptions polylineOptions = getDefaultPolyLines(latLngList);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        PolylineOptions polylineOptions = getDefaultPolyLines(latLngList);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
-                    polyline = mMap.addPolyline(polylineOptions);
-                }
-            });
+                polyline = mMap.addPolyline(polylineOptions);
+            }
+        });
 
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(positionLatitude,positionLongitude),14f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(positionLatitude, positionLongitude), 14f));
     }
 
     public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute) {
@@ -185,7 +182,7 @@ new Handler().post(new Runnable() {
     @Override
     public void onResume() {
         super.onResume();
-LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -197,7 +194,7 @@ LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, fil
     @Override
     public void onDestroy() {
         super.onDestroy();
-       LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -209,20 +206,20 @@ LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, fil
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(mMap!=null)
+        if (mMap != null)
             mMap.setMyLocationEnabled(true);
-        if(startLatitude!=0.0) {
+        if (startLatitude != 0.0) {
             googleMap.addMarker(new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)).position(new LatLng(startLatitude, startLongitude)));
             googleMap.addMarker(new MarkerOptions().title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location)).position(new LatLng(positionLatitude, positionLongitude)));
         }
 
     }
 
-    private String formatNumber2Decimals(double number ){
-        number=number/1000;
+    private String formatNumber2Decimals(double number) {
+        number = number / 1000;
 
 
-        return String.format(Locale.getDefault(), "%.2f", number) ;
+        return String.format(Locale.getDefault(), "%.2f", number);
     }
 
 }

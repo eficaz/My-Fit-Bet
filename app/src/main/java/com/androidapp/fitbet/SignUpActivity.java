@@ -73,11 +73,11 @@ public class SignUpActivity extends AppCompatActivity {
     @Bind(R.id.submit)
     Button submit;
 
-    String CountryCode="";
+    String CountryCode = "";
 
-    String CountryName="";
-    String token="";
-    String deviceID="";
+    String CountryName = "";
+    String token = "";
+    String deviceID = "";
 
 
     @Override
@@ -85,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-        CountryCode= getResources().getConfiguration().locale.getCountry();
+        CountryCode = getResources().getConfiguration().locale.getCountry();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.w("FCM TOKEN Failed", task.getException());
                 } else {
                     token = task.getResult().getToken();
-                    deviceID=token;
+                    deviceID = token;
                 }
             }
         });
@@ -133,6 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 4) {
@@ -143,6 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }*/
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -151,6 +153,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 4) {
@@ -160,6 +163,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -168,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 4) {
@@ -179,11 +184,13 @@ public class SignUpActivity extends AppCompatActivity {
                     }*/
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
     }
+
     public void scrollTo(View view) {
         new Handler().post(new Runnable() {
             @Override
@@ -192,27 +199,25 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
     private void reg() {
-        if(et_username.getText().toString().trim().equals("")){
+        if (et_username.getText().toString().trim().equals("")) {
             Utils.showCustomToastMsg(SignUpActivity.this, R.string.enter_userName);
-        }else if(et_email.getText().toString().trim().equals("")) {
+        } else if (et_email.getText().toString().trim().equals("")) {
             Utils.showCustomToastMsg(SignUpActivity.this, R.string.enter_valid_email);
-        }  else if(!Utils.isValidEmail(et_email.getText().toString().trim())){
+        } else if (!Utils.isValidEmail(et_email.getText().toString().trim())) {
             Utils.showCustomToastMsg(SignUpActivity.this, R.string.enter_valid_email);
-        }
-        else if(et_password.getText().toString().trim().equals("")) {
+        } else if (et_password.getText().toString().trim().equals("")) {
             Utils.showCustomToastMsg(SignUpActivity.this, R.string.select_password_type);
-        }else if(et_confirm_password.getText().toString().trim().equals("")) {
+        } else if (et_confirm_password.getText().toString().trim().equals("")) {
             Utils.showCustomToastMsg(SignUpActivity.this, R.string.select_confirm_password_type);
-        }
-        else if(!et_password.getText().toString().trim().equals(et_confirm_password.getText().toString().trim())) {
+        } else if (!et_password.getText().toString().trim().equals(et_confirm_password.getText().toString().trim())) {
             Utils.showCustomToastMsg(SignUpActivity.this, R.string.password_con_password_not_match);
-        }
-        else {
-            if (Utils.isConnectedToInternet(SignUpActivity.this)){
+        } else {
+            if (Utils.isConnectedToInternet(SignUpActivity.this)) {
                 CustomProgress.getInstance().showProgress(this, "", false);
-                callregApi(et_username.getText().toString(),et_email.getText().toString().trim(),et_password.getText().toString().trim());
-            } else{
+                callregApi(et_username.getText().toString(), et_email.getText().toString().trim(), et_password.getText().toString().trim());
+            } else {
                 Utils.showCustomToastMsg(SignUpActivity.this, R.string.no_internet);
             }
 
@@ -221,9 +226,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void callregApi(String username, String email, String password) {
 
-       // String deviceID=Utils.getAndroidDeviceUniqueID(this);
+        // String deviceID=Utils.getAndroidDeviceUniqueID(this);
         String CountryName = getResources().getConfiguration().locale.getDisplayCountry();
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SignUpTrack(username,email,deviceID,password,DEFAULT_COUNTRY,DEFAULT_COUNTRY_SHORT_NAME,"android");
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SignUpTrack(username, email, deviceID, password, DEFAULT_COUNTRY, DEFAULT_COUNTRY_SHORT_NAME, "android");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -234,32 +239,34 @@ public class SignUpActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void signUpSucess(String bodyString) {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String msg = jsonObject.getString("Msg");
             String status = jsonObject.getString("Status");
             Utils.showCustomToastMsg(SignUpActivity.this, msg);
-            if(status.trim().equals("Ok")){
+            if (status.trim().equals("Ok")) {
                 CustomProgress.getInstance().hideProgress();
                 Utils.showCustomToastMsg(SignUpActivity.this, msg);
                 startActivity(new Intent(SignUpActivity.this, DashBoardActivity.class));
                 finish();
-                JSONObject jsonObject1 = new JSONObject( jsonObject.getString("userdetails"));
+                JSONObject jsonObject1 = new JSONObject(jsonObject.getString("userdetails"));
                 String reg_key = jsonObject1.getString("reg_key");
                 AppPreference.getPrefsHelper().savePref(Contents.REG_KEY, reg_key);
                 //JSONArray jsonArray = new JSONArray(reg_key);
-            }else{
+            } else {
                 CustomProgress.getInstance().hideProgress();
                 Utils.showCustomToastMsg(SignUpActivity.this, msg);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

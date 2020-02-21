@@ -28,7 +28,7 @@ public class TermsAndServiceActivity extends BaseActivity {
     AutoCompleteTextView privacy_and_policy;
 
 
-    String content="<p align=\"center\"><strong>TERMS OF SERVICE</strong><a name=\"_GoBack\"></a><strong> </strong></p>\n" +
+    String content = "<p align=\"center\"><strong>TERMS OF SERVICE</strong><a name=\"_GoBack\"></a><strong> </strong></p>\n" +
             "<p><strong><u>Introduction</u></strong><br>\n" +
             "  The FitBet mobile application (hereafter, the &quot;Services&quot;) are provided by FitBet, Inc. (hereafter, &quot;us&quot; or &quot;we&quot; or &quot;our&quot;) in connection with our partners, service providers, sponsors, or other affiliates. So that we may safely and responsibly provide our services for all of our users, your use of our services is subject to the terms and conditions set forth below, as well as the privacy policy set forth.</p>\n" +
             "<p>By accessing and using our services, you accept and agree to be bound by the terms and provision of this agreement. In addition, when using our services, you shall be subject to any posted guidelines or rules applicable to such services, which may be posted and modified from time to time. All such guidelines or rules are hereby incorporated by reference into the Terms of Service (TOS).</p>\n" +
@@ -75,13 +75,12 @@ public class TermsAndServiceActivity extends BaseActivity {
             "  THE SERVICES DO NOT CONTAIN OR CONSTITUTE, AND SHOULD NOT BE INTERPRETED AS, MEDICAL ADVICE OR OPINION. We are not licensed medical professionals, and we are not in the business of providing medical advice. You should always consult a qualified and licensed medical professional prior to beginning or modifying any diet or exercise program. YOUR USE OF THE WEBSITE OR THE MOBILE APPLICATION DOES NOT CREATE A DOCTOR-PATIENT RELATIONSHIP BETWEEN YOU AND US.</p>\n";
 
 
-
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -89,8 +88,8 @@ public class TermsAndServiceActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -99,12 +98,11 @@ public class TermsAndServiceActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override

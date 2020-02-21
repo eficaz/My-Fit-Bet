@@ -19,10 +19,11 @@ import java.util.ArrayList;
 /**
  * ListView for select one year, year selected is highlight <br />
  * To get the year, assign an OnYearSelectedListener
- * @see com.kunzisoft.switchdatetime.date.OnYearSelectedListener#onYearSelected(View, int)
+ *
  * @author JJamet
+ * @see com.kunzisoft.switchdatetime.date.OnYearSelectedListener#onYearSelected(View, int)
  */
-public class ListPickerYearView extends RecyclerView implements YearPickerAdapter.OnClickYearListener{
+public class ListPickerYearView extends RecyclerView implements YearPickerAdapter.OnClickYearListener {
 
     private final static String TAG = "ListPickerYearView";
 
@@ -51,10 +52,10 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
     private void init(Context context, AttributeSet attrs) {
         setLayoutManager(new LinearLayoutManager(context));
 
-        if(attrs != null) {
+        if (attrs != null) {
             TypedArray yearTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ListPickerYearView);
-                setMinYear(yearTypedArray.getInt(R.styleable.ListPickerYearView_minYear, minYear));
-                setMaxYear(yearTypedArray.getInt(R.styleable.ListPickerYearView_maxYear, minYear));
+            setMinYear(yearTypedArray.getInt(R.styleable.ListPickerYearView_minYear, minYear));
+            setMaxYear(yearTypedArray.getInt(R.styleable.ListPickerYearView_maxYear, minYear));
             currentYear = yearTypedArray.getInt(R.styleable.ListPickerYearView_defaultYear, YearPickerAdapter.UNDEFINED);
             yearTypedArray.recycle();
         }
@@ -80,7 +81,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
      * Assign years to adapter only if view is init
      */
     private void injectYearsInAdapter() {
-        if(mAdapter != null) {
+        if (mAdapter != null) {
             ArrayList<Integer> years = new ArrayList<>();
             for (int year = minYear; year <= maxYear; year++) {
                 years.add(year);
@@ -95,7 +96,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
      */
     public void refreshAndCenter() {
         mAdapter.notifyDataSetChanged();
-        centerListOn(currentYear - minYear -1);
+        centerListOn(currentYear - minYear - 1);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
         // TODO Vibrate
         //mController.tryVibrate();
-        if(yearChangeListener != null) {
+        if (yearChangeListener != null) {
             yearChangeListener.onYearSelected(view, year);
         }
 
@@ -121,19 +122,21 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Center list on the selected year
+     *
      * @param position of year in the list
      */
     public void centerListOn(final int position) {
         getLayoutManager().scrollToPosition(position);
         try {
             getLayoutManager().scrollVerticallyBy(mViewSize / 2 - mChildSize / 2, null, null);
-        } catch(Exception e){
+        } catch (Exception e) {
             Log.w(TAG, "Can't scroll more");
         }
     }
 
     /**
      * Attach listener for select year
+     *
      * @param onYearSelectedListener listener
      */
     public void setDatePickerListener(OnYearSelectedListener onYearSelectedListener) {
@@ -142,6 +145,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Get current minYear
+     *
      * @return
      */
     public int getMinYear() {
@@ -150,6 +154,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Set minimum year of list
+     *
      * @param minYear minimum year
      */
     public void setMinYear(int minYear) {
@@ -159,6 +164,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Get maximum year of list
+     *
      * @return
      */
     public int getMaxYear() {
@@ -167,6 +173,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Set maximum year of list
+     *
      * @param maxYear
      */
     public void setMaxYear(int maxYear) {
@@ -176,6 +183,7 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Get current year selected
+     *
      * @return
      */
     public int getYearSelected() {
@@ -184,11 +192,12 @@ public class ListPickerYearView extends RecyclerView implements YearPickerAdapte
 
     /**
      * Assign current year and refresh list
+     *
      * @param year
      */
     public void assignCurrentYear(int year) {
         currentYear = year;
-        if(mAdapter != null) {
+        if (mAdapter != null) {
             try {
                 mAdapter.setSelectedYear(currentYear);
             } catch (YearPickerAdapter.SelectYearException e) {

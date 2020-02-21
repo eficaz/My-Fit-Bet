@@ -71,7 +71,7 @@ public class ReadyAndroidApp extends Application {
                             // values are returned.
                             mFirebaseRemoteConfig.activateFetched();
                         } else {
-                            Utils.showCustomToastMsg(getApplicationContext(),"Fetch Failed");
+                            Utils.showCustomToastMsg(getApplicationContext(), "Fetch Failed");
                             //CommonUtils.showToast(getApplicationContext(), "Fetch Failed");
                         }
                         //displayWelcomeMessage();

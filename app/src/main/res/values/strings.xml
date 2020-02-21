@@ -69,7 +69,7 @@
     <string name="imvalid_entry">An Unexpected Error Has Occurred Application</string>
     <string name="invited_successfully">Invited Successfully</string>
     <string name="please_choose_credit">Please select any one of the pack</string>
-<string name="permission_required">Service Permissions are required for this app</string>
+    <string name="permission_required">Service Permissions are required for this app</string>
     <string name="any_one_not_participate">None of Joined Any Participant in This Bet.</string>
 
     <string name="bet_name">Bet Name</string>

@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.fitbet.R;
 import com.androidapp.fitbet.customview.CustomProgress;
-import com.androidapp.fitbet.interfaces.CameraGalaryCaputer;
+import com.androidapp.fitbet.interfaces.CameraGalleryCapture;
 import com.androidapp.fitbet.interfaces.SearchNotFound;
 import com.androidapp.fitbet.model.Archives;
 import com.androidapp.fitbet.network.Constant;
@@ -71,7 +71,7 @@ import static com.androidapp.fitbet.utils.Contents.MYBETS_winner;
 import static com.androidapp.fitbet.utils.Contents.STATUS_A;
 import static com.androidapp.fitbet.utils.Contents.TOTAL;
 
-public class ArchivesListFragment extends Fragment implements CameraGalaryCaputer,SearchNotFound {
+public class ArchivesListFragment extends Fragment implements CameraGalleryCapture, SearchNotFound {
 
     @Bind(R.id.invite_group_list)
     RecyclerView invite_group_list;
@@ -93,9 +93,10 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("onViewCreated ArchivesListFragment");
-        AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"3");
+        AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION, "3");
         intintView();
     }
+
     private void intintView() {
 
         archivesGroupList();
@@ -112,15 +113,17 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 //after the change calling the method and passing the search input
-                if(editable.toString().equals("")){
+                if (editable.toString().equals("")) {
                     filter("");
-                }else{
+                } else {
                     filter(editable.toString());
                 }
             }
@@ -128,53 +131,58 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
         invite_group_list.addOnItemTouchListener(new RecyclerItemClickListener(SLApplication.getContext(), invite_group_list, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if(Integer.parseInt(archivesListDetails.get(position).getTotal())>1){
+                if (Integer.parseInt(archivesListDetails.get(position).getTotal()) > 1) {
                     Intent i = new Intent(getActivity(), ArchiveDetailsActivity.class);
-                    i.putExtra(Contents.MYBETS_betid,archivesListDetails.get(position).getBetid());
+                    i.putExtra(Contents.MYBETS_betid, archivesListDetails.get(position).getBetid());
                     startActivity(i);
-                }else{
+                } else {
                     Utils.showCustomToastMsg(getActivity(), R.string.any_one_not_participate);
                 }
             }
+
             @Override
             public void onItemLongClick(View view, int position) {
             }
         }));
     }
+
     private void filter(String text) {
-        if(archivesListAdapter!=null)
-        if(text.equals("")){
-            no_data.setVisibility(View.GONE);
-            archivesListAdapter.filterList("");
-        }else{
-            if(archivesListAdapter.getItemCount()==0){
-                no_data.setVisibility(View.VISIBLE);
-            }else{
+        if (archivesListAdapter != null)
+            if (text.equals("")) {
                 no_data.setVisibility(View.GONE);
+                archivesListAdapter.filterList("");
+            } else {
+                if (archivesListAdapter.getItemCount() == 0) {
+                    no_data.setVisibility(View.VISIBLE);
+                } else {
+                    no_data.setVisibility(View.GONE);
+                }
+                archivesListAdapter.filterList(text);
             }
-            archivesListAdapter.filterList(text);
-        }
     }
+
     private void archivesGroupList() {
         String search = "";
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    System.out.println("Archives grouplist == "+bodyString);
+                    System.out.println("Archives grouplist == " + bodyString);
                     groupDetailsList(bodyString);
                     CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void groupDetailsList(String bodyString) {
         try {
             final JSONObject jsonObject = new JSONObject(bodyString);
@@ -183,9 +191,9 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 archivesListDetails = new ArrayList<>();
@@ -229,12 +237,11 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
     }
 
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -243,8 +250,6 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
 
         return view;
     }
-
-
 
 
     @Override
@@ -260,14 +265,10 @@ public class ArchivesListFragment extends Fragment implements CameraGalaryCapute
 
     @Override
     public <T> void search_not_found(boolean item) {
-        if(item==true){
+        if (item == true) {
             //no_data.setVisibility(View.VISIBLE);
         }
     }
-
-
-
-
 
 
 }

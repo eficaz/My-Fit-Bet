@@ -2,40 +2,40 @@ package com.androidapp.fitbet.model;
 
 public class JoinBets {
 
-    String distance="";
-    String description="";
+    String distance = "";
+    String description = "";
 
-    String createdate="";
-    String route="";
+    String createdate = "";
+    String route = "";
 
-    String credit="";
-    String winner="";
+    String credit = "";
+    String winner = "";
 
-    String status="";
-    String createdby="";
+    String status = "";
+    String createdby = "";
 
-    String date="";
-    String betid="";
+    String date = "";
+    String betid = "";
 
-    String betname="";
-    String startlocation="";
+    String betname = "";
+    String startlocation = "";
 
-    String endlocation="";
-    String startlongitude="";
+    String endlocation = "";
+    String startlongitude = "";
 
-    String endlongitude="";
-    String startlatitude="";
+    String endlongitude = "";
+    String startlatitude = "";
 
-    String endlatitude="";
-    String bettype="";
+    String endlatitude = "";
+    String bettype = "";
 
-    String enddate="";
-    String challengerid="";
+    String enddate = "";
+    String challengerid = "";
 
-    String started="";
-    String total ="";
+    String started = "";
+    String total = "";
 
-    String editstatus="";
+    String editstatus = "";
 
 
     public String getDistance() {
@@ -221,9 +221,6 @@ public class JoinBets {
     public void setEditstatus(String editstatus) {
         this.editstatus = editstatus;
     }
-
-
-
 
 
 }

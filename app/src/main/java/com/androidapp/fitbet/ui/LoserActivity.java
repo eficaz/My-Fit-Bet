@@ -42,18 +42,16 @@ import retrofit2.Response;
 import static com.androidapp.fitbet.utils.Contents.DASH_BOARD_POSICTION;
 import static com.androidapp.fitbet.utils.Contents.FILE_PATH;
 import static com.androidapp.fitbet.utils.Contents.FILE_TYPE;
-import static com.androidapp.fitbet.utils.Contents.IMAGE_STATUS;
 import static com.androidapp.fitbet.utils.Contents.MYBETS_betid;
-import static com.androidapp.fitbet.utils.Contents.REG_TYPE;
 import static com.androidapp.fitbet.utils.Contents.WINNER_description;
 
 public class LoserActivity extends BaseActivity {
     Bundle bundle;
-    String regNo="";
-    String betId="";
-    String winName="";
-    String won="";
-    String file_Type="";
+    String regNo = "";
+    String betId = "";
+    String winName = "";
+    String won = "";
+    String file_Type = "";
 
     @Bind(R.id.userPostion)
     TextView userPostion;
@@ -82,15 +80,15 @@ public class LoserActivity extends BaseActivity {
     String imagepath;
     String videopath;
 
-    String uaser_image,winer_name,credit,winner_description;
-private AppPreference appPreference;
+    String uaser_image, winer_name, credit, winner_description;
+    private AppPreference appPreference;
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -98,8 +96,8 @@ private AppPreference appPreference;
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -108,12 +106,11 @@ private AppPreference appPreference;
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -122,19 +119,19 @@ private AppPreference appPreference;
         setContentView(R.layout.activity_loser);
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        appPreference=AppPreference.getPrefsHelper(this);
+        appPreference = AppPreference.getPrefsHelper(this);
         bundle = getIntent().getExtras();
-        betId=bundle.getString(MYBETS_betid);
+        betId = bundle.getString(MYBETS_betid);
         clearSavedBetItems();
-        if(!betId.equals("")){
+        if (!betId.equals("")) {
             CustomProgress.getInstance().showProgress(LoserActivity.this, "", false);
             loserDetail();
         }
         img_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    final Dialog dialog = new Dialog(LoserActivity.this,android.R.style.Theme_NoTitleBar);
+                try {
+                    final Dialog dialog = new Dialog(LoserActivity.this, android.R.style.Theme_NoTitleBar);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.imageview_dilog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -153,25 +150,24 @@ private AppPreference appPreference;
                             .placeholder(R.drawable.image_loader)
                             .into(image);
                     dialog.show();
-                }
-                catch(Exception ex){
-                    Log.e("Exception",ex.toString());
+                } catch (Exception ex) {
+                    Log.e("Exception", ex.toString());
                 }
             }
         });
         video_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(LoserActivity.this, Videoplayer.class);
-                i.putExtra("url",videopath);
+                Intent i = new Intent(LoserActivity.this, Videoplayer.class);
+                i.putExtra("url", videopath);
                 startActivity(i);
             }
         });
         wiiner_discreption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    final Dialog dialog = new Dialog(LoserActivity.this,android.R.style.Theme_NoTitleBar);
+                try {
+                    final Dialog dialog = new Dialog(LoserActivity.this, android.R.style.Theme_NoTitleBar);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.archive_list_details_dilog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -182,9 +178,9 @@ private AppPreference appPreference;
                     name.setText(winer_name);
                     credit1.setText(credit);
                     discreption.setText(winner_description);
-                    if(uaser_image.equals("")){
+                    if (uaser_image.equals("")) {
                         img_user.setImageDrawable(getResources().getDrawable(R.drawable.user_profile_avatar));
-                    }else{
+                    } else {
                         Picasso.get().load(uaser_image)
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
@@ -199,9 +195,8 @@ private AppPreference appPreference;
                         }
                     });
                     dialog.show();
-                }
-                catch(Exception ex){
-                    Log.e("Exception",ex.toString());
+                } catch (Exception ex) {
+                    Log.e("Exception", ex.toString());
                 }
             }
         });
@@ -209,8 +204,8 @@ private AppPreference appPreference;
             @Override
             public void onClick(View v) {
                 clearSavedBetItems();
-                AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION,"0");
-                startActivity(new Intent(LoserActivity.this,DashBoardActivity.class));
+                AppPreference.getPrefsHelper().savePref(DASH_BOARD_POSICTION, "0");
+                startActivity(new Intent(LoserActivity.this, DashBoardActivity.class));
                 finish();
             }
         });
@@ -245,9 +240,12 @@ private AppPreference appPreference;
         appPreference.saveUserRoute("");
         appPreference.saveOrigin("");
         appPreference.setLatLongList(null);
+        appPreference.savePositionLatitude("0.0");
+        appPreference.savePositionLongitude("0.0");
     }
+
     private void loserDetail() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoserDetail(betId,AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).LoserDetail(betId, AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -255,10 +253,10 @@ private AppPreference appPreference;
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     final JSONObject jsonObject;
                     jsonObject = new JSONObject(bodyString);
-                 System.out.println("Loser details = "+bodyString);
+                    System.out.println("Loser details = " + bodyString);
                     String data = jsonObject.getString("Status");
                     CustomProgress.getInstance().hideProgress();
-                    if(data.equals("Ok")){
+                    if (data.equals("Ok")) {
 
                         tv_Name.setText(jsonObject.getString("winner_name"));
                         tv_credit.setText(jsonObject.getString("winner_credit"));
@@ -268,65 +266,67 @@ private AppPreference appPreference;
                                 Picasso.get().load(Constant.BASE_APP_IMAGE__PATH + jsonObject.getString("winner_profile_pic"))
                                         .placeholder(R.drawable.image_loader)
                                         .into(img_user);
-                            }else{
+                            } else {
                                 Picasso.get().load(jsonObject.getString("winner_profile_pic"))
                                         .placeholder(R.drawable.image_loader)
                                         .into(img_user);
                             }
-                        }else{
+                        } else {
                             img_user.setImageDrawable(getDrawable(R.drawable.user_profile_avatar));
                         }
-                        if(jsonObject.getString(WINNER_description).equals("")){
+                        if (jsonObject.getString(WINNER_description).equals("")) {
                             wiiner_discreption.setVisibility(View.GONE);
-                        }else{
+                        } else {
                             wiiner_discreption.setVisibility(View.VISIBLE);
                         }
-                        if(jsonObject.getString(FILE_TYPE).equals("image")){
-                            imagepath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);
-                            String fileType="0";
+                        if (jsonObject.getString(FILE_TYPE).equals("image")) {
+                            imagepath = "" + Constant.BASE_APP_WINNER_IMAGE__PATH + jsonObject.getString(FILE_PATH);
+                            String fileType = "0";
                             video_type.setVisibility(View.GONE);
                             img_type.setVisibility(View.VISIBLE);
-                        }else if(jsonObject.getString(FILE_TYPE).equals("video")){
-                            videopath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);
-                            String fileType="1";
+                        } else if (jsonObject.getString(FILE_TYPE).equals("video")) {
+                            videopath = "" + Constant.BASE_APP_WINNER_IMAGE__PATH + jsonObject.getString(FILE_PATH);
+                            String fileType = "1";
                             video_type.setVisibility(View.VISIBLE);
                             img_type.setVisibility(View.GONE);
-                        }else{
+                        } else {
                             video_type.setVisibility(View.GONE);
                             img_type.setVisibility(View.GONE);
                         }
-                        winer_name=jsonObject.getString("winner_name");
-                        credit=jsonObject.getString("winner_credit");
-                        winner_description=jsonObject.getString(WINNER_description);
+                        winer_name = jsonObject.getString("winner_name");
+                        credit = jsonObject.getString("winner_credit");
+                        winner_description = jsonObject.getString(WINNER_description);
                         if (!jsonObject.getString("winner_profile_pic").equals("NA")) {
-                            if (jsonObject.getString("winner_reg_type").equals("normal")&&jsonObject.getString("winner_image_status").equals("0")){
-                                uaser_image=Constant.BASE_APP_IMAGE__PATH+jsonObject.getString("winner_profile_pic");
-                            }else{
-                                uaser_image=jsonObject.getString("winner_profile_pic");
+                            if (jsonObject.getString("winner_reg_type").equals("normal") && jsonObject.getString("winner_image_status").equals("0")) {
+                                uaser_image = Constant.BASE_APP_IMAGE__PATH + jsonObject.getString("winner_profile_pic");
+                            } else {
+                                uaser_image = jsonObject.getString("winner_profile_pic");
                             }
-                        }else{
-                            uaser_image="";
+                        } else {
+                            uaser_image = "";
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         CustomProgress.getInstance().hideProgress();
                         clearSavedBetItems();
-                        startActivity(new Intent(LoserActivity.this,DashBoardActivity.class));
+                        startActivity(new Intent(LoserActivity.this, DashBoardActivity.class));
                         finish();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:

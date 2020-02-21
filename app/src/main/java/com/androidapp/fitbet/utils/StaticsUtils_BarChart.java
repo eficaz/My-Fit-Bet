@@ -20,7 +20,7 @@ public class StaticsUtils_BarChart {
 
     private static Context mContext;
 
-    public static void setBarChartData(Context context, BarChart chart, int size, ArrayList<String> speed, ArrayList<String> dateDes,int type) {
+    public static void setBarChartData(Context context, BarChart chart, int size, ArrayList<String> speed, ArrayList<String> dateDes, int type) {
         mContext = context;
         chart.invalidate();
         chart.clear();

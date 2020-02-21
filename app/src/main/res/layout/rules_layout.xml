@@ -8,17 +8,20 @@
     android:orientation="vertical"
     android:background="@drawable/bg_alert"
     android:stateListAnimator="@null">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/txt_16"
-        android:text="Rules and Regulations"
-        android:fontFamily="@font/lato_bold"
-        android:layout_marginTop="@dimen/margin_15"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/txt_16"
+            android:text="Rules and Regulations"
+            android:fontFamily="@font/lato_bold"
+            android:layout_marginTop="@dimen/margin_15" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -26,22 +29,22 @@
             android:foregroundGravity="center"
             android:padding="3dp"
             android:src="@drawable/close_button"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
- <TextView
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-     android:layout_marginTop="@dimen/margin_15"
-     android:layout_marginBottom="@dimen/margin_20"
-     android:fontFamily="@font/lato_regular"
-     android:text="1. User needs to have sufficient Credit points to create a Bet.\n
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginBottom="@dimen/margin_20"
+        android:fontFamily="@font/lato_regular"
+        android:text="1. User needs to have sufficient Credit points to create a Bet.\n
 2. A Bet gets automatically started at the Bet start time.\n
 3. Bet cannot be cancelled once it has started.\n
 4. The user would be refunded the credit points once a Bet is cancelled.\n
 5. If no users have joined the Bet, it would be automatically cancelled and the credit would be refunded to the created user.\n
 6. At the time of a Bet starting, if the user has another active bet, then the automatic start of the Bet won't happen.\n
 7. Google is no way involved in the functioning of the Bet.
-"
-     />
+" />
 
 </LinearLayout>

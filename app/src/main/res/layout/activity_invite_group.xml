@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.CreateGroupActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,6 +14,7 @@
         android:gravity="center"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -24,6 +26,7 @@
                 android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
@@ -35,6 +38,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:background="@drawable/back_black" />
             </TableRow>
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="0dp"
@@ -60,17 +64,17 @@
                 android:textColor="@color/light_blue"
                 android:textSize="11dp" />
         </TableRow>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:orientation="vertical">
 
-        <TableRow
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2" >
+            android:layout_weight="5"
+            android:orientation="vertical">
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
 
 
                 <LinearLayout
@@ -89,6 +93,7 @@
                         android:gravity="center"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <com.androidapp.fitbet.utils.CircleImageView
                             android:id="@+id/img_user"
 
@@ -115,8 +120,7 @@
                             android:text=""
                             android:textColor="@color/white"
                             android:fontFamily="@font/lato_bold"
-                            android:gravity="center|start"
-                            />
+                            android:gravity="center|start" />
 
                         <TextView
                             android:id="@+id/description"
@@ -127,8 +131,7 @@
                             android:textSize="12sp"
                             android:textColor="@color/white"
                             android:fontFamily="@font/lato_regular"
-                            android:gravity="start"
-                            />
+                            android:gravity="start" />
 
                     </LinearLayout>
 
@@ -136,192 +139,191 @@
                 </LinearLayout>
 
 
-       <!--     <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_weight=".5"
-                    android:layout_height="0dp" >
-                    <com.androidapp.fitbet.utils.CircleImageView
-                        android:id="@+id/img_user"
-                        android:layout_width="@dimen/size_50"
-                        android:layout_height="@dimen/size_50"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:src="@drawable/group_icons" />
-
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="@dimen/margin_20"
-                        android:fontFamily="@font/lato_regular"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:layout_height="wrap_content"
-                         />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_weight=".5"
-                    android:layout_gravity="center|top"
-                    android:gravity="top|center"
-                    android:layout_height="0dp" >
-
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="match_parent"
-                        android:maxLines="2"
-                        android:layout_marginStart="60dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="top|center|start"
-                        android:gravity="center|top|left"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"
-                        />
-
-                </TableRow>
-            </LinearLayout>-->
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-
-            android:layout_weight="10">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-android:paddingStart="@dimen/margin_16"
-                    android:paddingEnd="@dimen/margin_16"
-                    android:layout_gravity="center|start"
-                    android:gravity="center|start"
-
-                   >
-
-
-
-
-                    <TableRow
-                        android:id="@+id/ed_delete_row"
-                        android:layout_width="match_parent"
-                        android:visibility="gone"
-                        android:background="@drawable/layout_whight_border"
-                        android:layout_height="match_parent" >
-                        <TextView
-                            android:id="@+id/users_count"
-                            android:layout_width="0dp"
-                            android:layout_weight="10"
-                            android:layout_height="match_parent"
-                            android:singleLine="true"
-                            android:text="0"
-                            android:layout_marginStart="10dp"
-                            android:drawablePadding="7dp"
-                            android:drawableStart="@drawable/group_icons_hover"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/lato_regular"
-                            android:gravity="center|start"
-                            />
-
-
-                        <ImageView
-                            android:id="@+id/delete"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_10"
-                            android:layout_marginTop="@dimen/margin_15"
-                            android:layout_marginBottom="@dimen/margin_15"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/delete_btn"
-                            android:visibility="gone" />
-
-                    </TableRow>
-
-
-                 <!--   <ImageView
-                        android:id="@+id/delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_10"
-                        android:visibility="gone"
-                        android:layout_marginBottom="@dimen/margin_15"
-                        android:layout_marginTop="@dimen/margin_15"
-                        android:src="@drawable/delete_btn"
-                        />-->
-                    <EditText
-                        android:id="@+id/searchview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="flagNoExtractUi"
-                        android:inputType="text|textNoSuggestions"
-                        android:background="@drawable/shape_button_roud_corner1"
-                        android:drawableStart="@drawable/search"
-                        android:maxLength="30"
-                        android:padding="10dp"
-                        android:textIsSelectable="false"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/main_text_color"
-                        android:textSize="12sp"
-                        />
-                  <!--  <EditText
-                        android:id="@+id/searchview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawableStart="@drawable/invite_group_icon"
-                        android:hint="@string/search_users"
-                        android:inputType="text|textNoSuggestions"
-                        android:maxLength="30"
-                        android:textSize="12sp"
-                        android:singleLine="true"
-                        android:text="" />-->
-                    <!-- <SearchView
-                         android:id="@+id/searchview"
+                <!--     <LinearLayout
                          android:layout_width="match_parent"
-                         android:queryHint="@string/search"
-                         android:layout_gravity="center"
-                         android:gravity="center"
-                         android:layout_height="match_parent" />-->
-                </TableRow>
+                         android:layout_height="match_parent"
+                         android:layout_marginStart="20dp"
+                         android:layout_marginEnd="20dp"
+                         android:orientation="vertical">
+
+                         <TableRow
+                             android:layout_width="match_parent"
+                             android:layout_weight=".5"
+                             android:layout_height="0dp" >
+                             <com.androidapp.fitbet.utils.CircleImageView
+                                 android:id="@+id/img_user"
+                                 android:layout_width="@dimen/size_50"
+                                 android:layout_height="@dimen/size_50"
+                                 android:layout_centerInParent="true"
+                                 android:layout_gravity="center"
+                                 android:src="@drawable/group_icons" />
+
+                             <TextView
+                                 android:id="@+id/name"
+                                 android:layout_gravity="center"
+                                 android:layout_width="wrap_content"
+                                 android:layout_marginStart="@dimen/margin_20"
+                                 android:fontFamily="@font/lato_regular"
+                                 android:textColor="@color/white"
+                                 android:textSize="14sp"
+                                 android:layout_height="wrap_content"
+                                  />
+                         </TableRow>
+
+                         <TableRow
+                             android:layout_width="match_parent"
+                             android:layout_weight=".5"
+                             android:layout_gravity="center|top"
+                             android:gravity="top|center"
+                             android:layout_height="0dp" >
+
+                             <TextView
+                                 android:id="@+id/description"
+                                 android:layout_width="match_parent"
+                                 android:maxLines="2"
+                                 android:layout_marginStart="60dp"
+                                 android:fontFamily="@font/lato_regular"
+                                 android:layout_height="match_parent"
+                                 android:layout_gravity="top|center|start"
+                                 android:gravity="center|top|left"
+                                 android:textSize="12sp"
+                                 android:textColor="@color/white"
+                                 />
+
+                         </TableRow>
+                     </LinearLayout>-->
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+
+                android:layout_weight="10">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/no_data"
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/margin_16"
+                        android:paddingEnd="@dimen/margin_16"
+                        android:layout_gravity="center|start"
+                        android:gravity="center|start"
+
+                        >
+
+
+                        <TableRow
+                            android:id="@+id/ed_delete_row"
+                            android:layout_width="match_parent"
+                            android:visibility="gone"
+                            android:background="@drawable/layout_whight_border"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/users_count"
+                                android:layout_width="0dp"
+                                android:layout_weight="10"
+                                android:layout_height="match_parent"
+                                android:singleLine="true"
+                                android:text="0"
+                                android:layout_marginStart="10dp"
+                                android:drawablePadding="7dp"
+                                android:drawableStart="@drawable/group_icons_hover"
+                                android:textSize="12sp"
+                                android:fontFamily="@font/lato_regular"
+                                android:gravity="center|start" />
+
+
+                            <ImageView
+                                android:id="@+id/delete"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_10"
+                                android:layout_marginTop="@dimen/margin_15"
+                                android:layout_marginBottom="@dimen/margin_15"
+                                android:layout_marginEnd="10dp"
+                                android:src="@drawable/delete_btn"
+                                android:visibility="gone" />
+
+                        </TableRow>
+
+
+                        <!--   <ImageView
+                               android:id="@+id/delete"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_marginStart="@dimen/margin_10"
+                               android:visibility="gone"
+                               android:layout_marginBottom="@dimen/margin_15"
+                               android:layout_marginTop="@dimen/margin_15"
+                               android:src="@drawable/delete_btn"
+                               />-->
+                        <EditText
+                            android:id="@+id/searchview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="flagNoExtractUi"
+                            android:inputType="text|textNoSuggestions"
+                            android:background="@drawable/shape_button_roud_corner1"
+                            android:drawableStart="@drawable/search"
+                            android:maxLength="30"
+                            android:padding="10dp"
+                            android:textIsSelectable="false"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="@color/main_text_color"
+                            android:textSize="12sp" />
+                        <!--  <EditText
+                              android:id="@+id/searchview"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:drawableStart="@drawable/invite_group_icon"
+                              android:hint="@string/search_users"
+                              android:inputType="text|textNoSuggestions"
+                              android:maxLength="30"
+                              android:textSize="12sp"
+                              android:singleLine="true"
+                              android:text="" />-->
+                        <!-- <SearchView
+                             android:id="@+id/searchview"
+                             android:layout_width="match_parent"
+                             android:queryHint="@string/search"
+                             android:layout_gravity="center"
+                             android:gravity="center"
+                             android:layout_height="match_parent" />-->
+                    </TableRow>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:textColor="@color/main_text_color"
-                        android:visibility="gone"
-                        android:gravity="center"
-                        android:text="@string/no_users" />
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/invite_group_list"
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="40dp"
-                        android:layout_height="match_parent" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/no_data"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:textColor="@color/main_text_color"
+                            android:visibility="gone"
+                            android:gravity="center"
+                            android:text="@string/no_users" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/invite_group_list"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="40dp"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
+            </TableRow>
 
-        </TableRow>
-
-    </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

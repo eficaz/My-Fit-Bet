@@ -16,30 +16,30 @@
             android:layout_above="@+id/navigationView"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:clipChildren="false"
-        android:elevation="3dp"
-        android:layout_alignParentBottom="true"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@drawable/navigation_selector"
-        app:itemTextColor="@drawable/navigation_selector"
-        app:menu="@menu/navigation">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigationView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:clipChildren="false"
+            android:elevation="3dp"
+            android:layout_alignParentBottom="true"
+            app:labelVisibilityMode="labeled"
+            app:itemIconTint="@drawable/navigation_selector"
+            app:itemTextColor="@drawable/navigation_selector"
+            app:menu="@menu/navigation">
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
         <!--  android:background="?bottom_tint_color"-->
     </RelativeLayout>
+
     <ImageView
         android:id="@+id/fab"
         android:layout_width="@dimen/size_85"
         android:layout_height="@dimen/size_85"
-    android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
         android:scaleType="fitXY"
         app:backgroundTint="@android:color/transparent"
         app:layout_anchor="@id/navigationView"
         app:layout_anchorGravity="center"
-        android:src="@drawable/tab_center_icon1"
-    />
+        android:src="@drawable/tab_center_icon1" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

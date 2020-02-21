@@ -5,6 +5,7 @@
     android:id="@+id/message_row"
     android:layout_height="match_parent"
     tools:context=".ui.MessageActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,11 +20,12 @@
             android:layout_height="0dp"
             android:layout_weight="1.5"
             android:orientation="vertical">
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:id="@+id/back_btn"
-                android:layout_weight=".6" >
+                android:layout_weight=".6">
 
                 <LinearLayout
 
@@ -43,6 +45,7 @@
             </TableRow>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -54,7 +57,7 @@
                 android:id="@+id/content_main1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible" >
+                android:visibility="visible">
 
             </FrameLayout>
 

@@ -37,19 +37,21 @@ import retrofit2.Response;
 
 import static com.androidapp.fitbet.network.Constant.BASE_APP_IMAGE__PATH;
 
-public class MyBetDetailsAdapter extends RecyclerView.Adapter  {
+public class MyBetDetailsAdapter extends RecyclerView.Adapter {
     Context constant;
     public static ArrayList<BetDetails> groupListModels;
     private static List<BetDetails> contactListFiltered;
     String groupId;
     private static CreateGroupFragment.RecyclerViewClickListener itemListener;
+
     public MyBetDetailsAdapter(Context context, ArrayList<BetDetails> myDataset, String betid) {
         this.constant = context;
         this.groupListModels = myDataset;
         contactListFiltered = new ArrayList<>();
         contactListFiltered.addAll(groupListModels);
-        this.groupId=groupId;
+        this.groupId = groupId;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -57,6 +59,7 @@ public class MyBetDetailsAdapter extends RecyclerView.Adapter  {
         MyBetDetailsAdapter.ViewHolder vh = new MyBetDetailsAdapter.ViewHolder(v);
         return vh;
     }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         final BetDetails m = groupListModels.get(position);
@@ -64,9 +67,9 @@ public class MyBetDetailsAdapter extends RecyclerView.Adapter  {
         viewholder.tv_Name.setText(m.getFirstname());
         viewholder.tv_Country.setText(m.getCountry());
         if (!m.getProfile_pic().equals("NA")) {
-            if (m.getRegType().equals("normal")&&m.getImage_status().equals("0")){
+            if (m.getRegType().equals("normal") && m.getImage_status().equals("0")) {
                 Picasso.get().
-                        load(BASE_APP_IMAGE__PATH+m.getProfile_pic())
+                        load(BASE_APP_IMAGE__PATH + m.getProfile_pic())
                         .placeholder(R.drawable.image_loader)
                         .into(viewholder.img_user);
 
@@ -93,7 +96,7 @@ public class MyBetDetailsAdapter extends RecyclerView.Adapter  {
                         })
                         .transform(new CircleTransform(constant))
                         .into(viewholder.img_user);*/
-            }else{
+            } else {
                 Picasso.get().
                         load(m.getProfile_pic())
                         .placeholder(R.drawable.image_loader)
@@ -138,31 +141,34 @@ public class MyBetDetailsAdapter extends RecyclerView.Adapter  {
             }
         });
     }
+
     private void callincviteApi(String regKey, String groupId, final int position) {
 
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddInviteMember(groupId,regKey);
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).AddInviteMember(groupId, regKey);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
-                    groupDetailsList(bodyString,position);
+                    groupDetailsList(bodyString, position);
                     //listOrderGroup(bodyString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void groupDetailsList(String bodyString, int position) {
         final JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString("Status");
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 groupListModels.remove(position);
                 notifyDataSetChanged();
             }
@@ -170,19 +176,22 @@ public class MyBetDetailsAdapter extends RecyclerView.Adapter  {
             e.printStackTrace();
         }
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
         TextView tv_Name, tv_Country;
         ConstraintLayout rowView;
+
         public ViewHolder(View convertView) {
             super(convertView);
-            rowView=  convertView.findViewById(R.id.row);
+            rowView = convertView.findViewById(R.id.row);
             img_user = convertView.findViewById(R.id.img_user);
             tv_Name = convertView.findViewById(R.id.tv_Name);
             tv_Country = convertView.findViewById(R.id.tv_Country);
             itemView.setTag(itemView);
         }
     }
+
     @Override
     public int getItemCount() {
         return groupListModels.size() > 0 ? groupListModels.size() : 0;

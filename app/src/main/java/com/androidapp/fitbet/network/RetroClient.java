@@ -32,6 +32,7 @@ public class RetroClient {
                 .build();
         return retrofit;
     }
+
     public static void setInterceptor(OkHttpClient.Builder clientBuilder) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         // set your desired log level
@@ -39,6 +40,7 @@ public class RetroClient {
         clientBuilder = new OkHttpClient.Builder();
         clientBuilder.addInterceptor(logging);  // <-- this is the important line!
     }
+
     public static OkHttpClient getOkHttpClient() {
         OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
         okHttpBuilder.callTimeout(2, TimeUnit.MINUTES);
@@ -53,17 +55,18 @@ public class RetroClient {
         }
         return okHttpBuilder.build();
     }
+
     private static Interceptor getInterceptor() {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request;
-                    Request original = chain.request();
-                    Request.Builder builder = original.newBuilder();
-                     request = builder
-                            .addHeader("Content-Type", "application/json")
-                            .method(original.method(), original.body())
-                            .build();
+                Request original = chain.request();
+                Request.Builder builder = original.newBuilder();
+                request = builder
+                        .addHeader("Content-Type", "application/json")
+                        .method(original.method(), original.body())
+                        .build();
                 return chain.proceed(request);
             }
         };

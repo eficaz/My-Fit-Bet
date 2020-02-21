@@ -2,27 +2,27 @@ package com.androidapp.fitbet.model;
 
 public class Invitemembers {
 
-    String reg_key="";
+    String reg_key = "";
 
-    String firstname="";
+    String firstname = "";
 
-    String email="";
+    String email = "";
 
-    String creditScore="";
+    String creditScore = "";
 
-    String won="";
+    String won = "";
 
-    String lost="";
+    String lost = "";
 
-    String country="";
+    String country = "";
 
-    String profile_pic="";
+    String profile_pic = "";
 
-    String regType="";
+    String regType = "";
 
-    String distance="";
+    String distance = "";
 
-    String image_status="";
+    String image_status = "";
 
     public String getImage_status() {
         return image_status;
@@ -31,7 +31,6 @@ public class Invitemembers {
     public void setImage_status(String image_status) {
         this.image_status = image_status;
     }
-
 
 
     public String getReg_key() {
@@ -113,7 +112,6 @@ public class Invitemembers {
     public void setDistance(String distance) {
         this.distance = distance;
     }
-
 
 
 }

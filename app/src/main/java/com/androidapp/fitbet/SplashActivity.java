@@ -22,7 +22,6 @@ import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -34,21 +33,20 @@ import java.util.Map;
 import static com.androidapp.fitbet.utils.Utils.permissionStatus;
 
 public class SplashActivity extends BaseActivity implements ForceUpdateChecker.OnUpdateNeededListener, MyDialog.MyDialogClickListener {
-    private final int SPLASH_TIME=1000;
-    private Handler handler=new Handler();
+    private final int SPLASH_TIME = 1000;
+    private Handler handler = new Handler();
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     private String TAG = "tag";
-private MyDialog.MyDialogClickListener mMyDialogClickListener;
+    private MyDialog.MyDialogClickListener mMyDialogClickListener;
     private String updateUrl;
-    private MyDialog noInternetDialog=null;
+    private MyDialog noInternetDialog = null;
     //https://medium.com/@sembozdemir/force-your-users-to-update-your-app-with-using-firebase-33f1e0bcec5a
 
     @Override
     public void onMessageReceived(String message) {
 
     }
-
 
 
     @Override
@@ -59,17 +57,17 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
         //mClassName=LoginActivity.class;
         permissionStatus = true;
         Utils.permissionDeclineStatus = false;
-        mMyDialogClickListener=this;
+        mMyDialogClickListener = this;
         AppPreference.getPrefsHelper().savePref(Contents.DASH_BOARD_POSICTION, "0");
         AppPreference.getPrefsHelper().savePref(Contents.BET_PAGE_POSICTION, "0");
         AppPreference.getPrefsHelper().savePref(Contents.START_STATUS, "true");
         ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
-        noInternetDialog=new MyDialog(this,null,getString(R.string.no_internet),getString(R.string.no_internet_message),getString(R.string.ok),"",true,"internet");
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checkAndRequestPermissions()) {
-                if (Utils.isConnectedToInternet(SplashActivity.this)){
+        noInternetDialog = new MyDialog(this, null, getString(R.string.no_internet), getString(R.string.no_internet_message), getString(R.string.ok), "", true, "internet");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkAndRequestPermissions()) {
+                if (Utils.isConnectedToInternet(SplashActivity.this)) {
                     startActivity();
-                } else{
+                } else {
                     noInternetDialog.show();
                 }
 
@@ -86,37 +84,39 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
                         // Log and toast
-                       // String msg = getString(R.string.msg_token_fmt, token);
+                        // String msg = getString(R.string.msg_token_fmt, token);
                         Log.d("----------------TAG", token);
                         //Toast.makeText(SplashActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
 
     }
+
     @Override
     public void onUpdateNeeded(final String updateUrl) {
 
-        this.updateUrl=updateUrl;
-        MyDialog myDialog=new MyDialog(this,mMyDialogClickListener,getString(R.string.new_version),getString(R.string.update_app),getString(R.string.update),getString(R.string.no_thanks),false,"update");
+        this.updateUrl = updateUrl;
+        MyDialog myDialog = new MyDialog(this, mMyDialogClickListener, getString(R.string.new_version), getString(R.string.update_app), getString(R.string.update), getString(R.string.no_thanks), false, "update");
         myDialog.show();
     }
 
     private void redirectStore(String updateUrl) {
 
-        if (Utils.isConnectedToInternet(SplashActivity.this)){
+        if (Utils.isConnectedToInternet(SplashActivity.this)) {
             final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        } else{
-       if(!noInternetDialog.isShowing())
-            noInternetDialog.show();
+        } else {
+            if (!noInternetDialog.isShowing())
+                noInternetDialog.show();
         }
     }
-    private  boolean checkAndRequestPermissions() {
+
+    private boolean checkAndRequestPermissions() {
         int READ_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         int WRITE_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int ACCESS_FINE_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-/*        int ACCESS_BACKGROUND_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.Loca);*/
+        /*        int ACCESS_BACKGROUND_LOCATION = ContextCompat.checkSelfPermission(this, Manifest.permission.Loca);*/
         int CAMERA = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         int ACCESS_NETWORK_STATE = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
         int ACCESS_WIFI_STATE = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
@@ -155,33 +155,35 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
             listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
             return false;
         }
         return true;
-    }         private Intent intent;
+    }
+
+    private Intent intent;
+
     private void startActivity() {
         handler = new Handler();
 
-            handler.postDelayed( new Runnable() {
-                @Override
-                public void run() {
-                    if(!AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,"").equals(""))
-                        intent=new Intent(SplashActivity.this, DashBoardActivity.class);
-                    else
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, "").equals(""))
+                    intent = new Intent(SplashActivity.this, DashBoardActivity.class);
+                else
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                startActivity(intent);
 
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
-                }
-            }, SPLASH_TIME);
-        }
-
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+            }
+        }, SPLASH_TIME);
+    }
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         Log.d(TAG, "Permission callback called-------");
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS: {
@@ -217,11 +219,11 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
                         Log.d(TAG, "sms & location services permission granted");
                         // process the normal flow
 
-                        if (Utils.isConnectedToInternet(SplashActivity.this)){
+                        if (Utils.isConnectedToInternet(SplashActivity.this)) {
                             startActivity();
-                        } else{
-                          if(! noInternetDialog.isShowing())
-                              noInternetDialog.show();
+                        } else {
+                            if (!noInternetDialog.isShowing())
+                                noInternetDialog.show();
                         }
 
                         //else any one or both the permissions are not granted
@@ -243,7 +245,7 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
                                 || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CHANGE_WIFI_STATE)
                                 || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
-                            MyDialog myDialog=new MyDialog(this,mMyDialogClickListener,getString(R.string.alert),getString(R.string.permission_required),getString(R.string.ok),getString(R.string.cancel),false,"permission");
+                            MyDialog myDialog = new MyDialog(this, mMyDialogClickListener, getString(R.string.alert), getString(R.string.permission_required), getString(R.string.ok), getString(R.string.cancel), false, "permission");
                             myDialog.show();
 
                         }
@@ -259,13 +261,13 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
     @Override
     protected void onResume() {
         super.onResume();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checkAndRequestPermissions()) {
-                if (Utils.isConnectedToInternet(SplashActivity.this)){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkAndRequestPermissions()) {
+                if (Utils.isConnectedToInternet(SplashActivity.this)) {
                     startActivity();
-                } else{
-                   if(!noInternetDialog.isShowing())
-                       noInternetDialog.show();
+                } else {
+                    if (!noInternetDialog.isShowing())
+                        noInternetDialog.show();
                 }
 
             }
@@ -273,36 +275,34 @@ private MyDialog.MyDialogClickListener mMyDialogClickListener;
     }
 
     @Override
-    public void onClick(MyDialog dialog, int type,String flag) {
+    public void onClick(MyDialog dialog, int type, String flag) {
 
-               switch (flag){
-                   case "permission":
-                    switch (type){
+        switch (flag) {
+            case "permission":
+                switch (type) {
 
-                        case 0:
-                            finish();
+                    case 0:
+                        finish();
                         break;
-                        case 1:
-                            checkAndRequestPermissions();
-                            break;
-                    }
+                    case 1:
+                        checkAndRequestPermissions();
+                        break;
+                }
 
 
+                break;
+            case "update":
+                switch (type) {
+                    case 0:
+                        finish();
+                        break;
+                    case 1:
+                        redirectStore(updateUrl);
+                        break;
+                }
 
-                   break;
-                   case "update":
-                       switch (type){
-                           case 0:
-                               finish();
-                               break;
-                           case 1:
-                               redirectStore(updateUrl);
-                               break;
-                       }
-
-                       break;
-               }
-
+                break;
+        }
 
 
     }

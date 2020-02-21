@@ -117,33 +117,33 @@ public class UpcomingBetDetailActivity extends BaseActivity {
     @Bind(R.id.btn_back)
     ImageView btn_back;
 
-    ArrayList<BetDetails>betDetails;
+    ArrayList<BetDetails> betDetails;
 
     MyBetDetailsAdapter betDetailsAdapter;
 
-    String betId="";
+    String betId = "";
 
-    Double lat,log;
+    Double lat, log;
 
-    String challengerid="";
+    String challengerid = "";
 
-    String distance="";
+    String distance = "";
 
-    String bettype="";
+    String bettype = "";
 
-    String route="";
+    String route = "";
 
     Bundle bundle;
-    String startlongitude,endlongitude,startlatitude,endlatitude;
-    String winerLat="",winerLog="";
+    String startlongitude, endlongitude, startlatitude, endlatitude;
+    String winerLat = "", winerLog = "";
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -151,21 +151,21 @@ public class UpcomingBetDetailActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -189,30 +189,30 @@ public class UpcomingBetDetailActivity extends BaseActivity {
                 callJoinApi();
             }
         });*/
-        if(bundle.getString(MYBETS_upcoming).equals("0")){
+        if (bundle.getString(MYBETS_upcoming).equals("0")) {
             message_row.setVisibility(View.GONE);
-        }else{
+        } else {
             message_row.setVisibility(View.VISIBLE);
         }
         message_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(UpcomingBetDetailActivity.this, MessageActivity.class);
-                i.putExtra(Contents.MYBETS_betid,bundle.getString(MYBETS_betid));
+                i.putExtra(Contents.MYBETS_betid, bundle.getString(MYBETS_betid));
                 startActivity(i);
             }
         });
         map_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!startlongitude.equals("") && !endlongitude.equals("")&& !startlatitude.equals("")&& !endlatitude.equals("")){
+                if (!startlongitude.equals("") && !endlongitude.equals("") && !startlatitude.equals("") && !endlatitude.equals("")) {
                     Intent i = new Intent(UpcomingBetDetailActivity.this, MapRedirectDetailedActivity.class);
-                    i.putExtra(Contents.MYBETS_startlongitude,startlongitude);
-                    i.putExtra(Contents.MYBETS_endlongitude,endlongitude);
-                    i.putExtra(Contents.MYBETS_startlatitude,startlatitude);
-                    i.putExtra(Contents.MYBETS_endlatitude,endlatitude);
-                    i.putExtra(Contents.POSITION_LATITUDE,winerLat);
-                    i.putExtra(Contents.POSITION_LONGITUDE,winerLog);
+                    i.putExtra(Contents.MYBETS_startlongitude, startlongitude);
+                    i.putExtra(Contents.MYBETS_endlongitude, endlongitude);
+                    i.putExtra(Contents.MYBETS_startlatitude, startlatitude);
+                    i.putExtra(Contents.MYBETS_endlatitude, endlatitude);
+                    i.putExtra(Contents.POSITION_LATITUDE, winerLat);
+                    i.putExtra(Contents.POSITION_LONGITUDE, winerLog);
                     startActivity(i);
                 }
             }
@@ -238,7 +238,7 @@ public class UpcomingBetDetailActivity extends BaseActivity {
     }
 
     private void callJoinApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),betId);
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).JoinBet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""), betId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -251,14 +251,16 @@ public class UpcomingBetDetailActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 CustomProgress.getInstance().hideProgress();
             }
         });
     }
+
     private void callMybetDetailsApi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(bundle.getString(MYBETS_betid),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Betdetail(bundle.getString(MYBETS_betid), AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -272,28 +274,30 @@ public class UpcomingBetDetailActivity extends BaseActivity {
                 }
 
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void BetDetailsList(String bodyString) {
-        try{
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 name.setText(jsonObject.getString(MYBETS_betname));
                 discreption.setText(jsonObject.getString(DESCRIPTION));
                 participants.setText(jsonObject.getString(TOTAL_PARTICIPANTS));
                 messages.setText(jsonObject.getString(TOTAL_MESSAGE));
-                betId= jsonObject.getString(MYBETS_betid);
+                betId = jsonObject.getString(MYBETS_betid);
                 credits.setText(jsonObject.getString(MYBETS_credit));
-                if(jsonObject.getString(MYBETS_challengerid).equals("null") || jsonObject.getString(MYBETS_challengerid).equals("")){
-                   //join_now.setVisibility(View.VISIBLE);
-                }else{
+                if (jsonObject.getString(MYBETS_challengerid).equals("null") || jsonObject.getString(MYBETS_challengerid).equals("")) {
+                    //join_now.setVisibility(View.VISIBLE);
+                } else {
                     //join_now.setVisibility(View.GONE);
                 }
-                try{
+                try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     df.setTimeZone(TimeZone.getTimeZone("UTC"));
                     Date date = df.parse(jsonObject.getString(MYBETS_date));
@@ -305,25 +309,25 @@ public class UpcomingBetDetailActivity extends BaseActivity {
                     output = outputformat.format(date);
                     calander.setText(outputformat.format(date));
                     clock.setText(outputformat1.format(date));
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                challengerid=jsonObject.getString(MYBETS_challengerid);
+                challengerid = jsonObject.getString(MYBETS_challengerid);
 
-                distance=jsonObject.getString(DISTANCE);
+                distance = jsonObject.getString(DISTANCE);
 
-                bettype=jsonObject.getString(MYBETS_bettype);
-                if(bettype.equals("distance")){
+                bettype = jsonObject.getString(MYBETS_bettype);
+                if (bettype.equals("distance")) {
                     map_row.setVisibility(View.GONE);
-                }else{
+                } else {
                     map_row.setVisibility(View.VISIBLE);
-                     startlongitude=jsonObject.getString(MYBETS_startlongitude);
-                     endlongitude=  jsonObject.getString(MYBETS_endlongitude);
-                     startlatitude=jsonObject.getString(MYBETS_startlatitude);
-                     endlatitude=jsonObject.getString(MYBETS_endlatitude);
+                    startlongitude = jsonObject.getString(MYBETS_startlongitude);
+                    endlongitude = jsonObject.getString(MYBETS_endlongitude);
+                    startlatitude = jsonObject.getString(MYBETS_startlatitude);
+                    endlatitude = jsonObject.getString(MYBETS_endlatitude);
                 }
 
-                route=jsonObject.getString(MYBETS_route);
+                route = jsonObject.getString(MYBETS_route);
 
                /* if(jsonObject.getString(MYBETS_started).equals("no")){
                    invite.setVisibility(View.GONE);
@@ -351,13 +355,13 @@ public class UpcomingBetDetailActivity extends BaseActivity {
                     model.setReg_key(jsonList.getString(REG_KEY1));
                     betDetails.add(model);
                 }
-                betDetailsAdapter = new MyBetDetailsAdapter(this, betDetails,jsonObject.getString(MYBETS_betid));
+                betDetailsAdapter = new MyBetDetailsAdapter(this, betDetails, jsonObject.getString(MYBETS_betid));
                 bet_list.setHasFixedSize(true);
                 bet_list.setLayoutManager(new LinearLayoutManager(this));
                 bet_list.setAdapter(betDetailsAdapter);
                 CustomProgress.getInstance().hideProgress();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

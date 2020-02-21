@@ -14,14 +14,16 @@ public class CustomProgress {
     public static CustomProgress customProgress = null;
     private Dialog mDialog;
     private GifView mProgressBar;
+
     public static CustomProgress getInstance() {
         if (customProgress == null) {
             customProgress = new CustomProgress();
         }
         return customProgress;
     }
+
     public void showProgress(Context context, String message, boolean cancelable) {
-        mDialog = new Dialog(context,android.R.style.Theme_Black);
+        mDialog = new Dialog(context, android.R.style.Theme_Black);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.progress_bar_dialog);
         mDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
@@ -34,6 +36,7 @@ public class CustomProgress {
         mDialog.setCanceledOnTouchOutside(cancelable);
         mDialog.show();
     }
+
     public void hideProgress() {
         if (mDialog != null) {
             mDialog.dismiss();
@@ -41,9 +44,9 @@ public class CustomProgress {
         }
     }
 
-   public boolean isShowing(){
-        if(mDialog!=null)
-        return mDialog.isShowing();
+    public boolean isShowing() {
+        if (mDialog != null)
+            return mDialog.isShowing();
         else return false;
-   }
+    }
 }

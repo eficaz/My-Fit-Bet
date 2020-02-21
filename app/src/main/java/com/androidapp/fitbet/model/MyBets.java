@@ -2,42 +2,42 @@ package com.androidapp.fitbet.model;
 
 public class MyBets {
 
-    String betid="";
+    String betid = "";
 
-    String betname="";
-    String description="";
+    String betname = "";
+    String description = "";
 
-    String date="";
-    String time="";
+    String date = "";
+    String time = "";
 
-    String enddate="";
-    String distance="";
+    String enddate = "";
+    String distance = "";
 
-    String startlocation="";
-    String endlocation="";
+    String startlocation = "";
+    String endlocation = "";
 
-    String startlongitude="";
-    String endlongitude="";
+    String startlongitude = "";
+    String endlongitude = "";
 
-    String startlatitude="";
-    String endlatitude="";
+    String startlatitude = "";
+    String endlatitude = "";
 
-    String route="";
-    String credit="";
+    String route = "";
+    String credit = "";
 
-    String winner="";
-    String status="";
+    String winner = "";
+    String status = "";
 
-    String createdate="";
-    String createdby="";
+    String createdate = "";
+    String createdby = "";
 
-    String bettype="";
-    String challengerid="";
+    String bettype = "";
+    String challengerid = "";
 
-    String started="";
-    String editstatus="";
+    String started = "";
+    String editstatus = "";
 
-    String total="";
+    String total = "";
 
 
     public String getTotal() {

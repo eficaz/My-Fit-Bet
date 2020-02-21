@@ -72,12 +72,12 @@ public class MyBetUserInviteActivity extends BaseActivity {
     Bundle bundle;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -85,8 +85,8 @@ public class MyBetUserInviteActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -95,11 +95,10 @@ public class MyBetUserInviteActivity extends BaseActivity {
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
     }
-
 
 
     @Override
@@ -108,7 +107,7 @@ public class MyBetUserInviteActivity extends BaseActivity {
         setContentView(R.layout.activity_my_bet_user_invite);
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
-        bundle =  getIntent().getExtras();
+        bundle = getIntent().getExtras();
         inviteGroupList();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -158,42 +157,44 @@ public class MyBetUserInviteActivity extends BaseActivity {
     }
 
     private void filter(String text) {
-if(inviteListAdapter!=null)
-        inviteListAdapter.filterList(text);
+        if (inviteListAdapter != null)
+            inviteListAdapter.filterList(text);
     }
+
     private void inviteGroupList() {
         CustomProgress.getInstance().showProgress(MyBetUserInviteActivity.this, "", false);
         final Bundle bundle = getIntent().getExtras();
-        if(bundle.getString(GROUP_ID)!= null ||bundle.getString(GROUP_ID)!= "")
-        {
-            String search="";
+        if (bundle.getString(GROUP_ID) != null || bundle.getString(GROUP_ID) != "") {
+            String search = "";
             Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).MybetsUserInvite(bundle.getString(GROUP_ID));
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         String bodyString = new String(response.body().bytes(), "UTF-8");
-                        groupDetailsList(bodyString,bundle.getString(GROUP_ID));
+                        groupDetailsList(bodyString, bundle.getString(GROUP_ID));
 
                         //listOrderGroup(bodyString);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                 }
             });
-        }else{
+        } else {
 
         }
     }
-    private void groupDetailsList(String bodyString,String groupId) {
-        try{
+
+    private void groupDetailsList(String bodyString, String groupId) {
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
             String betid = jsonObject.getString(MYBETS_betid);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 CustomProgress.getInstance().hideProgress();
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS_betindividuals);
@@ -216,16 +217,16 @@ if(inviteListAdapter!=null)
                     model.setImage_status(jsonList.getString(IMAGE_STATUS));
                     invitemembersDetails.add(model);
                 }
-                inviteListAdapter = new MybetUserInviteAdapter(this, invitemembersDetails,multiselect_list,betid);
+                inviteListAdapter = new MybetUserInviteAdapter(this, invitemembersDetails, multiselect_list, betid);
                 invite_group_list.setHasFixedSize(true);
                 invite_group_list.setLayoutManager(new LinearLayoutManager(this));
                 invite_group_list.setAdapter(inviteListAdapter);
                 inviteListAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 CustomProgress.getInstance().hideProgress();
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

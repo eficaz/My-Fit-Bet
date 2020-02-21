@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class PermissionHelper implements OnActivityPermissionCallback {
     private static final int OVERLAY_PERMISSION_REQ_CODE = 2;
     private static final int REQUEST_PERMISSIONS = 1;

@@ -14,15 +14,13 @@ import androidx.appcompat.app.AlertDialog;
  * Created by Jaison on 04/10/16.
  */
 
-public class AlertDialogHelper
-{
+public class AlertDialogHelper {
     Context context;
-    AlertDialog alertDialog=null;
+    AlertDialog alertDialog = null;
     AlertDialogListener callBack;
     Activity current_activity;
 
-    public AlertDialogHelper(Context context)
-    {
+    public AlertDialogHelper(Context context) {
         this.context = context;
         this.current_activity = (Activity) context;
         callBack = (AlertDialogListener) context;
@@ -30,7 +28,7 @@ public class AlertDialogHelper
 
     /**
      * Displays the AlertDialog with 3 Action buttons
-     *
+     * <p>
      * you can set cancelable property
      *
      * @param title
@@ -41,16 +39,15 @@ public class AlertDialogHelper
      * @param from
      * @param isCancelable
      */
-    public void showAlertDialog(String title,String message,String positive,String negative,String neutral,final int from,boolean isCancelable)
-    {
+    public void showAlertDialog(String title, String message, String positive, String negative, String neutral, final int from, boolean isCancelable) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(current_activity);
 
-        if(!TextUtils.isEmpty(title))
+        if (!TextUtils.isEmpty(title))
             alertDialogBuilder.setTitle(title);
-        if(!TextUtils.isEmpty(message))
+        if (!TextUtils.isEmpty(message))
             alertDialogBuilder.setMessage(message);
 
-        if(!TextUtils.isEmpty(positive)) {
+        if (!TextUtils.isEmpty(positive)) {
             alertDialogBuilder.setPositiveButton(positive,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -61,7 +58,7 @@ public class AlertDialogHelper
                         }
                     });
         }
-        if(!TextUtils.isEmpty(neutral)) {
+        if (!TextUtils.isEmpty(neutral)) {
             alertDialogBuilder.setNeutralButton(neutral,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -71,8 +68,7 @@ public class AlertDialogHelper
                         }
                     });
         }
-        if(!TextUtils.isEmpty(negative))
-        {
+        if (!TextUtils.isEmpty(negative)) {
             alertDialogBuilder.setNegativeButton(negative,
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -81,9 +77,7 @@ public class AlertDialogHelper
                             alertDialog.dismiss();
                         }
                     });
-        }
-        else
-        {
+        } else {
             try {
                 new Thread() {
                     @Override
@@ -114,7 +108,7 @@ public class AlertDialogHelper
 
     /**
      * Displays the AlertDialog with positive action button only
-     *
+     * <p>
      * you can set cancelable property
      *
      * @param title
@@ -123,14 +117,13 @@ public class AlertDialogHelper
      * @param from
      * @param isCancelable
      */
-    public void showAlertDialog(String title,String message,String positive,final int from,boolean isCancelable)
-    {
-        showAlertDialog(title,message,positive,"","",from,isCancelable);
+    public void showAlertDialog(String title, String message, String positive, final int from, boolean isCancelable) {
+        showAlertDialog(title, message, positive, "", "", from, isCancelable);
     }
 
     /**
      * Displays the AlertDialog with positive action button only
-     *
+     * <p>
      * cancelable property is false (Default)
      *
      * @param title
@@ -138,16 +131,14 @@ public class AlertDialogHelper
      * @param positive
      * @param from
      */
-    public void showAlertDialog(String title,String message,String positive,final int from)
-    {
-        showAlertDialog(title,message,positive,"","",from,false);
+    public void showAlertDialog(String title, String message, String positive, final int from) {
+        showAlertDialog(title, message, positive, "", "", from, false);
     }
 
 
     /**
-     *
      * Displays the AlertDialog with positive & negative buttons
-     *
+     * <p>
      * you can set cancelable property
      *
      * @param title
@@ -158,15 +149,13 @@ public class AlertDialogHelper
      * @param isCancelable
      */
 
-    public void showAlertDialog(String title,String message,String positive,String negative,final int from,boolean isCancelable)
-    {
-        showAlertDialog(title,message,positive,negative,"",from,isCancelable);
+    public void showAlertDialog(String title, String message, String positive, String negative, final int from, boolean isCancelable) {
+        showAlertDialog(title, message, positive, negative, "", from, isCancelable);
     }
 
     /**
-     *
      * Displays the AlertDialog with positive & negative buttons
-     *
+     * <p>
      * cancelable property is false (Default)
      *
      * @param title
@@ -175,14 +164,13 @@ public class AlertDialogHelper
      * @param negative
      * @param from
      */
-    public void showAlertDialog(String title,String message,String positive,String negative,final int from)
-    {
-        showAlertDialog(title,message,positive,negative,"",from,false);
+    public void showAlertDialog(String title, String message, String positive, String negative, final int from) {
+        showAlertDialog(title, message, positive, negative, "", from, false);
     }
 
     /**
      * Displays the AlertDialog with 3 Action buttons
-     *
+     * <p>
      * cancelable property is false (Default)
      *
      * @param title
@@ -192,16 +180,16 @@ public class AlertDialogHelper
      * @param neutral
      * @param from
      */
-    public void showAlertDialog(String title,String message,String positive,String negative,String neutral,final int from)
-    {
-        showAlertDialog(title,message,positive,negative,neutral,from,false);
+    public void showAlertDialog(String title, String message, String positive, String negative, String neutral, final int from) {
+        showAlertDialog(title, message, positive, negative, neutral, from, false);
     }
 
 
-    public interface AlertDialogListener
-    {
+    public interface AlertDialogListener {
         public void onPositiveClick(int from);
+
         public void onNegativeClick(int from);
+
         public void onNeutralClick(int from);
     }
 

@@ -156,30 +156,30 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     @Bind(R.id.txt_bet_not_completed)
     TextView txtBetNotCompleted;
 
-    String winnerPositionLat ="", winnerPositionLog ="";
+    String winnerPositionLat = "", winnerPositionLog = "";
     String imagepath;
     String videopath;
-    String uaser_image,winer_name,credit,winner_description;
+    String uaser_image, winer_name, credit, winner_description;
     private MediaController mediaController;
     ProgressDialog progressdialog;
     public static final int Progress_Dialog_Progress = 0;
     URL url;
-    URLConnection urlconnection ;
+    URLConnection urlconnection;
     int FileSize;
     InputStream inputstream;
     OutputStream outputstream;
     byte dataArray[] = new byte[1024];
     long totalSize = 0;
     //ImageView imageview;
-    String GetPath ;
+    String GetPath;
 
     SimpleExoPlayer exoPlayer;
 
-    String startlongitude="",endlongitude="",startlatitude="",endlatitude="";
+    String startlongitude = "", endlongitude = "", startlatitude = "", endlatitude = "";
 
-    String betName="";
-    String betid="";
-    String bet_TOTAL_PARTICIPANTS="";
+    String betName = "";
+    String betid = "";
+    String bet_TOTAL_PARTICIPANTS = "";
 
     ArrayList<ArchivesDetails> archivesDetailsList;
 
@@ -187,15 +187,15 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     private String originalRoute;
     private String originalStartLat;
     private String originalStartLog;
-    private String originalDistance, originalEndLat, originalEndLog,startAddress,endAddress;
+    private String originalDistance, originalEndLat, originalEndLog, startAddress, endAddress;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -203,8 +203,8 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -213,12 +213,11 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -239,8 +238,8 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
         wiiner_discreption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    final Dialog dialog = new Dialog(ArchiveDetailsActivity.this,android.R.style.Theme_NoTitleBar);
+                try {
+                    final Dialog dialog = new Dialog(ArchiveDetailsActivity.this, android.R.style.Theme_NoTitleBar);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.archive_list_details_dilog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -251,15 +250,15 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                     name.setText(winer_name);
                     credit1.setText(credit);
                     discreption.setText(winner_description);
-                    if(uaser_image.equals("")){
+                    if (uaser_image.equals("")) {
                         img_user.setImageDrawable(getResources().getDrawable(R.drawable.user_profile_avatar));
-                    }else{
+                    } else {
                         Picasso.get().load(uaser_image)
                                 .placeholder(R.drawable.image_loader)
                                 .into(img_user);
                     }
                     final ImageView btn_close = (ImageView) dialog.findViewById(R.id.btn_close);
-                   // RelativeLayout videorow = (RelativeLayout) dialog.findViewById(R.id.videorow);
+                    // RelativeLayout videorow = (RelativeLayout) dialog.findViewById(R.id.videorow);
                     //videorow.setVisibility(View.GONE);
                     btn_close.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -268,17 +267,16 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                         }
                     });
                     dialog.show();
-                }
-                catch(Exception ex){
-                    Log.e("Exception",ex.toString());
+                } catch (Exception ex) {
+                    Log.e("Exception", ex.toString());
                 }
             }
         });
         img_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    final Dialog dialog = new Dialog(ArchiveDetailsActivity.this,android.R.style.Theme_NoTitleBar);
+                try {
+                    final Dialog dialog = new Dialog(ArchiveDetailsActivity.this, android.R.style.Theme_NoTitleBar);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.imageview_dilog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -297,17 +295,16 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                             .placeholder(R.drawable.image_loader)
                             .into(image);
                     dialog.show();
-                }
-                catch(Exception ex){
-                    Log.e("Exception",ex.toString());
+                } catch (Exception ex) {
+                    Log.e("Exception", ex.toString());
                 }
             }
         });
         video_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(ArchiveDetailsActivity.this, Videoplayer.class);
-                i.putExtra("url",videopath);
+                Intent i = new Intent(ArchiveDetailsActivity.this, Videoplayer.class);
+                i.putExtra("url", videopath);
                 startActivity(i);
             }
         });
@@ -315,9 +312,9 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ArchiveDetailsActivity.this, MessageActivity.class);
-                i.putExtra(Contents.MYBETS_betid,betid);
-                i.putExtra(Contents.MYBETS_betname,betName);
-                i.putExtra(Contents.TOTAL_PARTICIPANTS,bet_TOTAL_PARTICIPANTS);
+                i.putExtra(Contents.MYBETS_betid, betid);
+                i.putExtra(Contents.MYBETS_betname, betName);
+                i.putExtra(Contents.TOTAL_PARTICIPANTS, bet_TOTAL_PARTICIPANTS);
                 startActivity(i);
             }
         });
@@ -325,16 +322,17 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ArchiveDetailsActivity.this, MapRedirectDetailedActivity.class);
-                Bundle b=new Bundle();;
-               b.putString(Contents.POSITION_LATITUDE, originalEndLat);
+                Bundle b = new Bundle();
+                ;
+                b.putString(Contents.POSITION_LATITUDE, originalEndLat);
                 b.putString(Contents.POSITION_LONGITUDE, originalEndLog);
-                b.putString(MYBETS_startlongitude,originalStartLog);
-                b.putString(MYBETS_startlatitude,originalStartLat);
-                b.putString("original route",originalRoute);
-                b.putString("original distance",originalDistance);
-                b.putString("start address",startAddress);
-                b.putString("end address",endAddress);
-                System.out.println("Extraaaa "+ originalEndLat +","+ originalEndLog +","+originalStartLog+","+originalStartLat);
+                b.putString(MYBETS_startlongitude, originalStartLog);
+                b.putString(MYBETS_startlatitude, originalStartLat);
+                b.putString("original route", originalRoute);
+                b.putString("original distance", originalDistance);
+                b.putString("start address", startAddress);
+                b.putString("end address", endAddress);
+                System.out.println("Extraaaa " + originalEndLat + "," + originalEndLog + "," + originalStartLog + "," + originalStartLat);
                 i.putExtras(b);
 
                 startActivity(i);
@@ -369,18 +367,22 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
     public void onPrepared(MediaPlayer mp) {
         mp.start();
     }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
     }
+
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
     }
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
+
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -395,6 +397,7 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                 return null;
         }
     }
+
     private void archivesDetailsGroupList() {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebetdetail(bundle.getString(Contents.MYBETS_betid));
         call.enqueue(new Callback<ResponseBody>() {
@@ -403,17 +406,19 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                 try {
                     String bodyString = new String(response.body().bytes(), "UTF-8");
                     Archivebetdetail(bodyString);
-                    System.out.println("Archive details == "+bodyString);
+                    System.out.println("Archive details == " + bodyString);
                     CustomProgress.getInstance().hideProgress();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void Archivebetdetail(String bodyString) {
         try {
             final JSONObject jsonObject = new JSONObject(bodyString);
@@ -421,42 +426,42 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
             if (data.equals("Ok")) {
 
 
-                if(jsonObject.getString("winnerkey").equals("no_winner")){
+                if (jsonObject.getString("winnerkey").equals("no_winner")) {
                     tableWinnerCard.setVisibility(View.GONE);
                     txtBetNotCompleted.setVisibility(View.VISIBLE);
                 }
 
-                     String data1 = jsonObject.getString(PARTICIPANT);
-                     JSONArray jsonArray = new JSONArray(data1);
-                     archivesDetailsList = new ArrayList<>();
-                     archivesDetailsList.clear();
-                     betName=jsonObject.getString(MYBETS_betname);
-                     betid=jsonObject.getString(MYBETS_betid);
-                     bet_TOTAL_PARTICIPANTS=jsonObject.getString(TOTAL_PARTICIPANTS);
-                     group_name.setText(jsonObject.getString(MYBETS_betname));
-                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                     double decimal= Double.parseDouble(String.valueOf(jsonObject.getString(MYBETS_distance)).replace("-",""));
-                     String input;
-                    if(jsonObject.getString(MYBETS_distance).length()>5){
-                         input = String.valueOf(decimal).substring(0,5);
-                    }else{
-                         input = String.valueOf(decimal);
-                    }
-                    double numberAsString= Double.parseDouble(input);
-                    participants.setText(""+decimalFormat.format(numberAsString/1000));
-                    if(jsonObject.getString(WINNER_description).equals("")){
-                        wiiner_discreption.setVisibility(View.GONE);
-                    }
-                    messages.setText(jsonObject.getString(TOTAL_MESSAGE));
-                    discreption.setText(jsonObject.getString(DESCRIPTION));
-                    credits.setText(jsonObject.getString(MYBETS_credit));
-                    user_count.setText(jsonObject.getString(TOTAL_PARTICIPANTS));
-                    startlatitude=jsonObject.getString(MYBETS_startlatitude);
-                    startlongitude=jsonObject.getString(MYBETS_startlongitude);
-                    endlatitude=jsonObject.getString(MYBETS_endlatitude);
-                    endlongitude=jsonObject.getString(MYBETS_endlongitude);
-                    country.setText(jsonObject.getString(WINNER_CREDIT));
-                try{
+                String data1 = jsonObject.getString(PARTICIPANT);
+                JSONArray jsonArray = new JSONArray(data1);
+                archivesDetailsList = new ArrayList<>();
+                archivesDetailsList.clear();
+                betName = jsonObject.getString(MYBETS_betname);
+                betid = jsonObject.getString(MYBETS_betid);
+                bet_TOTAL_PARTICIPANTS = jsonObject.getString(TOTAL_PARTICIPANTS);
+                group_name.setText(jsonObject.getString(MYBETS_betname));
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                double decimal = Double.parseDouble(String.valueOf(jsonObject.getString(MYBETS_distance)).replace("-", ""));
+                String input;
+                if (jsonObject.getString(MYBETS_distance).length() > 5) {
+                    input = String.valueOf(decimal).substring(0, 5);
+                } else {
+                    input = String.valueOf(decimal);
+                }
+                double numberAsString = Double.parseDouble(input);
+                participants.setText("" + decimalFormat.format(numberAsString / 1000));
+                if (jsonObject.getString(WINNER_description).equals("")) {
+                    wiiner_discreption.setVisibility(View.GONE);
+                }
+                messages.setText(jsonObject.getString(TOTAL_MESSAGE));
+                discreption.setText(jsonObject.getString(DESCRIPTION));
+                credits.setText(jsonObject.getString(MYBETS_credit));
+                user_count.setText(jsonObject.getString(TOTAL_PARTICIPANTS));
+                startlatitude = jsonObject.getString(MYBETS_startlatitude);
+                startlongitude = jsonObject.getString(MYBETS_startlongitude);
+                endlatitude = jsonObject.getString(MYBETS_endlatitude);
+                endlongitude = jsonObject.getString(MYBETS_endlongitude);
+                country.setText(jsonObject.getString(WINNER_CREDIT));
+                try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     df.setTimeZone(TimeZone.getTimeZone("UTC"));
                     Date date = df.parse(jsonObject.getString(MYBETS_date));
@@ -468,96 +473,96 @@ public class ArchiveDetailsActivity extends BaseActivity implements SurfaceHolde
                     output = outputformat.format(date);
                     calander.setText(outputformat.format(date));
                     clock.setText(outputformat1.format(date));
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                    if(jsonObject.getString(MYBETS_bettype).equals("distance")){
-                        map_row.setVisibility(View.GONE);
-                        originalRoute=jsonObject.getString("route");
-                        originalDistance=jsonObject.getString("distance");
+                if (jsonObject.getString(MYBETS_bettype).equals("distance")) {
+                    map_row.setVisibility(View.GONE);
+                    originalRoute = jsonObject.getString("route");
+                    originalDistance = jsonObject.getString("distance");
 
-                        originalStartLat=jsonObject.getString("startlatitude");
-                        originalStartLog=jsonObject.getString("startlongitude");
-                        originalEndLat =jsonObject.getString("endlatitude");
-                        originalEndLog =jsonObject.getString("endlongitude");
-                        startAddress=jsonObject.getString("startlocation");
-                        endAddress=jsonObject.getString("endlocation");
+                    originalStartLat = jsonObject.getString("startlatitude");
+                    originalStartLog = jsonObject.getString("startlongitude");
+                    originalEndLat = jsonObject.getString("endlatitude");
+                    originalEndLog = jsonObject.getString("endlongitude");
+                    startAddress = jsonObject.getString("startlocation");
+                    endAddress = jsonObject.getString("endlocation");
 
-                    }else{
-                        map_row.setVisibility(View.VISIBLE);
-                        originalRoute=jsonObject.getString("route");
-                        originalDistance=jsonObject.getString("distance");
+                } else {
+                    map_row.setVisibility(View.VISIBLE);
+                    originalRoute = jsonObject.getString("route");
+                    originalDistance = jsonObject.getString("distance");
 
-                        originalStartLat=jsonObject.getString("startlatitude");
-                        originalStartLog=jsonObject.getString("startlongitude");
-                        originalEndLat =jsonObject.getString("endlatitude");
-                        originalEndLog =jsonObject.getString("endlongitude");
-                        startAddress=jsonObject.getString("startlocation");
-                        endAddress=jsonObject.getString("endlocation");
-                    }
-                    if(jsonObject.getString(FILE_TYPE).equals("image")){
-                        imagepath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);
-                        String fileType="0";
-                        video_type.setVisibility(View.GONE);
-                        img_type.setVisibility(View.VISIBLE);
-                    }else if(jsonObject.getString(FILE_TYPE).equals("video")){
-                        videopath=""+Constant.BASE_APP_WINNER_IMAGE__PATH+jsonObject.getString(FILE_PATH);
-                        String fileType="1";
-                        video_type.setVisibility(View.VISIBLE);
-                        img_type.setVisibility(View.GONE);
-                    }else{
-                        video_type.setVisibility(View.GONE);
-                        img_type.setVisibility(View.GONE);
-                    }
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonList = jsonArray.getJSONObject(i);
-                        if(jsonList.getString(POSITION).equals("1")){
-                            wiinerName.setText(jsonList.getString(FIRST_NAME));
-                            winnerPositionLat =jsonList.getString(POSITION_LATITUDE);
-                            winnerPositionLog =jsonList.getString(POSITION_LONGITUDE);
+                    originalStartLat = jsonObject.getString("startlatitude");
+                    originalStartLog = jsonObject.getString("startlongitude");
+                    originalEndLat = jsonObject.getString("endlatitude");
+                    originalEndLog = jsonObject.getString("endlongitude");
+                    startAddress = jsonObject.getString("startlocation");
+                    endAddress = jsonObject.getString("endlocation");
+                }
+                if (jsonObject.getString(FILE_TYPE).equals("image")) {
+                    imagepath = "" + Constant.BASE_APP_WINNER_IMAGE__PATH + jsonObject.getString(FILE_PATH);
+                    String fileType = "0";
+                    video_type.setVisibility(View.GONE);
+                    img_type.setVisibility(View.VISIBLE);
+                } else if (jsonObject.getString(FILE_TYPE).equals("video")) {
+                    videopath = "" + Constant.BASE_APP_WINNER_IMAGE__PATH + jsonObject.getString(FILE_PATH);
+                    String fileType = "1";
+                    video_type.setVisibility(View.VISIBLE);
+                    img_type.setVisibility(View.GONE);
+                } else {
+                    video_type.setVisibility(View.GONE);
+                    img_type.setVisibility(View.GONE);
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonList = jsonArray.getJSONObject(i);
+                    if (jsonList.getString(POSITION).equals("1")) {
+                        wiinerName.setText(jsonList.getString(FIRST_NAME));
+                        winnerPositionLat = jsonList.getString(POSITION_LATITUDE);
+                        winnerPositionLog = jsonList.getString(POSITION_LONGITUDE);
 
-                            winer_name=jsonList.getString(FIRST_NAME);
-                            credit=jsonObject.getString(WINNER_CREDIT);
-                            winner_description=jsonObject.getString(WINNER_description);
-                            if (!jsonList.getString(PROFILE_PIC).equals("NA")) {
-                                if (jsonList.getString(REG_TYPE).equals("normal")&&jsonList.getString(IMAGE_STATUS).equals("0")){
-                                    uaser_image=Constant.BASE_APP_IMAGE__PATH+jsonList.getString(PROFILE_PIC);
-                                }else{
-                                    uaser_image=jsonList.getString(PROFILE_PIC);
-                                }
-                            }else{
-                                uaser_image="";
+                        winer_name = jsonList.getString(FIRST_NAME);
+                        credit = jsonObject.getString(WINNER_CREDIT);
+                        winner_description = jsonObject.getString(WINNER_description);
+                        if (!jsonList.getString(PROFILE_PIC).equals("NA")) {
+                            if (jsonList.getString(REG_TYPE).equals("normal") && jsonList.getString(IMAGE_STATUS).equals("0")) {
+                                uaser_image = Constant.BASE_APP_IMAGE__PATH + jsonList.getString(PROFILE_PIC);
+                            } else {
+                                uaser_image = jsonList.getString(PROFILE_PIC);
                             }
+                        } else {
+                            uaser_image = "";
                         }
-                        ArchivesDetails model = new ArchivesDetails();
-                        model.setPosition(jsonList.getString(POSITION));
-                        model.setReg_key(jsonList.getString(REG_KEY));
-                        model.setFirstname(jsonList.getString(FIRST_NAME));
-                        model.setEmail(jsonList.getString(EMAIL));
-                        model.setCreditScore(jsonList.getString(DASH_BOARD_CREDIT_SCORE));
-                        model.setWon(jsonList.getString(WON));
-                        model.setLost(jsonList.getString(LOST));
-                        model.setCountry(jsonList.getString(DASH_BOARD_COUNTRY));
-                        model.setProfile_pic(jsonList.getString(PROFILE_PIC));
-                        model.setRegType(jsonList.getString(REG_TYPE));
-                        model.setImage_status(jsonList.getString(IMAGE_STATUS));
-                        model.setDistance(jsonList.getString(DISTANCE));
-                        model.setStartdate(jsonList.getString(START_DATE));
-                        model.setPositionlongitude(jsonList.getString(POSITION_LONGITUDE));
-                        model.setPositionlatitude(jsonList.getString(POSITION_LATITUDE));
-                        model.setStartlocation(jsonList.getString(MYBETS_startlocation));
-                        model.setEndlocation(jsonList.getString(MYBETS_endlocation));
-                        model.setStartlatitude(jsonList.getString(MYBETS_startlatitude));
-                        model.setStartlongitude(jsonList.getString(MYBETS_startlongitude));
-                        model.setRoute(jsonList.getString(MYBETS_route));
-                        archivesDetailsList.add(model);
                     }
+                    ArchivesDetails model = new ArchivesDetails();
+                    model.setPosition(jsonList.getString(POSITION));
+                    model.setReg_key(jsonList.getString(REG_KEY));
+                    model.setFirstname(jsonList.getString(FIRST_NAME));
+                    model.setEmail(jsonList.getString(EMAIL));
+                    model.setCreditScore(jsonList.getString(DASH_BOARD_CREDIT_SCORE));
+                    model.setWon(jsonList.getString(WON));
+                    model.setLost(jsonList.getString(LOST));
+                    model.setCountry(jsonList.getString(DASH_BOARD_COUNTRY));
+                    model.setProfile_pic(jsonList.getString(PROFILE_PIC));
+                    model.setRegType(jsonList.getString(REG_TYPE));
+                    model.setImage_status(jsonList.getString(IMAGE_STATUS));
+                    model.setDistance(jsonList.getString(DISTANCE));
+                    model.setStartdate(jsonList.getString(START_DATE));
+                    model.setPositionlongitude(jsonList.getString(POSITION_LONGITUDE));
+                    model.setPositionlatitude(jsonList.getString(POSITION_LATITUDE));
+                    model.setStartlocation(jsonList.getString(MYBETS_startlocation));
+                    model.setEndlocation(jsonList.getString(MYBETS_endlocation));
+                    model.setStartlatitude(jsonList.getString(MYBETS_startlatitude));
+                    model.setStartlongitude(jsonList.getString(MYBETS_startlongitude));
+                    model.setRoute(jsonList.getString(MYBETS_route));
+                    archivesDetailsList.add(model);
+                }
                 archiveDetailsListAdapter = new ArchiveDetailsListAdapter(ArchiveDetailsActivity.this, archivesDetailsList);
                 invite_group_list.setHasFixedSize(true);
                 invite_group_list.setLayoutManager(new LinearLayoutManager(ArchiveDetailsActivity.this));
                 invite_group_list.setAdapter(archiveDetailsListAdapter);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

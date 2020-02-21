@@ -27,7 +27,6 @@ import com.androidapp.fitbet.utils.AppPreference;
 import com.androidapp.fitbet.utils.Contents;
 import com.androidapp.fitbet.utils.RecyclerItemClickListener;
 import com.androidapp.fitbet.utils.SLApplication;
-import com.google.android.gms.location.LocationCallback;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -85,12 +84,12 @@ public class ArchivesListActivity extends BaseActivity {
     //Bundle bundle;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -98,21 +97,21 @@ public class ArchivesListActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -137,16 +136,18 @@ public class ArchivesListActivity extends BaseActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 //after the change calling the method and passing the search input
-                if(editable.toString().equals("")){
+                if (editable.toString().equals("")) {
                     filter(" ");
-                }else{
+                } else {
 
 
                     filter(editable.toString());
@@ -158,9 +159,10 @@ public class ArchivesListActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Intent i = new Intent(ArchivesListActivity.this, ArchiveDetailsActivity.class);
-                i.putExtra(Contents.MYBETS_betid,archivesListDetails.get(position).getBetid());
+                i.putExtra(Contents.MYBETS_betid, archivesListDetails.get(position).getBetid());
                 startActivity(i);
             }
+
             @Override
             public void onItemLongClick(View view, int position) {
 
@@ -194,33 +196,35 @@ public class ArchivesListActivity extends BaseActivity {
     }
 
     private void filter(String text) {
-        if(text.equals("")){
+        if (text.equals("")) {
             archivesListAdapter.filterList(" ");
-        }else{
+        } else {
             archivesListAdapter.filterList(text);
         }
 
     }
 
     private void archivesGroupList() {
-            String search = "";
-            Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        String bodyString = new String(response.body().bytes(), "UTF-8");
-                        groupDetailsList(bodyString);
-                        CustomProgress.getInstance().hideProgress();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        String search = "";
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String bodyString = new String(response.body().bytes(), "UTF-8");
+                    groupDetailsList(bodyString);
+                    CustomProgress.getInstance().hideProgress();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                }
-            });
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            }
+        });
     }
+
     private void groupDetailsList(String bodyString) {
         try {
             final JSONObject jsonObject = new JSONObject(bodyString);
@@ -229,9 +233,9 @@ public class ArchivesListActivity extends BaseActivity {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 archivesListDetails = new ArrayList<>();

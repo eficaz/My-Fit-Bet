@@ -94,7 +94,7 @@ import static com.androidapp.fitbet.utils.SLApplication.getContext;
 import static com.androidapp.fitbet.utils.Utils.getAddressFromGPSLocation;
 
 
-public class MapDistanceByLoctionActivity extends BaseActivity  implements OnMapReadyCallback, LocationReceiveListener {
+public class MapDistanceByLoctionActivity extends BaseActivity implements OnMapReadyCallback, LocationReceiveListener {
 
     private GoogleMap mMap;
     int AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -130,30 +130,30 @@ public class MapDistanceByLoctionActivity extends BaseActivity  implements OnMap
     TableRow close_row;
 
 
-    Double latitude =0.0, longitude =0.0;
+    Double latitude = 0.0, longitude = 0.0;
 
-    Double startALat=0.0;
-    Double startALog=0.0;
+    Double startALat = 0.0;
+    Double startALog = 0.0;
 
-    Double endALat=0.0;
-    Double endALog=0.0;
+    Double endALat = 0.0;
+    Double endALog = 0.0;
 
-    Double start_loc_lat=0.0;
-    Double start_loc_log=0.0;
+    Double start_loc_lat = 0.0;
+    Double start_loc_log = 0.0;
 
-    int kmInDec=0;
+    int kmInDec = 0;
 
     Marker startMarker;
     Marker entMarker;
     Polyline polyline;
-    int startOrend=0;
-    String distance_draw="0";
-    Double startDrowLat=0.0,startDrowLog=0.0,endDrowLat=0.0,endDrowLog=0.0;
+    int startOrend = 0;
+    String distance_draw = "0";
+    Double startDrowLat = 0.0, startDrowLog = 0.0, endDrowLat = 0.0, endDrowLog = 0.0;
 
-    String start_point,end_point;
+    String start_point, end_point;
 
-    boolean km_m=false;
-    ArrayList markerPoints= new ArrayList();
+    boolean km_m = false;
+    ArrayList markerPoints = new ArrayList();
 
     public static final int PATTERN_DASH_LENGTH_PX = 20;
     public static final int PATTERN_GAP_LENGTH_PX = 4;
@@ -163,21 +163,21 @@ public class MapDistanceByLoctionActivity extends BaseActivity  implements OnMap
     public static final List<PatternItem> PATTERN_POLYGON_ALPHA = Arrays.asList(GAP, DASH);
 
     PolylineOptions lineOptions = null;
-    boolean curentMarker=true;
+    boolean curentMarker = true;
 
 
     String overview_polyline;
-private Intent serviceIntent;
-private LocationManager mLocationManager;
-private LocationReceiveListener locationReceiveListener;
+    private Intent serviceIntent;
+    private LocationManager mLocationManager;
+    private LocationReceiveListener locationReceiveListener;
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -185,8 +185,8 @@ private LocationReceiveListener locationReceiveListener;
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
@@ -195,12 +195,11 @@ private LocationReceiveListener locationReceiveListener;
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -211,9 +210,9 @@ private LocationReceiveListener locationReceiveListener;
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, filter);
         distance.setText("");
-        locationReceiveListener=this;
+        locationReceiveListener = this;
         LocReceiver.registerLocationReceiveListener(locationReceiveListener);
-        mLocationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         serviceIntent = new Intent(this, LocService.class);
         if (!SLApplication.isServiceRunning)
             startLocationService(serviceIntent);
@@ -221,17 +220,17 @@ private LocationReceiveListener locationReceiveListener;
             return;
         }
 
-        mLocationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         //mMapView = (MapView)findViewById(R.id.map);
 
 
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
-        if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("true")){
-            curentMarker=true;
+        if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("true")) {
+            curentMarker = true;
             CustomProgress.getInstance().showProgress(MapDistanceByLoctionActivity.this, "", false);
-        }else{
-            curentMarker=true;
+        } else {
+            curentMarker = true;
             CustomProgress.getInstance().showProgress(MapDistanceByLoctionActivity.this, "", false);
         }
 
@@ -254,20 +253,15 @@ private LocationReceiveListener locationReceiveListener;
             });*/
 
 
-
-
-
-
         close_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-
-                if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("true")){
+                if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("true")) {
                     Intent i = new Intent(MapDistanceByLoctionActivity.this, BetCreationActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("key1","value1");
+                    bundle.putString("key1", "value1");
                     bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
                     bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
                     bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -279,10 +273,10 @@ private LocationReceiveListener locationReceiveListener;
                     i.putExtras(bundle);
                     startActivity(i);
                     finish();
-                }else if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("false")){
+                } else if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("false")) {
                     Intent i = new Intent(MapDistanceByLoctionActivity.this, EditBetCreationActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("key1","value1");
+                    bundle.putString("key1", "value1");
                     bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
                     bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
                     bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -298,16 +292,15 @@ private LocationReceiveListener locationReceiveListener;
                 }
 
 
-
             }
         });
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("true")){
+                if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("true")) {
                     Intent i = new Intent(MapDistanceByLoctionActivity.this, BetCreationActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("key1","value1");
+                    bundle.putString("key1", "value1");
                     bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
                     bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
                     bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -319,10 +312,10 @@ private LocationReceiveListener locationReceiveListener;
                     i.putExtras(bundle);
                     startActivity(i);
                     finish();
-                }else if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("false")){
+                } else if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("false")) {
                     Intent i = new Intent(MapDistanceByLoctionActivity.this, EditBetCreationActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("key1","value1");
+                    bundle.putString("key1", "value1");
                     bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
                     bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
                     bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -341,7 +334,7 @@ private LocationReceiveListener locationReceiveListener;
         startpoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startOrend=0;
+                startOrend = 0;
                 autocompletePlace();
 
             }
@@ -349,14 +342,14 @@ private LocationReceiveListener locationReceiveListener;
         row_startpoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startOrend=0;
+                startOrend = 0;
                 autocompletePlace();
             }
         });
         row_endpoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startOrend=1;
+                startOrend = 1;
                 autocompletePlace();
                 setRow.setVisibility(View.VISIBLE);
             }
@@ -364,7 +357,7 @@ private LocationReceiveListener locationReceiveListener;
         endpoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startOrend=1;
+                startOrend = 1;
                 autocompletePlace();
                 setRow.setVisibility(View.VISIBLE);
 
@@ -373,13 +366,13 @@ private LocationReceiveListener locationReceiveListener;
         distance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Location startPoint=new Location("locationA");
+                Location startPoint = new Location("locationA");
                 startPoint.setLatitude(startALat);
                 startPoint.setLongitude(startALog);
-                Location endPoint=new Location("locationA");
+                Location endPoint = new Location("locationA");
                 endPoint.setLatitude(endALat);
                 endPoint.setLongitude(endALog);
-                double distance=startPoint.distanceTo(endPoint);
+                double distance = startPoint.distanceTo(endPoint);
             }
         });
         set.setOnClickListener(new View.OnClickListener() {
@@ -387,10 +380,10 @@ private LocationReceiveListener locationReceiveListener;
             public void onClick(View v) {
 
 
-                if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("true")){
+                if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("true")) {
                     Intent i = new Intent(MapDistanceByLoctionActivity.this, BetCreationActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("key1","value1");
+                    bundle.putString("key1", "value1");
                     bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
                     bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
                     bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -402,10 +395,10 @@ private LocationReceiveListener locationReceiveListener;
                     i.putExtras(bundle);
                     startActivity(i);
                     finish();
-                }else  if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("false")){
+                } else if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("false")) {
                     Intent i = new Intent(MapDistanceByLoctionActivity.this, EditBetCreationActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("key1","value1");
+                    bundle.putString("key1", "value1");
                     bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
                     bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
                     bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -421,25 +414,25 @@ private LocationReceiveListener locationReceiveListener;
                 }
 
 
-
             }
         });
 
     }
 
     private void startLocationService(Intent intent) {
-if(!SLApplication.isServiceRunning) {
-    startService(intent);
-    SLApplication.isServiceRunning = true;
-}
+        if (!SLApplication.isServiceRunning) {
+            startService(intent);
+            SLApplication.isServiceRunning = true;
+        }
     }
 
     private void stopLocationService(Intent intent) {
-        if(SLApplication.isServiceRunning) {
+        if (SLApplication.isServiceRunning) {
             stopService(intent);
             SLApplication.isServiceRunning = false;
         }
     }
+
     @Override
     public void onStop() {
 
@@ -454,10 +447,10 @@ if(!SLApplication.isServiceRunning) {
 
         stopLocationService(serviceIntent);
 
-        if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("true")){
+        if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("true")) {
             Intent i = new Intent(MapDistanceByLoctionActivity.this, BetCreationActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("key1","value1");
+            bundle.putString("key1", "value1");
             bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
             bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
             bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -469,10 +462,10 @@ if(!SLApplication.isServiceRunning) {
             i.putExtras(bundle);
             startActivity(i);
             finish();
-        }else  if(AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE,"").equals("false")){
+        } else if (AppPreference.getPrefsHelper().getPref(Contents.MYBETS_EDIT_OR_CREATE, "").equals("false")) {
             Intent i = new Intent(MapDistanceByLoctionActivity.this, EditBetCreationActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("key1","value1");
+            bundle.putString("key1", "value1");
             bundle.putString(Contents.pass_startlatitude, String.valueOf(startALat));
             bundle.putString(Contents.pass_startlongitude, String.valueOf(startALog));
             bundle.putString(Contents.pass_endlatitude, String.valueOf(endALat));
@@ -489,14 +482,13 @@ if(!SLApplication.isServiceRunning) {
     }
 
 
-
     @Override
     public void onLocationReceived(Double lat, Double lon) {
-        latitude =lat;
-        longitude=lon;
-        if(lat!=null){
-            if(curentMarker==true){
-                curentMarker=false;
+        latitude = lat;
+        longitude = lon;
+        if (lat != null) {
+            if (curentMarker == true) {
+                curentMarker = false;
                 mMapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap mMap) {
@@ -504,13 +496,13 @@ if(!SLApplication.isServiceRunning) {
                         LatLng latLng = new LatLng(latitude, longitude);
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(18).build();
                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                        startMarker=mMap.addMarker(new MarkerOptions().position(latLng).title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)));
-                        String abc[]=getAddressFromGPSLocation(MapDistanceByLoctionActivity.this,latitude, longitude);
+                        startMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("").snippet("").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)));
+                        String abc[] = getAddressFromGPSLocation(MapDistanceByLoctionActivity.this, latitude, longitude);
                         startpoint.setVisibility(View.VISIBLE);
                         startpoint.setText(abc[4]);
-                        start_point=abc[4];
-                        startALat= Double.valueOf(AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LAT,""));
-                        startALog= Double.valueOf(AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LOG,""));
+                        start_point = abc[4];
+                        startALat = Double.valueOf(AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LAT, ""));
+                        startALog = Double.valueOf(AppPreference.getPrefsHelper().getPref(Contents.FOR_START_BET_LOG, ""));
                     }
                 });
                 CustomProgress.getInstance().hideProgress();
@@ -533,11 +525,12 @@ if(!SLApplication.isServiceRunning) {
             }
             startpoint.setVisibility(View.VISIBLE);
             startpoint.setText(locationAddress);
-            start_point=locationAddress;
+            start_point = locationAddress;
         }
     }
+
     private void drawMapViewRoot(Double startALat, Double startALog, Double endALat, Double endALog) {
-        if(!(startALat ==0.0) ||!(startALog==0.0)||!(endALat==0.0)||!(endALog==00)){
+        if (!(startALat == 0.0) || !(startALog == 0.0) || !(endALat == 0.0) || !(endALog == 00)) {
             int Radius = 6371;
             double lat1 = startALat;
             double lat2 = endALat;
@@ -558,15 +551,16 @@ if(!SLApplication.isServiceRunning) {
             int meterInDec = Integer.valueOf(newFormat.format(meter));
             set.setVisibility(View.VISIBLE);
             distance.setVisibility(View.VISIBLE);
-            String origin=startALat+","+startALog;
-            String dest=endALat+","+endALog;
-            drawRoute(origin,dest);
-        }else{
+            String origin = startALat + "," + startALog;
+            String dest = endALat + "," + endALog;
+            drawRoute(origin, dest);
+        } else {
             //distance.setText("0" +" km");
         }
     }
-    private void drawRoute(String origin, String dest){
-        Call<ResponseBody> call = RetroClient.getClient(DRAW_MAP_BASE_URL).create(RetroInterface.class).MapDetails(origin,dest,"driving",getString(R.string.google_maps_key));
+
+    private void drawRoute(String origin, String dest) {
+        Call<ResponseBody> call = RetroClient.getClient(DRAW_MAP_BASE_URL).create(RetroInterface.class).MapDetails(origin, dest, "driving", getString(R.string.google_maps_key));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -578,11 +572,13 @@ if(!SLApplication.isServiceRunning) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
         // Parsing the data in non-ui thread
         @Override
@@ -591,61 +587,60 @@ if(!SLApplication.isServiceRunning) {
             List<List<HashMap<String, String>>> routes = null;
             try {
                 jObject = new JSONObject(jsonData[0]);
-   System.out.println("Parser task 1 = "+jsonData[0]);
+                System.out.println("Parser task 1 = " + jsonData[0]);
                 DataParser parser = new DataParser();
                 Log.d("ParserTask2", parser.toString());
                 routes = parser.parse(jObject);
-                Log.d("ParserTask3","Executing routes");
-                Log.d("ParserTask4",routes.toString());
+                Log.d("ParserTask3", "Executing routes");
+                Log.d("ParserTask4", routes.toString());
                 final JSONObject jsonObject_routes = new JSONObject(jsonData[0].toString());
                 String data_routes = jsonObject_routes.getString(ROUTES);
-                JSONArray yukilanarray =  new JSONArray(data_routes);
+                JSONArray yukilanarray = new JSONArray(data_routes);
                 String legs = null;
-                for(int i=0;i<yukilanarray.length();i++)
-                {
+                for (int i = 0; i < yukilanarray.length(); i++) {
                     JSONObject jb1 = yukilanarray.getJSONObject(i);
                     legs = jb1.getString(LEGS);
-                    String overview_polyline_routes_data  = jb1.getString(OVERVIEW_POLYLINE);
+                    String overview_polyline_routes_data = jb1.getString(OVERVIEW_POLYLINE);
                     final JSONObject overview_polyline_routes = new JSONObject(overview_polyline_routes_data);
-                   String  poly = overview_polyline_routes.getString(POINTS);
-                    overview_polyline= StringEscapeUtils.escapeJava(poly);
+                    String poly = overview_polyline_routes.getString(POINTS);
+                    overview_polyline = StringEscapeUtils.escapeJava(poly);
                 }
-                JSONArray legsarray =  new JSONArray(legs);
-                for(int i=0;i<legsarray.length();i++)
-                {
+                JSONArray legsarray = new JSONArray(legs);
+                for (int i = 0; i < legsarray.length(); i++) {
                     JSONObject jb1 = legsarray.getJSONObject(i);
-                    String data_start_location= jb1.getString(START_LOCATION);
+                    String data_start_location = jb1.getString(START_LOCATION);
                     String data_end_location = jb1.getString(END_LOCATION);
-                    String distance=jb1.getString(DISTANCE);
+                    String distance = jb1.getString(DISTANCE);
                     final JSONObject jsonObject_distance = new JSONObject(distance);
                     //String dis=jsonObject_distance.getString("text").replace("km","").replace("m","");
                     String str = jsonObject_distance.getString("text").substring(jsonObject_distance.getString("text").length() - 2);
                     double lave_bet_dis;
 
-                    if(str.equals("km")){
-                        distance_draw= String.valueOf(Double.parseDouble(jsonObject_distance.getString("text").replace("km","").trim())*1000);
-                        km_m=true;
-                    }else{
-                        distance_draw= String.valueOf(Double.parseDouble(jsonObject_distance.getString("text").replace("m","").trim()));
-                        km_m=false;
+                    if (str.equals("km")) {
+                        distance_draw = String.valueOf(Double.parseDouble(jsonObject_distance.getString("text").replace("km", "").trim()) * 1000);
+                        km_m = true;
+                    } else {
+                        distance_draw = String.valueOf(Double.parseDouble(jsonObject_distance.getString("text").replace("m", "").trim()));
+                        km_m = false;
                     }
                     final JSONObject jsonObject_start_location = new JSONObject(data_start_location);
                     final JSONObject jsonObject_data_end_location = new JSONObject(data_end_location);
-                     startDrowLat= Double.valueOf(jsonObject_start_location.getString("lat"));
-                     startDrowLog= Double.valueOf(jsonObject_start_location.getString("lng"));
-                     endDrowLat= Double.valueOf(jsonObject_data_end_location.getString("lat"));
-                     endDrowLog= Double.valueOf(jsonObject_data_end_location.getString("lng"));
-                     startALat=startDrowLat;
-                     startALog=startDrowLog;
-                     endALat=endDrowLat;
-                     endALog=endDrowLog;
+                    startDrowLat = Double.valueOf(jsonObject_start_location.getString("lat"));
+                    startDrowLog = Double.valueOf(jsonObject_start_location.getString("lng"));
+                    endDrowLat = Double.valueOf(jsonObject_data_end_location.getString("lat"));
+                    endDrowLog = Double.valueOf(jsonObject_data_end_location.getString("lng"));
+                    startALat = startDrowLat;
+                    startALog = startDrowLog;
+                    endALat = endDrowLat;
+                    endALog = endDrowLog;
                 }
             } catch (Exception e) {
-                Log.d("ParserTask5",e.toString());
+                Log.d("ParserTask5", e.toString());
                 e.printStackTrace();
             }
             return routes;
         }
+
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
@@ -668,25 +663,25 @@ if(!SLApplication.isServiceRunning) {
                 lineOptions.color(ContextCompat.getColor(getContext(), R.color.black));
                 lineOptions.addAll(points);
                 lineOptions.width(10);
-           /*     lineOptions.pattern(PATTERN_POLYGON_ALPHA);*/
-                Log.d("onPostExecute","onPostExecute lineoptions decoded");
+                /*     lineOptions.pattern(PATTERN_POLYGON_ALPHA);*/
+                Log.d("onPostExecute", "onPostExecute lineoptions decoded");
             }
             // Drawing polyline in the Google Map for the i-th route
-            if(lineOptions != null) {
+            if (lineOptions != null) {
                 mMapView.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap mMap1) {
                         mMap = mMap1;
-                        if(km_m==true){
-                            distance.setText((Double.parseDouble(distance_draw)/1000) +"Km");
-                        }else{
-                            distance.setText((Double.parseDouble(distance_draw)/1000) +"Km");
+                        if (km_m == true) {
+                            distance.setText((Double.parseDouble(distance_draw) / 1000) + "Km");
+                        } else {
+                            distance.setText((Double.parseDouble(distance_draw) / 1000) + "Km");
                         }
 
                       /*  double dis= Double.parseDouble(distance_draw/)/1000;
                         distance.setText(""+dis+"km");*/
-                        startMarker=mMap.addMarker(new MarkerOptions().position(new LatLng(startDrowLat, startDrowLog)).title("Start").snippet("Start").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)));
-                        entMarker=mMap.addMarker(new MarkerOptions().position(new LatLng(endDrowLat, endDrowLog)).title("End").snippet("End").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location)));
+                        startMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(startDrowLat, startDrowLog)).title("Start").snippet("Start").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_location)));
+                        entMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(endDrowLat, endDrowLog)).title("End").snippet("End").icon(BitmapDescriptorFactory.fromResource(R.drawable.end_location)));
                         startMarker.setDraggable(true);
                         entMarker.setDraggable(true);
 
@@ -703,16 +698,18 @@ if(!SLApplication.isServiceRunning) {
                             @Override
                             public void onMarkerDragStart(Marker marker) {
                             }
+
                             @Override
                             public void onMarkerDrag(Marker marker) {
                             }
+
                             @Override
                             public void onMarkerDragEnd(Marker marker) {
-                                if(marker.getId().equals(startMarker.getId())){
+                                if (marker.getId().equals(startMarker.getId())) {
                                     mMap.clear();
                                     startMarker.setPosition(marker.getPosition());
                                     setRow.setVisibility(View.VISIBLE);
-                                    drawMapViewRoot(marker.getPosition().latitude,marker.getPosition().longitude,endDrowLat,endDrowLog);
+                                    drawMapViewRoot(marker.getPosition().latitude, marker.getPosition().longitude, endDrowLat, endDrowLog);
                                     Geocoder geocoder = new Geocoder(MapDistanceByLoctionActivity.this, Locale.getDefault());
                                     try {
                                         List<Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
@@ -725,18 +722,18 @@ if(!SLApplication.isServiceRunning) {
                                         add = add + "\n" + obj.getSubAdminArea();
                                         add = add + "\n" + obj.getLocality();
                                         add = add + "\n" + obj.getSubThoroughfare();
-                                        start_point=add;
+                                        start_point = add;
                                         startpoint.setText(add);
                                     } catch (IOException e) {
                                         // TODO Auto-generated catch block
                                         e.printStackTrace();
                                         //Toast.makeText(MapDistanceByLoctionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
-                                }else if(marker.getId().equals(entMarker.getId())){
+                                } else if (marker.getId().equals(entMarker.getId())) {
                                     mMap.clear();
                                     entMarker.setPosition(marker.getPosition());
                                     setRow.setVisibility(View.VISIBLE);
-                                    drawMapViewRoot(startDrowLat,startDrowLog,marker.getPosition().latitude,marker.getPosition().longitude);
+                                    drawMapViewRoot(startDrowLat, startDrowLog, marker.getPosition().latitude, marker.getPosition().longitude);
                                     Geocoder geocoder = new Geocoder(MapDistanceByLoctionActivity.this, Locale.getDefault());
                                     try {
                                         List<Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
@@ -750,7 +747,7 @@ if(!SLApplication.isServiceRunning) {
                                         add1 = add1 + "\n" + obj.getLocality();
                                         add1 = add1 + "\n" + obj.getSubThoroughfare();
                                         endpoint.setText(add1);
-                                        end_point=add1;
+                                        end_point = add1;
                                     } catch (IOException e) {
                                         // TODO Auto-generated catch block
                                         e.printStackTrace();
@@ -761,12 +758,12 @@ if(!SLApplication.isServiceRunning) {
                         });
                     }
                 });
-            }
-            else {
-                Log.d("onPostExecute","without Polylines drawn");
+            } else {
+                Log.d("onPostExecute", "without Polylines drawn");
             }
         }
     }
+
     private void autocompletePlace() {
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
         Intent intent = new Autocomplete.IntentBuilder(
@@ -774,6 +771,7 @@ if(!SLApplication.isServiceRunning) {
                 .build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
@@ -781,7 +779,7 @@ if(!SLApplication.isServiceRunning) {
                 final Place place = Autocomplete.getPlaceFromIntent(data);
                 if (place != null) {
                     String placeId = place.getId();
-                    Call<ResponseBody> call = RetroClient.getClient(PLACE_BASE_URL).create(RetroInterface.class).PlaceDetails(placeId,getString(R.string.google_maps_key));
+                    Call<ResponseBody> call = RetroClient.getClient(PLACE_BASE_URL).create(RetroInterface.class).PlaceDetails(placeId, getString(R.string.google_maps_key));
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -797,7 +795,7 @@ if(!SLApplication.isServiceRunning) {
                                     final JSONObject jsonObject3 = new JSONObject(location);
                                     String lat = jsonObject3.getString(LAT);
                                     String lng = jsonObject3.getString(LNG);
-                                    if (startOrend==0) {
+                                    if (startOrend == 0) {
                                         mMapView.getMapAsync(new OnMapReadyCallback() {
                                             @Override
                                             public void onMapReady(GoogleMap mMap) {
@@ -805,16 +803,16 @@ if(!SLApplication.isServiceRunning) {
                                                 mMap.clear();
                                             }
                                         });
-                                        String start_point1=place.getName();
+                                        String start_point1 = place.getName();
                                         startpoint.setVisibility(View.VISIBLE);
-                                        start_point=start_point1;
+                                        start_point = start_point1;
                                         startpoint.setText(start_point1);
-                                        startALat= Double.valueOf(lat);
-                                        startALog= Double.valueOf(lng);
-                                        AppPreference.getPrefsHelper().savePref(Contents.START_LAT, ""+startALat);
-                                        AppPreference.getPrefsHelper().savePref(Contents.START_LOG, ""+startALog);
-                                        drawMapViewRoot(startALat,startALog,endALat,endALog);
-                                    }else if(startOrend==1){
+                                        startALat = Double.valueOf(lat);
+                                        startALog = Double.valueOf(lng);
+                                        AppPreference.getPrefsHelper().savePref(Contents.START_LAT, "" + startALat);
+                                        AppPreference.getPrefsHelper().savePref(Contents.START_LOG, "" + startALog);
+                                        drawMapViewRoot(startALat, startALog, endALat, endALog);
+                                    } else if (startOrend == 1) {
                                         mMapView.getMapAsync(new OnMapReadyCallback() {
                                             @Override
                                             public void onMapReady(GoogleMap mMap) {
@@ -822,17 +820,17 @@ if(!SLApplication.isServiceRunning) {
                                                 mMap.clear();
                                             }
                                         });
-                                        String end_point1=place.getName();
+                                        String end_point1 = place.getName();
                                         endpoint.setVisibility(View.VISIBLE);
                                         endpoint.setText(end_point1);
-                                        end_point=end_point1;
-                                        endALat=Double.valueOf(lat);
-                                        endALog=Double.valueOf(lng);
-                                        AppPreference.getPrefsHelper().savePref(Contents.END_LAT, ""+endALat);
-                                        AppPreference.getPrefsHelper().savePref(Contents.END_LOG, ""+endALog);
-                                        drawMapViewRoot(startALat,startALog,endALat,endALog);
+                                        end_point = end_point1;
+                                        endALat = Double.valueOf(lat);
+                                        endALog = Double.valueOf(lng);
+                                        AppPreference.getPrefsHelper().savePref(Contents.END_LAT, "" + endALat);
+                                        AppPreference.getPrefsHelper().savePref(Contents.END_LOG, "" + endALog);
+                                        drawMapViewRoot(startALat, startALog, endALat, endALog);
                                     }
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
@@ -841,6 +839,7 @@ if(!SLApplication.isServiceRunning) {
                                 e.printStackTrace();
                             }
                         }
+
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                         }

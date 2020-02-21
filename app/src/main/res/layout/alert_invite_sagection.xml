@@ -30,11 +30,13 @@
                 android:padding="@dimen/margin_10"
                 android:textSize="18dp"
                 android:text="@string/invite_" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_gravity="center"
                 android:background="@color/md_grey_100" />
+
             <TextView
                 android:id="@+id/user"
                 android:layout_width="match_parent"
@@ -45,12 +47,14 @@
                 android:fontFamily="@font/lato_regular"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/light_blue"/>
+                android:textColor="@color/light_blue" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_gravity="center"
                 android:background="@color/md_grey_100" />
+
             <TextView
                 android:id="@+id/group"
                 android:layout_width="match_parent"
@@ -61,13 +65,14 @@
                 android:textColor="@color/light_blue"
                 android:padding="@dimen/margin_10"
                 android:layout_gravity="center"
-                android:gravity="center"
-                 />
+                android:gravity="center" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_gravity="center"
                 android:background="@color/md_grey_100" />
+
             <TextView
                 android:id="@+id/cancel"
                 android:layout_width="match_parent"

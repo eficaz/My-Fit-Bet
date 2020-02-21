@@ -10,11 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="25dp"
-            android:layout_weight=".6" >
+            android:layout_weight=".6">
 
             <LinearLayout
                 android:id="@+id/btn_back"
@@ -50,6 +51,7 @@
             </LinearLayout>
 
         </TableRow>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -57,12 +59,14 @@
             android:orientation="vertical">
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
             android:layout_marginTop="30dp"
             android:orientation="vertical">
+
             <AutoCompleteTextView
                 android:id="@+id/privacy_and_policy"
                 android:layout_width="match_parent"
@@ -77,20 +81,20 @@
                 android:background="@null"
                 android:editable="false"
                 android:layout_marginTop="10dp"
-                android:completionThreshold="1"/>
+                android:completionThreshold="1" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txt_rules_heading"
-                    android:textSize="@dimen/txt_16"
-                    android:text="Rules and Regulations"
-                    android:visibility="gone"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:layout_marginTop="@dimen/margin_15"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_rules_heading"
+                android:textSize="@dimen/txt_16"
+                android:text="Rules and Regulations"
+                android:visibility="gone"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/lato_bold"
+                android:layout_marginTop="@dimen/margin_15" />
 
 
             <TextView
@@ -110,8 +114,7 @@
 5. If no users have joined the Bet, it would be automatically cancelled and the credit would be refunded to the created user.\n
 6. At the time of a Bet starting, if the user has another active bet, then the automatic start of the Bet won't happen.\n
 7. Google is no way involved in the functioning of the Bet.
-"
-                />
+" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

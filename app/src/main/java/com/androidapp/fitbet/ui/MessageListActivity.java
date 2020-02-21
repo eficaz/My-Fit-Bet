@@ -105,16 +105,15 @@ public class MessageListActivity extends BaseActivity {
 
     MessageUpcommingListAdapter messageUpcommingListAdapter;
 
-    boolean findrow=false;
+    boolean findrow = false;
 
 
-
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -122,21 +121,21 @@ public class MessageListActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -174,7 +173,7 @@ public class MessageListActivity extends BaseActivity {
     private void intintView() {
         upCommingBets();
         CustomProgress.getInstance().showProgress(MessageListActivity.this, "", false);
-        findrow=false;
+        findrow = false;
         row_upcomming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,7 +183,7 @@ public class MessageListActivity extends BaseActivity {
                 view_line3.setVisibility(View.VISIBLE);
                 upCommingBets();
                 CustomProgress.getInstance().showProgress(MessageListActivity.this, "", false);
-                findrow=false;
+                findrow = false;
             }
         });
 
@@ -197,7 +196,7 @@ public class MessageListActivity extends BaseActivity {
                 view_line3.setVisibility(View.GONE);
                 archivesGroupList();
                 CustomProgress.getInstance().showProgress(MessageListActivity.this, "", false);
-                findrow=true;
+                findrow = true;
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -233,7 +232,7 @@ public class MessageListActivity extends BaseActivity {
 
     private void upCommingBets() {
         String search = "";
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Listjoinedbet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Listjoinedbet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -245,6 +244,7 @@ public class MessageListActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -260,9 +260,9 @@ public class MessageListActivity extends BaseActivity {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 messageChatListUpCommingBets = new ArrayList<>();
@@ -308,13 +308,13 @@ public class MessageListActivity extends BaseActivity {
 
     private void filter(String text) {
 
-        if(findrow==true){
+        if (findrow == true) {
             if (text.equals("")) {
                 archivesListAdapter.filterList(" ");
             } else {
                 archivesListAdapter.filterList(text);
             }
-        }else{
+        } else {
             if (text.equals("")) {
                 messageUpcommingListAdapter.filterList(" ");
             } else {
@@ -322,9 +322,10 @@ public class MessageListActivity extends BaseActivity {
             }
         }
     }
+
     private void archivesGroupList() {
         String search = "";
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""));
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).Archivebet(AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -336,6 +337,7 @@ public class MessageListActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
@@ -350,9 +352,9 @@ public class MessageListActivity extends BaseActivity {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MYBETS);
                 JSONArray jsonArray = new JSONArray(data1);
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
                 archivesListDetails = new ArrayList<>();

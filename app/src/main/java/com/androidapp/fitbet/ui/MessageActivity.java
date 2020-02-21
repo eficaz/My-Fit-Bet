@@ -34,7 +34,6 @@ import com.androidapp.fitbet.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -61,9 +60,9 @@ import static com.androidapp.fitbet.utils.Contents.TOTAL_PARTICIPANTS;
 public class MessageActivity extends BaseActivity {
 
     Bundle bundle;
-    String betId="";
+    String betId = "";
 
-    ArrayList<Message>messageList;
+    ArrayList<Message> messageList;
 
     MessageListAdapter betDetailsAdapter;
 
@@ -96,15 +95,15 @@ public class MessageActivity extends BaseActivity {
 
     @Bind(R.id.no_data)
     TextView no_data;
-    String chant="";
+    String chant = "";
 
 
-    private IntentFilter filter=new IntentFilter("count_down");
-    private boolean firstConnect=true;
-    private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
+    private IntentFilter filter = new IntentFilter("count_down");
+    private boolean firstConnect = true;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null) {
+            if (intent != null) {
                 if (firstConnect) {
                     firstConnect = false;
 
@@ -112,21 +111,21 @@ public class MessageActivity extends BaseActivity {
                     onMessageReceived(message);
 
                 }
-            }else{
-                firstConnect=true;
+            } else {
+                firstConnect = true;
             }
 
         }
     };
+
     @Override
     public void onMessageReceived(String message) {
 
-        SLApplication.isCountDownRunning=true;
-        startActivity(new Intent(this,DashBoardActivity.class));
+        SLApplication.isCountDownRunning = true;
+        startActivity(new Intent(this, DashBoardActivity.class));
         finish();
 
     }
-
 
 
     @Override
@@ -149,15 +148,15 @@ public class MessageActivity extends BaseActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Utils.isConnectedToInternet(MessageActivity.this)){
-                    if(!ed_message.getText().toString().equals("")){
-                        chant=ed_message.getText().toString();
+                if (Utils.isConnectedToInternet(MessageActivity.this)) {
+                    if (!ed_message.getText().toString().equals("")) {
+                        chant = ed_message.getText().toString();
                         sendMessageAPi();
                         ed_message.setText("");
-                    }else{
+                    } else {
                         Utils.showCustomToastMsg(MessageActivity.this, R.string.please_type_message);
                     }
-                } else{
+                } else {
                     Utils.showCustomToastMsg(MessageActivity.this, R.string.no_internet);
                 }
 
@@ -223,7 +222,7 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void sendMessageAPi() {
-        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SendMessage(bundle.getString(MYBETS_betid),AppPreference.getPrefsHelper().getPref(Contents.REG_KEY,""),ed_message.getText().toString());
+        Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).SendMessage(bundle.getString(MYBETS_betid), AppPreference.getPrefsHelper().getPref(Contents.REG_KEY, ""), ed_message.getText().toString());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -237,23 +236,26 @@ public class MessageActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void MessageSendDeials(String bodyString) {
-        try{
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 ed_message.setText("");
                 betDetailsAdapter.notifyDataSetChanged();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void callMessageListApi() {
         Call<ResponseBody> call = RetroClient.getClient(Constant.BASE_APP_URL).create(RetroInterface.class).MessageList(bundle.getString(MYBETS_betid));
         call.enqueue(new Callback<ResponseBody>() {
@@ -267,16 +269,18 @@ public class MessageActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }
+
     private void MessageDetailsList(String bodyString) {
-        try{
+        try {
             final JSONObject jsonObject = new JSONObject(bodyString);
             String data = jsonObject.getString(STATUS_A);
-            if(data.equals("Ok")){
+            if (data.equals("Ok")) {
                 JSONObject jsonObject1 = new JSONObject(bodyString);
                 String data1 = jsonObject1.getString(MESSAGES);
                 JSONArray jsonArray = new JSONArray(data1);
@@ -295,7 +299,7 @@ public class MessageActivity extends BaseActivity {
                     messageList.add(model);
                 }
                 Collections.reverse(messageList);
-                betDetailsAdapter = new MessageListAdapter(this, messageList,bundle.getString(MYBETS_betid));
+                betDetailsAdapter = new MessageListAdapter(this, messageList, bundle.getString(MYBETS_betid));
                 bet_list.setHasFixedSize(true);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
                 linearLayoutManager.setReverseLayout(true);
@@ -304,13 +308,13 @@ public class MessageActivity extends BaseActivity {
                 bet_list.setAdapter(betDetailsAdapter);
                 bet_list.findViewHolderForAdapterPosition(messageList.size());
                 betDetailsAdapter.notifyDataSetChanged();
-                if(jsonArray.length()==0){
+                if (jsonArray.length() == 0) {
                     no_data.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     no_data.setVisibility(View.GONE);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
